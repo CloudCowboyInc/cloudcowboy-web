@@ -6,12 +6,12 @@ const painPoints = [
   {
     icon: Clock,
     title: "3 Hours Per Quote",
-    description: "Manual quoting kills your pipeline. Every lead waits while you measure fields, check chemical prices, and build PDFs by hand.",
+    description: "Manual quoting kills your pipeline. Every lead waits while you measure fields, calculate distance, and build PDFs by hand.",
   },
   {
     icon: EyeOff,
     title: "Zero Visibility",
-    description: "No idea where your crews are or what's happening in the field. You're running a tech business on phone calls and texts.",
+    description: "No idea where your crews are or what's happening in the field. You're running a business on phone calls and texts.",
   },
   {
     icon: TrendingDown,
