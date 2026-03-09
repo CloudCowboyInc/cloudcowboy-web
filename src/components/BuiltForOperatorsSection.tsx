@@ -5,8 +5,8 @@ import { Shield, Radio, Beaker, CloudSun } from "lucide-react";
 const features = [
   {
     icon: Shield,
-    title: "FAA Part 137 Ready",
-    desc: "Compliance built into every workflow.",
+    title: "Complete Privacy",
+    desc: "Compliance built into every workflow. To protect you and your customers.",
   },
   {
     icon: Radio,
