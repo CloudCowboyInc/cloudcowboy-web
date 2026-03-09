@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import CloudCowboyLogo from "./CloudCowboyLogo";
 
 const DEMO_LINK = "https://calendly.com/chris-cloudcowboy/30min";
 
