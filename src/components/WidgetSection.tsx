@@ -3,11 +3,11 @@ import { useRef } from "react";
 import { MousePointer, FileText, ClipboardCheck, CreditCard } from "lucide-react";
 
 const steps = [
-  { icon: MousePointer, label: "Click" },
-  { icon: FileText, label: "Quote" },
-  { icon: ClipboardCheck, label: "Contract" },
-  { icon: CreditCard, label: "Deposit" },
-];
+{ icon: MousePointer, label: "Click" },
+{ icon: FileText, label: "Quote" },
+{ icon: ClipboardCheck, label: "Contract" },
+{ icon: CreditCard, label: "Deposit" }];
+
 
 export default function WidgetSection() {
   const ref = useRef(null);
@@ -20,8 +20,8 @@ export default function WidgetSection() {
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.5 }}
-          className="text-secondary text-sm tracking-[0.3em] uppercase mb-4 text-center"
-        >
+          className="text-secondary text-sm tracking-[0.3em] uppercase mb-4 text-center">
+          
           Step 1
         </motion.p>
 
@@ -29,8 +29,8 @@ export default function WidgetSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="text-3xl md:text-5xl font-bold text-center mb-6"
-        >
+          className="text-3xl md:text-5xl font-bold text-center mb-6">
+          
           It Starts With a <span className="text-gradient-secondary">Click</span>
         </motion.h2>
 
@@ -38,10 +38,10 @@ export default function WidgetSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-muted-foreground text-lg text-center max-w-2xl mx-auto mb-16"
-        >
-          Install a free widget on your website. A customer clicks their field on the map, selects services. 
-          The AI generates an instant quote based on real flight data. In minutes, not hours.
+          className="text-muted-foreground text-lg text-center max-w-2xl mx-auto mb-16">Install a free widget on your website. A customer clicks their field on the map, selects services. The AI generates an instant quote based on real data and your set preferences. In minutes, not hours.
+
+
+
         </motion.p>
 
         {/* Widget mockup */}
@@ -49,8 +49,8 @@ export default function WidgetSection() {
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="relative max-w-4xl mx-auto mb-20"
-        >
+          className="relative max-w-4xl mx-auto mb-20">
+          
           <div className="bg-card border border-border rounded-2xl p-2 glow-secondary">
             {/* Browser chrome */}
             <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
@@ -91,8 +91,8 @@ export default function WidgetSection() {
                         d="M80 60 L220 50 L240 150 L60 160 Z"
                         fill="hsl(25 68% 50% / 0.15)"
                         stroke="hsl(25 68% 50% / 0.6)"
-                        strokeWidth="2"
-                      />
+                        strokeWidth="2" />
+                      
                     </svg>
                   </div>
                   <div className="mt-3 flex gap-2">
@@ -114,28 +114,28 @@ export default function WidgetSection() {
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="flex justify-center items-center gap-4 md:gap-8"
-        >
-          {steps.map((step, i) => (
-            <div key={step.label} className="flex items-center gap-4 md:gap-8">
+          className="flex justify-center items-center gap-4 md:gap-8">
+          
+          {steps.map((step, i) =>
+          <div key={step.label} className="flex items-center gap-4 md:gap-8">
               <motion.div
-                initial={{ scale: 0 }}
-                animate={inView ? { scale: 1 } : {}}
-                transition={{ duration: 0.4, delay: 0.7 + i * 0.12, type: "spring" }}
-                className="flex flex-col items-center gap-2"
-              >
+              initial={{ scale: 0 }}
+              animate={inView ? { scale: 1 } : {}}
+              transition={{ duration: 0.4, delay: 0.7 + i * 0.12, type: "spring" }}
+              className="flex flex-col items-center gap-2">
+              
                 <div className="w-14 h-14 rounded-xl bg-card border border-primary/30 flex items-center justify-center">
                   <step.icon className="w-6 h-6 text-primary" />
                 </div>
                 <span className="text-xs text-muted-foreground font-medium">{step.label}</span>
               </motion.div>
-              {i < steps.length - 1 && (
-                <div className="w-8 md:w-16 h-px bg-primary/30" />
-              )}
+              {i < steps.length - 1 &&
+            <div className="w-8 md:w-16 h-px bg-primary/30" />
+            }
             </div>
-          ))}
+          )}
         </motion.div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
