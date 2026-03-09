@@ -76,14 +76,25 @@ export default function CTASection() {
           </a>
         </motion.div>
 
-        <motion.p
+        {/* Footer */}
+        <motion.div
           initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 0.5 } : {}}
+          animate={inView ? { opacity: 0.6 } : {}}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-16 text-sm text-muted-foreground"
+          className="mt-20 space-y-2"
         >
-          © {new Date().getFullYear()} Cloud Cowboy. Built for the operators who feed the world.
-        </motion.p>
+          <p className="text-sm text-muted-foreground">
+            Built for the operators who feed the world.
+          </p>
+          <p className="text-sm text-muted-foreground">
+            <a href="mailto:chris@cloudcowboy.us" className="hover:text-primary transition-colors">
+              chris@cloudcowboy.us
+            </a>
+          </p>
+          <p className="text-xs text-muted-foreground">
+            © 2026 Cloud Cowboy LLC
+          </p>
+        </motion.div>
       </div>
     </section>
   );
