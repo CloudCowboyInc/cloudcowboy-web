@@ -11,7 +11,7 @@ const painPoints = [
   {
     icon: EyeOff,
     title: "Zero Visibility",
-    description: "No idea where your crews are or what's happening in the field. You're running a tech business on phone calls and texts.",
+    description: "No idea where your crews are or what's happening in the field. You're running a business on phone calls and texts.",
   },
   {
     icon: TrendingDown,

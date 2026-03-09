@@ -10,7 +10,7 @@ const features = [
   },
   {
     icon: Radio,
-    title: "DJI Agras Integration",
+    title: "Complete Integration",
     desc: "Syncs with your existing fleet hardware.",
   },
   {
