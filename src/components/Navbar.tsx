@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import CloudCowboyLogo from "./CloudCowboyLogo";
 
 const DEMO_LINK = "https://calendly.com/chris-cloudcowboy/30min";
 
@@ -24,9 +25,10 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <span className="text-xl font-display font-bold text-primary">
-          Cloud Cowboy
-        </span>
+        <div className="flex items-center gap-2">
+          <CloudCowboyLogo size={32} />
+          <span className="text-xl font-display font-bold text-primary">Cloud Cowboy</span>
+        </div>
         <a
           href={DEMO_LINK}
           target="_blank"
