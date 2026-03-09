@@ -31,7 +31,7 @@ export default function HeroSection() {
         variants={stagger}
       >
         <motion.div variants={fadeUp} custom={0} className="flex justify-center mb-6">
-          <CloudCowboyLogo size={80} />
+          <CloudCowboyLogo size={100} />
         </motion.div>
 
         <motion.p

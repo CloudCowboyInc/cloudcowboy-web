@@ -13,7 +13,6 @@ import CTASection from "@/components/CTASection";
 const Index = () => {
   return (
     <main className="bg-background text-foreground overflow-x-hidden">
-      <Navbar />
       <HeroSection />
       <PainPointsSection />
       <WidgetSection />
