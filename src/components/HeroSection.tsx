@@ -30,9 +30,13 @@ export default function HeroSection() {
         animate="visible"
         variants={stagger}
       >
+        <motion.div variants={fadeUp} custom={0} className="flex justify-center mb-6">
+          <CloudCowboyLogo size={80} />
+        </motion.div>
+
         <motion.p
           variants={fadeUp}
-          custom={0}
+          custom={0.5}
           className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-6"
         >
           Agricultural Drone Operations
