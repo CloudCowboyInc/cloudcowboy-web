@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { MapPin, Users, BarChart3, Plane } from "lucide-react";
+import mapBg from "@/assets/map-bg.jpg";
 
 export default function OperationsSection() {
   const ref = useRef(null);
@@ -66,7 +67,11 @@ export default function OperationsSection() {
 
           {/* Map area */}
           <div className="bg-muted/30 rounded-xl h-48 flex items-center justify-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-topo-pattern opacity-60" />
+            <img
+              src={mapBg}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover opacity-30"
+            />
             <div className="relative z-10 flex items-center gap-3 text-muted-foreground">
               <MapPin className="w-5 h-5 text-primary" />
               <span className="text-sm">Live Operations Map — 4 crews active</span>
