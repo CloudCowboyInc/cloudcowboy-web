@@ -7,7 +7,7 @@ import Navbar from "./components/Navbar";
 import Index from "./pages/Index";
 import Investors from "./pages/Investors";
 import Beta from "./pages/Beta";
-import About from "./pages/About";
+
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
