@@ -68,16 +68,9 @@ export default function OperationsSection() {
           {/* Map area */}
           <div className="bg-muted/30 rounded-xl h-48 flex items-center justify-center relative overflow-hidden">
             <img
-              src="https://tile.openstreetmap.org/4/4/6.png"
+              src={mapBg}
               alt=""
-              className="absolute inset-0 w-full h-full object-cover opacity-20 scale-[3]"
-              style={{ imageRendering: 'auto' }}
-            />
-            <img
-              src="https://tile.openstreetmap.org/4/3/6.png"
-              alt=""
-              className="absolute inset-0 w-1/2 h-full object-cover opacity-20 scale-[3]"
-              style={{ imageRendering: 'auto' }}
+              className="absolute inset-0 w-full h-full object-cover opacity-30"
             />
             <div className="relative z-10 flex items-center gap-3 text-muted-foreground">
               <MapPin className="w-5 h-5 text-primary" />
