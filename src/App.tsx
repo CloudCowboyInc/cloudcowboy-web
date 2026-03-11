@@ -7,7 +7,7 @@ import Navbar from "./components/Navbar";
 import Index from "./pages/Index";
 import Investors from "./pages/Investors";
 import Beta from "./pages/Beta";
-import About from "./pages/About";
+
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
@@ -24,7 +24,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/investors" element={<Investors />} />
           <Route path="/beta" element={<Beta />} />
-          <Route path="/about" element={<About />} />
+          
           <Route path="/contact" element={<Contact />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
