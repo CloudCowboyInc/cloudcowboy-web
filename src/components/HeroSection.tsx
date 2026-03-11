@@ -73,7 +73,7 @@ export default function HeroSection() {
             rel="noopener noreferrer"
             className="px-8 py-4 rounded-lg bg-primary text-primary-foreground font-semibold text-lg glow-primary hover:opacity-90 transition-opacity">
             
-            Learn More 
+            Join The Beta   
           </a>
           
 
