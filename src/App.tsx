@@ -20,8 +20,8 @@ const App = () => (
         <Navbar />
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/investors" element={<Investors />} />
           <Route path="/beta" element={<Beta />} />
+          <Route path="/contact" element={<Contact />} />
           
           <Route path="/contact" element={<Contact />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
