@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { MapPin, Users, BarChart3, Plane } from "lucide-react";
+import mapBg from "@/assets/map-bg.jpg";
 
 export default function OperationsSection() {
   const ref = useRef(null);
