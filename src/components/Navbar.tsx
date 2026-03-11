@@ -7,9 +7,9 @@ import CloudCowboyLogo from "./CloudCowboyLogo";
 const DEMO_LINK = "https://calendly.com/chris-cloudcowboy/30min";
 
 const navLinks = [
-{ label: "Investors", to: "/investors" },
-{ label: "Beta Program", to: "/beta" },
-{ label: "Contact", to: "/contact" }];
+  { label: "Beta Program", to: "/beta" },
+  { label: "Contact", to: "/contact" }
+];
 
 
 export default function Navbar() {
