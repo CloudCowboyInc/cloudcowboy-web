@@ -9,7 +9,7 @@ const DEMO_LINK = "https://calendly.com/chris-cloudcowboy/30min";
 const navLinks = [
 { label: "Investors", to: "/investors" },
 { label: "Beta Program", to: "/beta" },
-  { label: "Contact", to: "/contact" }];
+{ label: "Contact", to: "/contact" }];
 
 
 export default function Navbar() {
@@ -64,7 +64,7 @@ export default function Navbar() {
               rel="noopener noreferrer"
               className="px-5 py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity">
               
-              Learn More 
+              ​Join The Beta   
             </a>
           </div>
 
