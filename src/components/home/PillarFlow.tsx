@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Globe, FileText, Calendar, Users, Clock, Smartphone, MapPin, Activity, TrendingUp, RotateCw } from "lucide-react";
+import { Users, Clock, Smartphone, MapPin, Activity, TrendingUp, RotateCw } from "lucide-react";
 
 const RUST = "#d96c47";
 const RUST_DEEP = "#c25b3a";
@@ -65,7 +65,7 @@ function PillarShell({
 /* Vertical animated dashed connector with a rust particle traveling top→bottom. */
 function Connector({ label }: { label: string }) {
   return (
-    <div className="flex flex-col items-center justify-center w-full py-6">
+    <div className="flex flex-col items-center justify-center w-full py-10 md:py-12">
       <div className="relative h-24 w-px overflow-hidden">
         <div
           className="absolute inset-0"
@@ -92,24 +92,68 @@ function Connector({ label }: { label: string }) {
 
 function VisualQuoting() {
   return (
-    <div className="flex items-center gap-3 text-[#e8ecf1]">
-      <div className="flex flex-col items-center gap-1">
-        <Globe className="w-7 h-7 text-[#8b95a8]" />
-        <span className="text-[9px] tracking-[0.2em] text-[#8b95a8]">SITE</span>
-      </div>
-      <span className="text-[#c25b3a]/60 text-xs tracking-widest">- - -</span>
-      <div className="flex flex-col items-center gap-1">
-        <FileText className="w-7 h-7" style={{ color: RUST }} />
-        <span className="text-[9px] tracking-[0.2em] text-[#8b95a8]">QUOTE</span>
-      </div>
-      <span className="text-[#c25b3a]/60 text-xs tracking-widest">- - -</span>
-      <div className="flex flex-col items-center gap-1">
-        <div className="relative">
-          <Calendar className="w-7 h-7 text-[#8b95a8]" />
-          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full" style={{ background: RUST, boxShadow: `0 0 8px ${RUST}` }} />
-        </div>
-        <span className="text-[9px] tracking-[0.2em] text-[#8b95a8]">BOOKED</span>
-      </div>
+    <div className="w-full max-w-[480px]">
+      <svg viewBox="0 0 480 360" className="w-full h-auto" role="img" aria-label="Quoting UI mockup">
+        <defs>
+          <pattern id="cc-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+            <path d="M 24 0 L 0 0 0 24" fill="none" stroke={RUST} strokeOpacity="0.08" strokeWidth="1" />
+          </pattern>
+        </defs>
+
+        {/* Outer panel */}
+        <rect x="1" y="1" width="478" height="358" rx="12" fill="#0f1722" stroke="rgba(139,149,168,0.35)" strokeWidth="1" />
+
+        {/* Top bar */}
+        <circle cx="22" cy="28" r="4" fill={RUST} />
+        <text x="36" y="32" fontFamily="Inter, sans-serif" fontSize="11" fontWeight={600} fill="#8b95a8" letterSpacing="1.3">
+          SELECT FIELDS
+        </text>
+        <line x1="0" y1="52" x2="480" y2="52" stroke="rgba(139,149,168,0.18)" />
+
+        {/* Map area */}
+        <rect x="0" y="52" width="480" height="240" fill="#0b1320" />
+        <rect x="0" y="52" width="480" height="240" fill="url(#cc-grid)" />
+
+        {/* Unselected polygons */}
+        <polygon points="40,80 150,72 168,140 60,150" fill="none" stroke="rgba(139,149,168,0.4)" strokeWidth="1.2" />
+        <polygon points="320,70 450,90 440,170 330,160" fill="none" stroke="rgba(139,149,168,0.4)" strokeWidth="1.2" />
+        <polygon points="40,210 130,200 145,275 50,280" fill="none" stroke="rgba(139,149,168,0.4)" strokeWidth="1.2" />
+        <polygon points="320,220 445,210 450,285 335,280" fill="none" stroke="rgba(139,149,168,0.4)" strokeWidth="1.2" />
+
+        {/* Selected polygon (center) */}
+        <polygon
+          points="180,150 305,135 318,235 195,248"
+          fill="rgba(194,91,58,0.22)"
+          stroke="#c25b3a"
+          strokeWidth="2"
+        />
+        {/* Dashed bounding ring */}
+        <rect
+          x="172" y="125" width="156" height="135" rx="6"
+          fill="none" stroke={RUST} strokeWidth="1" strokeDasharray="4 4" opacity="0.7"
+        />
+
+        {/* Label callout */}
+        <line x1="318" y1="175" x2="370" y2="135" stroke={RUST} strokeWidth="1" />
+        <rect x="368" y="118" width="100" height="26" rx="6" fill="#1a2332" stroke="rgba(139,149,168,0.4)" />
+        <text x="418" y="135" textAnchor="middle" fontFamily="Inter, sans-serif" fontSize="10" fontWeight={500} fill="#e8ecf1">
+          120 acres · Soybean
+        </text>
+
+        {/* Bottom bar / quote card */}
+        <line x1="0" y1="292" x2="480" y2="292" stroke="rgba(139,149,168,0.18)" />
+        <text x="22" y="316" fontFamily="Inter, sans-serif" fontSize="9" fontWeight={600} fill={RUST} letterSpacing="1.6">
+          QUOTE
+        </text>
+        <text x="22" y="346" fontFamily="Space Grotesk, sans-serif" fontSize="26" fontWeight={700} fill={RUST}>
+          $4,800
+        </text>
+
+        <rect x="320" y="312" width="140" height="36" rx="8" fill={RUST_DEEP} />
+        <text x="390" y="335" textAnchor="middle" fontFamily="Inter, sans-serif" fontSize="12" fontWeight={600} fill="#0f1722" letterSpacing="0.6">
+          Confirm &amp; Pay
+        </text>
+      </svg>
     </div>
   );
 }

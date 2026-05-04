@@ -191,22 +191,24 @@ export default function WorkflowLoop() {
           y={cy - 4}
           textAnchor="middle"
           fontFamily="Inter, sans-serif"
-          fontSize="10"
+          fontSize="13"
+          fontWeight={600}
           fill="#8b95a8"
-          letterSpacing="0.28em"
+          letterSpacing="0.18em"
         >
-          THE WORKFLOW
+          THE WORKFLOW:
         </text>
         <text
           x={cx}
-          y={cy + 14}
+          y={cy + 18}
           textAnchor="middle"
           fontFamily="Inter, sans-serif"
-          fontSize="10"
+          fontSize="17"
+          fontWeight={600}
           fill="#c25b3a"
-          letterSpacing="0.28em"
+          letterSpacing="0.1em"
         >
-          CONTINUOUS LOOP
+          ONE CONTINUOUS LOOP
         </text>
       </svg>
     </div>

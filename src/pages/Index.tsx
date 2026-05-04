@@ -42,7 +42,7 @@ const Index = () => {
         {/* ─────────── HERO ─────────── */}
         <section
           id="hero"
-          className="cc-anchor relative min-h-screen flex items-center justify-center px-6 pt-28 pb-20"
+          className="cc-anchor relative min-h-screen flex items-center justify-center px-5 md:px-8 pt-24 pb-16 md:pt-28 md:pb-24"
         >
           <div className="max-w-6xl w-full mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <Reveal className="text-center lg:text-left">
@@ -69,7 +69,7 @@ const Index = () => {
         </section>
 
         {/* ─────────── 2 · AI THAT WORKS FOR YOU ─────────── */}
-        <section id="ai" className="cc-anchor relative px-6 py-28">
+        <section id="ai" className="cc-anchor relative px-5 md:px-8 py-16 md:py-24">
           <div className="max-w-4xl mx-auto text-center">
             <Reveal>
               <Eyebrow>AI-Native · Human-Led</Eyebrow>
@@ -88,8 +88,8 @@ const Index = () => {
         </section>
 
         {/* ─────────── 3 · 4-PILLAR WALKTHROUGH ─────────── */}
-        <section id="pillars" className="cc-anchor relative px-6 py-24">
-          <div className="max-w-7xl mx-auto">
+        <section id="pillars" className="cc-anchor relative px-5 md:px-8 py-16 md:py-24">
+          <div className="max-w-[1280px] mx-auto">
             <Reveal className="text-center mb-14">
               <Eyebrow>One Platform · Four Connected Pillars</Eyebrow>
               <h2 className="font-display text-4xl md:text-5xl font-bold leading-tight mb-5">
@@ -106,7 +106,7 @@ const Index = () => {
         </section>
 
         {/* ─────────── 3.5 · BUILT ON AN AGENTIC PLATFORM ─────────── */}
-        <section id="agentic" className="cc-anchor relative px-6 py-28">
+        <section id="agentic" className="cc-anchor relative px-5 md:px-8 py-16 md:py-24">
           <div className="max-w-4xl mx-auto text-center mb-14">
             <Reveal>
               <Eyebrow>Built on an Agentic Platform</Eyebrow>
@@ -124,7 +124,7 @@ const Index = () => {
         </section>
 
         {/* ─────────── 4 · HARDWARE AGNOSTIC ─────────── */}
-        <section id="hardware" className="cc-anchor relative px-6 py-28">
+        <section id="hardware" className="cc-anchor relative px-5 md:px-8 py-16 md:py-24">
           <div className="max-w-4xl mx-auto text-center">
             <Reveal>
               <Eyebrow>Hardware Agnostic</Eyebrow>
@@ -165,7 +165,7 @@ const Index = () => {
         </section>
 
         {/* ─────────── 5 · FOCUS ─────────── */}
-        <section id="focus" className="cc-anchor relative px-6 py-28">
+        <section id="focus" className="cc-anchor relative px-5 md:px-8 py-16 md:py-24">
           <div className="max-w-4xl mx-auto text-center">
             <Reveal>
               <Eyebrow>What Matters</Eyebrow>
@@ -184,7 +184,7 @@ const Index = () => {
         </section>
 
         {/* ─────────── 6 · WE BELIEVE IN AG ─────────── */}
-        <section id="believe" className="cc-anchor relative px-6 py-28">
+        <section id="believe" className="cc-anchor relative px-5 md:px-8 py-16 md:py-24">
           <div className="max-w-4xl mx-auto text-center">
             <Reveal>
               <Eyebrow>Our Stand</Eyebrow>
@@ -204,7 +204,7 @@ const Index = () => {
         {/* ─────────── 7 · FINAL CTA ─────────── */}
         <section
           id="cta"
-          className="cc-anchor relative px-6 py-32 flex items-center justify-center"
+          className="cc-anchor relative px-5 md:px-8 py-20 md:py-28 flex items-center justify-center"
         >
           <Reveal className="text-center max-w-3xl mx-auto">
             <h2 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-10">
