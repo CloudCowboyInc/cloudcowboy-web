@@ -29,20 +29,39 @@ const ICON_PATHS: Record<string, JSX.Element> = {
       <circle cx="17" cy="18" r="3" />
     </g>
   ),
-  // lucide Truck
+  // Semi tractor cab (no trailer): hood, cab with slanted windshield, exhaust stack, two wheels.
   truck: (
-    <g fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" />
-      <path d="M15 18H9" />
-      <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" />
-      <circle cx="17" cy="18" r="2" />
-      <circle cx="7" cy="18" r="2" />
+    <g fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round">
+      {/* Cab body */}
+      <path d="M9 17 V8 H16 V17" />
+      {/* Slanted windshield */}
+      <path d="M9 8 L12 5 H16 V8" />
+      {/* Hood forward of cab */}
+      <path d="M9 17 V12 H4 V17" />
+      {/* Exhaust stack rising from roof behind cab */}
+      <path d="M15 8 V3" />
+      <path d="M14 3 H16" />
+      {/* Wheels */}
+      <circle cx="6" cy="18" r="1.6" />
+      <circle cx="14" cy="18" r="1.9" />
     </g>
   ),
-  // lucide Plane (rotated -45 in render)
+  // Crop duster biplane (side profile)
   plane: (
-    <g fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+    <g fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round">
+      {/* Fuselage */}
+      <rect x="6" y="11" width="12" height="3" rx="1.4" />
+      {/* Upper wing */}
+      <path d="M8 8 H16" />
+      {/* Lower wing */}
+      <path d="M5 16 H19" />
+      {/* Strut between wings */}
+      <path d="M12 8 V16" />
+      {/* Tail rudder */}
+      <path d="M18 11 L20 8 L20 14" />
+      {/* Propeller at front */}
+      <path d="M5 11 V14" />
+      <path d="M4 12.5 H6" />
     </g>
   ),
 };
@@ -51,7 +70,7 @@ const ICONS: { key: string; rotate?: number }[] = [
   { key: "drone" },
   { key: "tractor" },
   { key: "truck" },
-  { key: "plane", rotate: -45 },
+  { key: "plane" },
 ];
 
 /**
@@ -117,18 +136,23 @@ export default function WorkflowLoop() {
         />
 
         {/* Orbiting ag-service vehicle icons (evenly spaced 90deg apart) */}
-        {ICONS.map(({ key, rotate }, i) => (
-          <g key={key} color={RUST} filter="url(#iconGlow)">
-            <g transform={`translate(-10,-10) ${rotate ? `rotate(${rotate} 10 10)` : ""}`}>
-              <svg width="20" height="20" viewBox="0 0 24 24" overflow="visible">
-                {ICON_PATHS[key]}
-              </svg>
+        {ICONS.map(({ key, rotate }, i) => {
+          const size = 28;
+          const half = size / 2;
+          const begins = [0, 3.5, 7, 10.5];
+          return (
+            <g key={key} color={RUST} filter="url(#iconGlow)">
+              <g transform={`translate(${-half},${-half}) ${rotate ? `rotate(${rotate} ${half} ${half})` : ""}`}>
+                <svg width={size} height={size} viewBox="0 0 24 24" overflow="visible">
+                  {ICON_PATHS[key]}
+                </svg>
+              </g>
+              <animateMotion dur="14s" repeatCount="indefinite" begin={`${begins[i]}s`}>
+                <mpath href="#cc-orbit" />
+              </animateMotion>
             </g>
-            <animateMotion dur="8s" repeatCount="indefinite" begin={`${i * 2}s`}>
-              <mpath href="#cc-orbit" />
-            </animateMotion>
-          </g>
-        ))}
+          );
+        })}
 
         {/* Nodes */}
         {nodes.map((n) => (
