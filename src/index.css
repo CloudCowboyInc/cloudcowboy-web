@@ -195,6 +195,27 @@
   transform: translateY(0);
 }
 
+/* Flow particle animations for pillar connectors */
+@keyframes cc-flow-right {
+  0%   { left: -8px; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+@keyframes cc-flow-down {
+  0%   { top: -8px; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* Perimeter ring pulse for agentic section */
+@keyframes cc-perimeter-pulse {
+  0%, 100% { opacity: 0.6; filter: drop-shadow(0 0 6px rgba(217,108,71,0.5)); }
+  50%      { opacity: 1;   filter: drop-shadow(0 0 18px rgba(217,108,71,0.85)); }
+}
+.cc-perimeter-ring { animation: cc-perimeter-pulse 4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+
 /* Section anchor offset for sticky nav */
 .cc-anchor {
   scroll-margin-top: 96px;
