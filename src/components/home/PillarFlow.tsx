@@ -1,4 +1,5 @@
-import { Globe, FileText, Calendar, Users, Clock, Smartphone, MapPin, Activity, BarChart3, TrendingUp } from "lucide-react";
+import { Fragment } from "react";
+import { Globe, FileText, Calendar, Users, Clock, Smartphone, MapPin, Activity, TrendingUp } from "lucide-react";
 
 const RUST = "#d96c47";
 const RUST_DEEP = "#c25b3a";
@@ -254,10 +255,10 @@ export default function PillarFlow() {
     <div className="w-full">
       <div className="grid lg:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] gap-y-2 lg:gap-x-3 items-stretch">
         {PILLARS.map((p, i) => (
-          <>
-            <PillarShell key={p.n} {...p} />
-            {p.next && <Connector key={`c-${i}`} label={p.next} />}
-          </>
+          <Fragment key={p.n}>
+            <PillarShell {...p} />
+            {p.next && <Connector label={p.next} />}
+          </Fragment>
         ))}
       </div>
 
