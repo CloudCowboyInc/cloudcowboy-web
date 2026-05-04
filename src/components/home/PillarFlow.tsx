@@ -1,12 +1,12 @@
 import { Fragment } from "react";
-import { Globe, FileText, Calendar, Users, Clock, Smartphone, MapPin, Activity, TrendingUp } from "lucide-react";
+import { Globe, FileText, Calendar, Users, Clock, Smartphone, MapPin, Activity, TrendingUp, RotateCw } from "lucide-react";
 
 const RUST = "#d96c47";
 const RUST_DEEP = "#c25b3a";
 
 function DataChips({ items }: { items: string[] }) {
   return (
-    <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1.5 justify-center">
+    <div className="mt-5 flex flex-wrap gap-x-3 gap-y-1.5">
       {items.map((d) => (
         <span
           key={d}
@@ -26,6 +26,7 @@ function PillarShell({
   body,
   visual,
   data,
+  flip,
 }: {
   n: string;
   title: string;
@@ -33,71 +34,56 @@ function PillarShell({
   body: string;
   visual: React.ReactNode;
   data: string[];
+  flip?: boolean;
 }) {
   return (
-    <div className="relative rounded-2xl border border-white/10 bg-[#1a2332]/65 backdrop-blur-sm p-7 transition-all duration-300 hover:border-[#c25b3a]/45 hover:-translate-y-1 hover:shadow-[0_0_30px_-12px_rgba(217,108,71,0.4)]">
-      <span className="text-xs tracking-[0.3em] text-[#c25b3a] font-medium">PILLAR · {n}</span>
-      <h3 className="font-display text-2xl font-semibold text-[#e8ecf1] mt-2 mb-2 leading-tight">{title}</h3>
-      <p className="text-[#b9c2d2] text-base mb-3">{tag}</p>
-      <p className="text-[#8b95a8] text-sm leading-relaxed mb-5">{body}</p>
-      <div className="rounded-xl border border-[#c25b3a]/20 bg-[#0f1722]/50 p-4 flex items-center justify-center min-h-[120px]">
-        {visual}
+    <div className="relative w-full rounded-2xl border border-white/10 bg-[#1a2332]/65 backdrop-blur-sm p-8 md:p-12 transition-all duration-300 hover:border-[#c25b3a]/45 hover:shadow-[0_0_40px_-14px_rgba(217,108,71,0.45)]">
+      <div
+        className={`grid md:grid-cols-2 gap-8 md:gap-12 items-center ${
+          flip ? "md:[&>*:first-child]:order-2" : ""
+        }`}
+      >
+        {/* Copy */}
+        <div>
+          <span className="text-xs tracking-[0.3em] text-[#c25b3a] font-medium">PILLAR · {n}</span>
+          <h3 className="font-display text-3xl md:text-4xl font-semibold text-[#e8ecf1] mt-3 mb-3 leading-tight">
+            {title}
+          </h3>
+          <p className="text-[#b9c2d2] text-lg mb-4">{tag}</p>
+          <p className="text-[#8b95a8] text-base leading-relaxed">{body}</p>
+          <DataChips items={data} />
+        </div>
+        {/* Visual */}
+        <div className="rounded-xl border border-[#c25b3a]/20 bg-[#0f1722]/60 p-6 md:p-8 flex items-center justify-center min-h-[220px]">
+          {visual}
+        </div>
       </div>
-      <DataChips items={data} />
     </div>
   );
 }
 
-/* Animated dashed connector with traveling particle.
-   Horizontal on lg+, vertical on smaller screens. */
+/* Vertical animated dashed connector with a rust particle traveling top→bottom. */
 function Connector({ label }: { label: string }) {
   return (
-    <div className="relative flex items-center justify-center my-4 lg:my-0 lg:mx-1">
-      {/* Vertical (mobile) */}
-      <div className="lg:hidden flex flex-col items-center w-full">
-        <div className="relative h-20 w-px overflow-hidden">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `repeating-linear-gradient(to bottom, ${RUST} 0 6px, transparent 6px 12px)`,
-              opacity: 0.55,
-            }}
-          />
-          <span
-            className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full"
-            style={{
-              background: RUST,
-              boxShadow: `0 0 12px ${RUST}`,
-              animation: "cc-flow-down 2.4s linear infinite",
-            }}
-          />
-        </div>
-        <span className="text-[10px] tracking-[0.25em] uppercase text-[#d96c47] mt-2">{label}</span>
+    <div className="flex flex-col items-center justify-center w-full py-6">
+      <div className="relative h-24 w-px overflow-hidden">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `repeating-linear-gradient(to bottom, ${RUST} 0 6px, transparent 6px 12px)`,
+            opacity: 0.55,
+          }}
+        />
+        <span
+          className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full"
+          style={{
+            background: RUST,
+            boxShadow: `0 0 12px ${RUST}`,
+            animation: "cc-flow-down 2.4s linear infinite",
+          }}
+        />
       </div>
-
-      {/* Horizontal (desktop) */}
-      <div className="hidden lg:flex flex-col items-center justify-center w-full min-w-[80px]">
-        <span className="text-[10px] tracking-[0.25em] uppercase text-[#d96c47] mb-2 whitespace-nowrap">
-          {label}
-        </span>
-        <div className="relative h-px w-full overflow-hidden">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `repeating-linear-gradient(to right, ${RUST} 0 6px, transparent 6px 12px)`,
-              opacity: 0.55,
-            }}
-          />
-          <span
-            className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full"
-            style={{
-              background: RUST,
-              boxShadow: `0 0 12px ${RUST}`,
-              animation: "cc-flow-right 2.4s linear infinite",
-            }}
-          />
-        </div>
-      </div>
+      <span className="text-[10px] tracking-[0.3em] uppercase text-[#d96c47] mt-3">{label}</span>
     </div>
   );
 }
@@ -216,9 +202,9 @@ const PILLARS = [
     n: "01",
     title: "Quoting & Scheduling",
     tag: "Stop chasing quotes. Start closing them.",
-    body: "A farmer requests a job through a widget on your existing website. Cloud Cowboy generates the price, drafts the contract, takes payment, and books your schedule — automatically. You never had to pick up the phone.",
+    body: "A farmer requests a job through a widget on your existing website. Cloud Cowboy generates the price, drafts the contract, processes the payment, and books your schedule — automatically. We handle payment processing end-to-end: collected, secured, and reconciled inside Cloud Cowboy. You never had to pick up the phone. You never had to chase down a check.",
     visual: <VisualQuoting />,
-    data: ["Job location", "Acreage", "Service type", "Schedule"],
+    data: ["Job location", "Acreage", "Service type", "Payment", "Schedule"],
     next: "Sold job → executable plan",
   },
   {
@@ -253,33 +239,29 @@ const PILLARS = [
 export default function PillarFlow() {
   return (
     <div className="w-full">
-      <div className="grid lg:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] gap-y-2 lg:gap-x-3 items-stretch">
+      <div className="flex flex-col items-stretch max-w-5xl mx-auto">
         {PILLARS.map((p, i) => (
           <Fragment key={p.n}>
-            <PillarShell {...p} />
+            <PillarShell {...p} flip={i % 2 === 1} />
             {p.next && <Connector label={p.next} />}
           </Fragment>
         ))}
-      </div>
 
-      {/* Loop-close arc */}
-      <div className="relative mt-6 hidden lg:block">
-        <svg viewBox="0 0 1200 80" className="w-full h-16" preserveAspectRatio="none">
-          <path
-            d="M 1150,5 C 1150,70 50,70 50,5"
-            fill="none"
-            stroke={RUST}
-            strokeWidth="1.2"
-            strokeDasharray="6 6"
-            opacity="0.55"
-          />
-          <circle r="3.5" fill={RUST} style={{ filter: `drop-shadow(0 0 6px ${RUST})` }}>
-            <animateMotion dur="6s" repeatCount="indefinite" path="M 1150,5 C 1150,70 50,70 50,5" />
-          </circle>
-        </svg>
-        <p className="text-center text-xs tracking-[0.25em] uppercase text-[#d96c47] -mt-2">
-          Insights sharpen the next quote · The platform learns from every job
-        </p>
+        {/* Loop-close: circular arrow */}
+        <div className="flex flex-col items-center justify-center pt-10">
+          <div
+            className="w-14 h-14 rounded-full border border-[#c25b3a]/50 flex items-center justify-center"
+            style={{ boxShadow: `0 0 24px -6px ${RUST}` }}
+          >
+            <RotateCw className="w-6 h-6" style={{ color: RUST, transform: "scaleX(-1)" }} />
+          </div>
+          <p className="text-[10px] tracking-[0.3em] uppercase text-[#d96c47] mt-3">
+            BACK TO START
+          </p>
+          <p className="text-center text-sm text-[#b9c2d2] mt-2 max-w-md">
+            Insights sharpen the next quote — the platform learns from every job you run.
+          </p>
+        </div>
       </div>
 
       <p className="text-center text-[#b9c2d2] text-base md:text-lg mt-10 max-w-3xl mx-auto leading-relaxed">
