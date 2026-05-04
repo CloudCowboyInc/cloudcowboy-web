@@ -1,7 +1,36 @@
+import { Tractor, Truck, Plane } from "lucide-react";
+import { renderToStaticMarkup } from "react-dom/server";
+import logoSvg from "@/assets/cloud-cowboy-logo.svg";
+
+// Inline quadcopter (top-down) SVG markup
+const QuadcopterSvg = (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="2.2" />
+    <line x1="12" y1="12" x2="5" y2="5" />
+    <line x1="12" y1="12" x2="19" y2="5" />
+    <line x1="12" y1="12" x2="5" y2="19" />
+    <line x1="12" y1="12" x2="19" y2="19" />
+    <circle cx="5" cy="5" r="2.4" />
+    <circle cx="19" cy="5" r="2.4" />
+    <circle cx="5" cy="19" r="2.4" />
+    <circle cx="19" cy="19" r="2.4" />
+  </svg>
+);
+
+const iconToDataUri = (node: JSX.Element) =>
+  `data:image/svg+xml;utf8,${encodeURIComponent(renderToStaticMarkup(node))}`;
+
+const ICONS = [
+  iconToDataUri(QuadcopterSvg),
+  iconToDataUri(<Tractor color="#d96c47" size={20} strokeWidth={1.8} />),
+  iconToDataUri(<Truck color="#d96c47" size={20} strokeWidth={1.8} />),
+  iconToDataUri(<Plane color="#d96c47" size={20} strokeWidth={1.8} />),
+];
+
 /**
  * Animated SVG showing four labeled circular nodes arranged in an oval:
  * QUOTE → PLAN → EXECUTE → LEARN, connected by a dashed oval path.
- * Pulsing concentric rings on each node + three glowing rust particles
+ * Pulsing concentric rings on each node + four ag-service vehicle icons
  * orbiting the loop via animateMotion.
  */
 export default function WorkflowLoop() {
@@ -38,11 +67,13 @@ export default function WorkflowLoop() {
             <stop offset="50%" stopColor="#d96c47" stopOpacity="0.85" />
             <stop offset="100%" stopColor="#8a3d24" stopOpacity="0.55" />
           </linearGradient>
-          <radialGradient id="particleGrad">
-            <stop offset="0%" stopColor="#ffb38a" stopOpacity="1" />
-            <stop offset="60%" stopColor="#d96c47" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#c25b3a" stopOpacity="0" />
-          </radialGradient>
+          <filter id="iconGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="1.2" result="b" />
+            <feMerge>
+              <feMergeNode in="b" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
 
           {/* The orbit path (referenced by mpath) */}
           <path id="cc-orbit" d={ovalPath} />
@@ -58,13 +89,21 @@ export default function WorkflowLoop() {
           opacity="0.7"
         />
 
-        {/* Orbiting particles */}
-        {[0, 2, 4].map((delay, i) => (
-          <circle key={i} r="6" fill="url(#particleGrad)">
-            <animateMotion dur="8s" repeatCount="indefinite" begin={`${delay}s`} rotate="auto">
+        {/* Orbiting ag-service vehicle icons (evenly spaced 90deg apart) */}
+        {ICONS.map((href, i) => (
+          <image
+            key={i}
+            href={href}
+            width="20"
+            height="20"
+            x="-10"
+            y="-10"
+            filter="url(#iconGlow)"
+          >
+            <animateMotion dur="8s" repeatCount="indefinite" begin={`${i * 2}s`}>
               <mpath href="#cc-orbit" />
             </animateMotion>
-          </circle>
+          </image>
         ))}
 
         {/* Nodes */}
@@ -96,6 +135,16 @@ export default function WorkflowLoop() {
               fill="#0f1722"
               stroke="#c25b3a"
               strokeWidth="2"
+            />
+            {/* Cloud Cowboy logo watermark behind label */}
+            <image
+              href={logoSvg}
+              x={n.x - 26}
+              y={n.y - 26}
+              width="52"
+              height="52"
+              opacity="0.13"
+              style={{ pointerEvents: "none" }}
             />
             <text
               x={n.x}
