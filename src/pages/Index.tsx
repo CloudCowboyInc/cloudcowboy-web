@@ -1,6 +1,7 @@
 import { Laptop, Smartphone } from "lucide-react";
 import WorkflowLoop from "@/components/home/WorkflowLoop";
-import PillarCards from "@/components/home/PillarCards";
+import PillarFlow from "@/components/home/PillarFlow";
+import AgenticSection from "@/components/home/AgenticSection";
 import SectionSpy from "@/components/home/SectionSpy";
 import Reveal from "@/components/home/Reveal";
 
@@ -85,20 +86,38 @@ const Index = () => {
 
         {/* ─────────── 3 · 4-PILLAR WALKTHROUGH ─────────── */}
         <section id="pillars" className="cc-anchor relative px-6 py-24">
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-7xl mx-auto">
             <Reveal className="text-center mb-14">
-              <Eyebrow>The Platform</Eyebrow>
+              <Eyebrow>One Platform · Four Connected Pillars</Eyebrow>
               <h2 className="font-display text-4xl md:text-5xl font-bold leading-tight mb-5">
-                Four pillars. <span className="text-[#d96c47]">One continuous loop.</span>
+                Every job <span className="text-[#d96c47]">feeds the next.</span>
               </h2>
               <p className="text-[#b9c2d2] text-lg max-w-2xl mx-auto">
-                Click any pillar to see how it works inside your day-to-day.
+                One platform connects every part of your operation. Each pillar produces data the next pillar uses to get smarter — automation and insight you cannot get from a stack of disconnected tools.
               </p>
             </Reveal>
             <Reveal delayMs={120}>
-              <PillarCards />
+              <PillarFlow />
             </Reveal>
           </div>
+        </section>
+
+        {/* ─────────── 3.5 · BUILT ON AN AGENTIC PLATFORM ─────────── */}
+        <section id="agentic" className="cc-anchor relative px-6 py-28">
+          <div className="max-w-4xl mx-auto text-center mb-14">
+            <Reveal>
+              <Eyebrow>Built on an Agentic Platform</Eyebrow>
+              <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-7">
+                Bespoke. Local. <span className="text-[#d96c47]">Private by default.</span>
+              </h2>
+              <p className="text-lg md:text-xl text-[#b9c2d2] leading-relaxed">
+                Cloud Cowboy isn't built on someone else's API. The agents that quote your jobs, plan your missions, and run your operations are bespoke and local — purpose-built for your business and running entirely within Cloud Cowboy. Your data, your customers' data, your contracts — all handled internally, end to end.
+              </p>
+            </Reveal>
+          </div>
+          <Reveal delayMs={120}>
+            <AgenticSection />
+          </Reveal>
         </section>
 
         {/* ─────────── 4 · HARDWARE AGNOSTIC ─────────── */}
