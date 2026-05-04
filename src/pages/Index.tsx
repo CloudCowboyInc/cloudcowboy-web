@@ -1,5 +1,6 @@
 import { Laptop, Smartphone } from "lucide-react";
 import WorkflowLoop from "@/components/home/WorkflowLoop";
+import HeroLanding from "@/components/home/HeroLanding";
 import PillarFlow from "@/components/home/PillarFlow";
 import AgenticSection from "@/components/home/AgenticSection";
 import SectionSpy from "@/components/home/SectionSpy";
@@ -36,6 +37,8 @@ const Index = () => {
       <SectionSpy />
 
       <main className="relative" style={{ zIndex: 2, color: "#e8ecf1" }}>
+        <HeroLanding />
+
         {/* ─────────── HERO ─────────── */}
         <section
           id="hero"
