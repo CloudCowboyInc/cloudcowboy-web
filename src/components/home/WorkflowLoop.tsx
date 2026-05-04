@@ -1,30 +1,57 @@
-import { Tractor, Truck, Plane } from "lucide-react";
-import { renderToStaticMarkup } from "react-dom/server";
 import logoSvg from "@/assets/cloud-cowboy-logo.svg";
 
-// Inline quadcopter (top-down) SVG markup
-const QuadcopterSvg = (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="2.2" />
-    <line x1="12" y1="12" x2="5" y2="5" />
-    <line x1="12" y1="12" x2="19" y2="5" />
-    <line x1="12" y1="12" x2="5" y2="19" />
-    <line x1="12" y1="12" x2="19" y2="19" />
-    <circle cx="5" cy="5" r="2.4" />
-    <circle cx="19" cy="5" r="2.4" />
-    <circle cx="5" cy="19" r="2.4" />
-    <circle cx="19" cy="19" r="2.4" />
-  </svg>
-);
+const RUST = "#d96c47";
 
-const iconToDataUri = (node: JSX.Element) =>
-  `data:image/svg+xml;utf8,${encodeURIComponent(renderToStaticMarkup(node))}`;
+// Inline icon contents (24x24 viewBox). All strokes use currentColor via parent <g color>.
+const ICON_PATHS: Record<string, JSX.Element> = {
+  drone: (
+    <g fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="2.2" />
+      <line x1="12" y1="12" x2="5" y2="5" />
+      <line x1="12" y1="12" x2="19" y2="5" />
+      <line x1="12" y1="12" x2="5" y2="19" />
+      <line x1="12" y1="12" x2="19" y2="19" />
+      <circle cx="5" cy="5" r="2.4" />
+      <circle cx="19" cy="5" r="2.4" />
+      <circle cx="5" cy="19" r="2.4" />
+      <circle cx="19" cy="19" r="2.4" />
+    </g>
+  ),
+  // lucide Tractor
+  tractor: (
+    <g fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 4h9l1 7" />
+      <path d="M4 11V4" />
+      <path d="M8 10V4" />
+      <path d="M18 5c-.6 0-1 .4-1 1v5.5" />
+      <path d="m22 14-4.5-4.5" />
+      <circle cx="7" cy="15" r="3" />
+      <circle cx="17" cy="18" r="3" />
+    </g>
+  ),
+  // lucide Truck
+  truck: (
+    <g fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" />
+      <path d="M15 18H9" />
+      <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" />
+      <circle cx="17" cy="18" r="2" />
+      <circle cx="7" cy="18" r="2" />
+    </g>
+  ),
+  // lucide Plane (rotated -45 in render)
+  plane: (
+    <g fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+    </g>
+  ),
+};
 
-const ICONS = [
-  iconToDataUri(QuadcopterSvg),
-  iconToDataUri(<Tractor color="#d96c47" size={20} strokeWidth={1.8} />),
-  iconToDataUri(<Truck color="#d96c47" size={20} strokeWidth={1.8} />),
-  iconToDataUri(<Plane color="#d96c47" size={20} strokeWidth={1.8} />),
+const ICONS: { key: string; rotate?: number }[] = [
+  { key: "drone" },
+  { key: "tractor" },
+  { key: "truck" },
+  { key: "plane", rotate: -45 },
 ];
 
 /**
@@ -90,20 +117,17 @@ export default function WorkflowLoop() {
         />
 
         {/* Orbiting ag-service vehicle icons (evenly spaced 90deg apart) */}
-        {ICONS.map((href, i) => (
-          <image
-            key={i}
-            href={href}
-            width="20"
-            height="20"
-            x="-10"
-            y="-10"
-            filter="url(#iconGlow)"
-          >
+        {ICONS.map(({ key, rotate }, i) => (
+          <g key={key} color={RUST} filter="url(#iconGlow)">
+            <g transform={`translate(-10,-10) ${rotate ? `rotate(${rotate} 10 10)` : ""}`}>
+              <svg width="20" height="20" viewBox="0 0 24 24" overflow="visible">
+                {ICON_PATHS[key]}
+              </svg>
+            </g>
             <animateMotion dur="8s" repeatCount="indefinite" begin={`${i * 2}s`}>
               <mpath href="#cc-orbit" />
             </animateMotion>
-          </image>
+          </g>
         ))}
 
         {/* Nodes */}
