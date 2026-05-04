@@ -76,7 +76,7 @@ function Connector({ label }: { label: string }) {
       </div>
 
       {/* Horizontal (desktop) */}
-      <div className="hidden lg:flex flex-col items-center justify-center w-full">
+      <div className="hidden lg:flex flex-col items-center justify-center w-full min-w-[80px]">
         <span className="text-[10px] tracking-[0.25em] uppercase text-[#d96c47] mb-2 whitespace-nowrap">
           {label}
         </span>
