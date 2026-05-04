@@ -4,6 +4,7 @@ const SECTIONS = [
   { id: "hero", label: "Loop" },
   { id: "ai", label: "AI" },
   { id: "pillars", label: "Platform" },
+  { id: "agentic", label: "Agentic" },
   { id: "hardware", label: "Hardware" },
   { id: "focus", label: "Focus" },
   { id: "believe", label: "Why" },
