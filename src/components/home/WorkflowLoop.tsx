@@ -114,7 +114,7 @@ export default function WorkflowLoop() {
         {ICONS.map(({ key, rotate }, i) => {
           const size = 28;
           const half = size / 2;
-          const begins = [0, 3.5, 7, 10.5];
+          const begins = [0, -3.5, -7, -10.5];
           return (
             <g key={key} color={RUST} filter="url(#iconGlow)">
               <g transform={`translate(${-half},${-half}) ${rotate ? `rotate(${rotate} ${half} ${half})` : ""}`}>
