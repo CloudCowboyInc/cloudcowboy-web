@@ -65,7 +65,7 @@ function PillarShell({
 /* Vertical animated dashed connector with a rust particle traveling top→bottom. */
 function Connector({ label }: { label: string }) {
   return (
-    <div className="flex flex-col items-center justify-center w-full py-6">
+    <div className="flex flex-col items-center justify-center w-full py-10 md:py-12">
       <div className="relative h-24 w-px overflow-hidden">
         <div
           className="absolute inset-0"
