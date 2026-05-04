@@ -1,5 +1,4 @@
 import { Laptop, Smartphone } from "lucide-react";
-import AnimatedBackground from "@/components/home/AnimatedBackground";
 import WorkflowLoop from "@/components/home/WorkflowLoop";
 import PillarCards from "@/components/home/PillarCards";
 import SectionSpy from "@/components/home/SectionSpy";
@@ -33,7 +32,6 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 const Index = () => {
   return (
     <>
-      <AnimatedBackground />
       <SectionSpy />
 
       <main className="relative" style={{ zIndex: 2, color: "#e8ecf1" }}>
