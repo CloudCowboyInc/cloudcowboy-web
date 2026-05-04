@@ -35,7 +35,7 @@ export default function HeroLanding() {
       />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-24 md:py-32 w-full">
+      <div className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-20 md:py-24 w-full h-full">
         <motion.div
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -46,7 +46,7 @@ export default function HeroLanding() {
             animate={{ scale: [1, 1.03, 1] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           >
-            <CloudCowboyLogo size={232} />
+            <CloudCowboyLogo size={228} />
           </motion.div>
         </motion.div>
 
@@ -56,14 +56,14 @@ export default function HeroLanding() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.25, ease: "easeOut" }}
-          className="mt-12 w-[88vw] max-w-[640px] h-auto"
+          className="mt-6 w-[86vw] max-w-[660px] h-auto"
         />
 
         <motion.p
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
-          className="mt-8 text-[14px] md:text-[15px] tracking-[0.3em] uppercase font-medium"
+          className="mt-7 text-[14px] md:text-[15px] tracking-[0.3em] uppercase font-medium"
           style={{ color: "#d96c47" }}
         >
           The Ag Service Operating System
