@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 const SECTIONS = [
+  { id: "landing", label: "Cloud Cowboy" },
   { id: "hero", label: "Loop" },
   { id: "ai", label: "AI" },
   { id: "pillars", label: "Platform" },
@@ -12,7 +13,7 @@ const SECTIONS = [
 ];
 
 export default function SectionSpy() {
-  const [active, setActive] = useState("hero");
+  const [active, setActive] = useState("landing");
 
   useEffect(() => {
     const els = SECTIONS.map((s) => document.getElementById(s.id)).filter(
