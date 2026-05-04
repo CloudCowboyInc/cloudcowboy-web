@@ -29,39 +29,31 @@ const ICON_PATHS: Record<string, JSX.Element> = {
       <circle cx="17" cy="18" r="3" />
     </g>
   ),
-  // Semi tractor cab (no trailer): hood, cab with slanted windshield, exhaust stack, two wheels.
+  // Semi tractor cab (no trailer)
   truck: (
-    <g fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round">
-      {/* Cab body */}
-      <path d="M9 17 V8 H16 V17" />
-      {/* Slanted windshield */}
-      <path d="M9 8 L12 5 H16 V8" />
-      {/* Hood forward of cab */}
-      <path d="M9 17 V12 H4 V17" />
-      {/* Exhaust stack rising from roof behind cab */}
-      <path d="M15 8 V3" />
-      <path d="M14 3 H16" />
-      {/* Wheels */}
-      <circle cx="6" cy="18" r="1.6" />
-      <circle cx="14" cy="18" r="1.9" />
+    <g fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M 16 6 L 16 17 L 8 17 L 8 12 L 11 12 L 11 6 Z" />
+      <line x1="11" y1="6" x2="8" y2="12" />
+      <line x1="3" y1="17" x2="8" y2="17" />
+      <line x1="3" y1="14" x2="3" y2="17" />
+      <line x1="3" y1="14" x2="8" y2="14" />
+      <line x1="14" y1="6" x2="14" y2="2" strokeWidth={1.5} />
+      <circle cx="14" cy="1.6" r="0.6" fill="currentColor" stroke="none" />
+      <circle cx="6" cy="19" r="1.8" />
+      <circle cx="14" cy="19" r="1.8" />
     </g>
   ),
-  // Crop duster biplane (side profile)
+  // Crop duster biplane
   plane: (
-    <g fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round">
-      {/* Fuselage */}
-      <rect x="6" y="11" width="12" height="3" rx="1.4" />
-      {/* Upper wing */}
-      <path d="M8 8 H16" />
-      {/* Lower wing */}
-      <path d="M5 16 H19" />
-      {/* Strut between wings */}
-      <path d="M12 8 V16" />
-      {/* Tail rudder */}
-      <path d="M18 11 L20 8 L20 14" />
-      {/* Propeller at front */}
-      <path d="M5 11 V14" />
-      <path d="M4 12.5 H6" />
+    <g fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+      <line x1="4" y1="12" x2="18" y2="12" />
+      <line x1="9" y1="8" x2="16" y2="8" />
+      <line x1="7" y1="16" x2="17" y2="16" />
+      <line x1="10.5" y1="8" x2="10.5" y2="16" strokeWidth={1} />
+      <line x1="14.5" y1="8" x2="14.5" y2="16" strokeWidth={1} />
+      <path d="M 18 10 L 21 12 L 18 14 Z" fill="currentColor" />
+      <line x1="3" y1="9" x2="3" y2="15" strokeWidth={2} />
+      <circle cx="4" cy="12" r="0.6" fill="currentColor" stroke="none" />
     </g>
   ),
 };
