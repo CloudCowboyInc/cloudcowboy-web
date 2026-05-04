@@ -40,10 +40,10 @@ export default function Navbar() {
         "bg-transparent"}`
         }>
         
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <CloudCowboyLogo size={36} />
-            <img src={wordmark} alt="Cloud Cowboy" className="h-7 md:h-8 w-auto" />
+        <div className="max-w-7xl mx-auto px-6 md:px-8 h-[72px] md:h-20 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-3">
+            <CloudCowboyLogo size={44} />
+            <img src={wordmark} alt="Cloud Cowboy" className="h-10 md:h-11 w-auto" />
           </Link>
 
           {/* Desktop nav */}
@@ -88,7 +88,7 @@ export default function Navbar() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.2 }}
-          className="fixed top-16 left-0 right-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border/50 px-6 py-6 flex flex-col gap-4 md:hidden">
+          className="fixed top-[72px] left-0 right-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border/50 px-6 py-6 flex flex-col gap-4 md:hidden">
           
             {navLinks.map((link) =>
           <Link
