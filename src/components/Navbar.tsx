@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import CloudCowboyLogo from "./CloudCowboyLogo";
+import wordmark from "@/assets/cloud-cowboy-wordmark.svg";
 
 const DEMO_LINK = "https://calendly.com/chris-cloudcowboy/30min";
 
@@ -42,7 +43,7 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <CloudCowboyLogo size={36} />
-            <span className="text-xl font-display font-bold text-primary">Cloud Cowboy</span>
+            <img src={wordmark} alt="Cloud Cowboy" className="h-7 md:h-8 w-auto" />
           </Link>
 
           {/* Desktop nav */}
