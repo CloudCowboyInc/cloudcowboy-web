@@ -1,4 +1,5 @@
 import { Cog, Server, ShieldCheck } from "lucide-react";
+import logoSvg from "@/assets/cloud-cowboy-logo.svg";
 
 const RUST = "#d96c47";
 
@@ -42,6 +43,17 @@ function PerimeterDiagram() {
 
   return (
     <svg viewBox="0 0 600 600" className="w-full max-w-[600px] mx-auto">
+      <defs>
+        <filter id="ccLogoGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="6" result="b" />
+          <feFlood floodColor={RUST} floodOpacity="0.55" />
+          <feComposite in2="b" operator="in" result="glow" />
+          <feMerge>
+            <feMergeNode in="glow" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
       {/* Outside-perimeter dimmed third-parties */}
       {[
         { x: 60, y: 80, label: "Third-party AI" },
@@ -96,14 +108,17 @@ function PerimeterDiagram() {
         );
       })}
 
-      {/* Center mark */}
-      <circle cx={cx} cy={cy} r="34" fill="#0f1722" stroke={RUST} strokeWidth="1.5" />
-      <text x={cx} y={cy - 2} textAnchor="middle" fontSize="11" fill="#e8ecf1" letterSpacing="2">
-        CLOUD
-      </text>
-      <text x={cx} y={cy + 12} textAnchor="middle" fontSize="11" fill={RUST} letterSpacing="2">
-        COWBOY
-      </text>
+      {/* Center: Cloud Cowboy logo with rust glow */}
+      <circle cx={cx} cy={cy} r="56" fill={`${RUST}1a`} />
+      <circle cx={cx} cy={cy} r="48" fill="#0f1722" stroke={RUST} strokeWidth="1.5" />
+      <image
+        href={logoSvg}
+        x={cx - 40}
+        y={cy - 40}
+        width="80"
+        height="80"
+        filter="url(#ccLogoGlow)"
+      />
 
       {/* Agent nodes */}
       {agents.map((a) => {
