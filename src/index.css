@@ -99,3 +99,104 @@
     background-size: 400px 400px;
   }
 }
+
+/* ============================================================
+   Cloud Cowboy — animated background layers + helpers
+   ============================================================ */
+
+.cc-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  opacity: 0.2;
+  will-change: transform, opacity;
+}
+.cc-orb-1 {
+  width: 620px; height: 620px;
+  top: -160px; left: -160px;
+  background: radial-gradient(circle at 30% 30%, #c25b3a, transparent 70%);
+  animation: cc-orb-float-1 28s ease-in-out infinite;
+}
+.cc-orb-2 {
+  width: 720px; height: 720px;
+  top: 30%; right: -220px;
+  background: radial-gradient(circle at 50% 50%, #2e5666, transparent 70%);
+  animation: cc-orb-float-2 36s ease-in-out infinite;
+}
+.cc-orb-3 {
+  width: 800px; height: 800px;
+  bottom: -260px; left: 30%;
+  background: radial-gradient(circle at 50% 50%, #8a3d24, transparent 70%);
+  animation: cc-orb-float-3 44s ease-in-out infinite;
+}
+
+@keyframes cc-orb-float-1 {
+  0%, 100% { transform: translate(0,0) scale(1);   opacity: 0.18; }
+  50%      { transform: translate(60px,40px) scale(1.08); opacity: 0.26; }
+}
+@keyframes cc-orb-float-2 {
+  0%, 100% { transform: translate(0,0) scale(1);   opacity: 0.16; }
+  50%      { transform: translate(-50px,30px) scale(1.06); opacity: 0.24; }
+}
+@keyframes cc-orb-float-3 {
+  0%, 100% { transform: translate(0,0) scale(1);   opacity: 0.18; }
+  50%      { transform: translate(40px,-50px) scale(1.1); opacity: 0.26; }
+}
+
+.cc-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(194,91,58,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(194,91,58,0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+  animation: cc-grid-drift 80s linear infinite;
+  -webkit-mask-image: radial-gradient(ellipse at center, black 35%, transparent 85%);
+          mask-image: radial-gradient(ellipse at center, black 35%, transparent 85%);
+}
+@keyframes cc-grid-drift {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 640px 640px, 640px 640px; }
+}
+
+.cc-scanline {
+  position: absolute;
+  left: 0; right: 0;
+  height: 200px;
+  top: -200px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(194,91,58,0.10) 50%,
+    transparent
+  );
+  animation: cc-scan 12s linear infinite;
+}
+@keyframes cc-scan {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(calc(100vh + 400px)); }
+}
+
+.cc-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(15,23,34,0.85) 100%);
+}
+
+/* Reveal-on-scroll */
+.cc-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+  will-change: opacity, transform;
+}
+.cc-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Section anchor offset for sticky nav */
+.cc-anchor {
+  scroll-margin-top: 96px;
+}
+
