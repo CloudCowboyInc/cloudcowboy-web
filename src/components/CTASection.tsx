@@ -72,7 +72,7 @@ export default function CTASection() {
             rel="noopener noreferrer"
             className="px-8 py-4 rounded-lg border border-primary/40 text-foreground font-semibold text-lg hover:border-primary/70 transition-colors">
             
-            Join the Beta
+            Get in Touch
           </a>
         </motion.div>
 

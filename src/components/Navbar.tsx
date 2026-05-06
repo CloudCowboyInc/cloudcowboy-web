@@ -65,7 +65,7 @@ export default function Navbar() {
               rel="noopener noreferrer"
               className="px-5 py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity">
               
-              ​Join The Beta   
+              Get in Touch
             </a>
           </div>
 
@@ -107,7 +107,7 @@ export default function Navbar() {
             rel="noopener noreferrer"
             className="px-5 py-3 rounded-lg bg-primary text-primary-foreground font-semibold text-sm text-center hover:opacity-90 transition-opacity mt-2">
             
-              Book a Demo
+              Get in Touch
             </a>
           </motion.div>
         }

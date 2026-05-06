@@ -83,7 +83,7 @@ export default function JoinMovementSection() {
               rel="noopener noreferrer"
               className="inline-block px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold glow-primary hover:opacity-90 transition-opacity"
             >
-              Apply for Beta
+              Get in Touch
             </a>
           </motion.div>
 
