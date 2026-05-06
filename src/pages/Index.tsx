@@ -55,7 +55,7 @@ const Index = () => {
                 From quote to insight, one platform runs your business — so you can focus on the farmers you serve.
               </p>
               <div className="flex justify-center lg:justify-start">
-                <CTAButton large>Join the Beta</CTAButton>
+                <CTAButton large>Get in Touch</CTAButton>
               </div>
             </Reveal>
 
@@ -211,7 +211,7 @@ const Index = () => {
               Ready to focus on{" "}
               <span className="text-[#d96c47]">what matters?</span>
             </h2>
-            <CTAButton large>Join the Beta</CTAButton>
+            <CTAButton large>Get in Touch</CTAButton>
           </Reveal>
         </section>
       </main>
