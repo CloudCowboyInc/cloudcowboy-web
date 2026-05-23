@@ -1,0 +1,95 @@
+name: Deploy to AWS Staging (S3 + CloudFront)
+
+on:
+  push:
+    branches: [staging]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: us-east-1
+  AWS_ROLE_ARN: arn:aws:iam::573631993254:role/CloudCowboyWebStagingDeploy
+  S3_BUCKET: cloudcowboy-us-staging-site
+  CLOUDFRONT_DISTRIBUTION_ID: E2AMU4XU26RIJI
+  NODE_VERSION: "20"
+  BUILD_OUTPUT_DIR: dist
+
+concurrency:
+  group: deploy-staging-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build & Deploy to STAGING
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          NODE_ENV: production
+          VITE_ENVIRONMENT: staging
+
+      - name: Verify build output exists
+        run: |
+          if [ ! -d "${{ env.BUILD_OUTPUT_DIR }}" ]; then
+            echo "::error::Build output directory '${{ env.BUILD_OUTPUT_DIR }}' not found"
+            exit 1
+          fi
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: github-actions-deploy-staging-${{ github.run_id }}
+
+      - name: Upload hashed assets (1-year cache)
+        run: |
+          aws s3 sync ${{ env.BUILD_OUTPUT_DIR }} s3://${{ env.S3_BUCKET }} \
+            --delete \
+            --exclude "*" \
+            --include "assets/*" \
+            --include "*.woff" --include "*.woff2" \
+            --include "*.ttf" --include "*.otf" --include "*.eot" \
+            --cache-control "public, max-age=31536000, immutable"
+
+      - name: Upload HTML and other files (no-cache)
+        run: |
+          aws s3 sync ${{ env.BUILD_OUTPUT_DIR }} s3://${{ env.S3_BUCKET }} \
+            --delete \
+            --exclude "assets/*" \
+            --exclude "*.woff" --exclude "*.woff2" \
+            --exclude "*.ttf" --exclude "*.otf" --exclude "*.eot" \
+            --cache-control "public, max-age=0, must-revalidate"
+
+      - name: Invalidate CloudFront cache
+        run: |
+          INVALIDATION_ID=$(aws cloudfront create-invalidation \
+            --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/index.html" "/" "/sw.js" "/manifest.json" \
+            --query 'Invalidation.Id' --output text)
+          echo "INVALIDATION_ID=$INVALIDATION_ID" >> $GITHUB_ENV
+
+      - name: Wait for invalidation to complete
+        run: |
+          aws cloudfront wait invalidation-completed \
+            --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --id ${{ env.INVALIDATION_ID }}
+          echo "::notice::Staging deploy complete: https://staging.cloudcowboy.us/"
