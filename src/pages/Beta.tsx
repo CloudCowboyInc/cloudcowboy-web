@@ -21,8 +21,8 @@ export default function BetaPage() {
   return (
     <main className="bg-background text-foreground overflow-x-hidden">
       <Helmet>
-        <title>Beta Program | Cloud Cowboy — Free Access for Ag Service Operators</title>
-        <meta name="description" content="Join the Cloud Cowboy beta and get free access to the ag service operating system built for spray, seed, and custom operators. Lock in founder pricing and shape the platform." />
+        <title>Beta Program | Cloud Cowboy</title>
+        <meta name="description" content="Free beta access to the Cloud Cowboy ag service operating system. Lock in founder pricing and help shape the platform." />
         <link rel="canonical" href="https://cloudcowboy.us/beta" />
         <meta property="og:title" content="Cloud Cowboy Beta — Free Access for Ag Service Operators" />
         <meta property="og:description" content="Free beta access to the ag service operating system. Lock in founder pricing and help shape the platform." />
