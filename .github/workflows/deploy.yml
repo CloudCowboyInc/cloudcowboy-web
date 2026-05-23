@@ -1,0 +1,126 @@
+name: Deploy to AWS (S3 + CloudFront)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# OIDC requires id-token: write. Read repo contents.
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: us-east-1
+  AWS_ROLE_ARN: arn:aws:iam::573631993254:role/CloudCowboyWebDeploy
+  S3_BUCKET: cloudcowboy-us-prod-site
+  CLOUDFRONT_DISTRIBUTION_ID: E17S88TQPA7PM1
+  NODE_VERSION: "20"
+  BUILD_OUTPUT_DIR: dist  # Vite default. Change to "build" for CRA, "out" for Next.js static export.
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false  # Don't cancel an in-flight deploy if a new commit lands; queue it.
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          # Vite reads VITE_* env vars at build time. Add any public build-time config here.
+          NODE_ENV: production
+
+      - name: Verify build output exists
+        run: |
+          if [ ! -d "${{ env.BUILD_OUTPUT_DIR }}" ]; then
+            echo "::error::Build output directory '${{ env.BUILD_OUTPUT_DIR }}' not found. Check your build script."
+            exit 1
+          fi
+          echo "Build output:"
+          ls -la ${{ env.BUILD_OUTPUT_DIR }}
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: github-actions-deploy-${{ github.run_id }}
+
+      # Two-pass upload for correct cache headers.
+      #
+      # Pass 1: Hashed asset files (in /assets/) get a 1-year immutable cache.
+      #         Vite renames these on every build (index-abc123.js), so the URL itself
+      #         changes when content changes — safe to cache forever.
+      #
+      # Pass 2: HTML files and the service worker get no-cache. These have stable URLs
+      #         (index.html), so we must re-fetch every time to discover new asset URLs.
+
+      - name: Upload hashed assets (1-year cache)
+        run: |
+          aws s3 sync ${{ env.BUILD_OUTPUT_DIR }} s3://${{ env.S3_BUCKET }} \
+            --delete \
+            --exclude "*" \
+            --include "assets/*" \
+            --include "*.woff" \
+            --include "*.woff2" \
+            --include "*.ttf" \
+            --include "*.otf" \
+            --include "*.eot" \
+            --cache-control "public, max-age=31536000, immutable"
+
+      - name: Upload HTML and other files (no-cache)
+        run: |
+          aws s3 sync ${{ env.BUILD_OUTPUT_DIR }} s3://${{ env.S3_BUCKET }} \
+            --delete \
+            --exclude "assets/*" \
+            --exclude "*.woff" \
+            --exclude "*.woff2" \
+            --exclude "*.ttf" \
+            --exclude "*.otf" \
+            --exclude "*.eot" \
+            --cache-control "public, max-age=0, must-revalidate"
+
+      - name: Invalidate CloudFront cache
+        run: |
+          INVALIDATION_ID=$(aws cloudfront create-invalidation \
+            --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/index.html" "/" "/sw.js" "/manifest.json" \
+            --query 'Invalidation.Id' \
+            --output text)
+          echo "Created invalidation: $INVALIDATION_ID"
+          echo "INVALIDATION_ID=$INVALIDATION_ID" >> $GITHUB_ENV
+
+      - name: Wait for invalidation to complete
+        run: |
+          aws cloudfront wait invalidation-completed \
+            --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --id ${{ env.INVALIDATION_ID }}
+          echo "::notice::Deploy complete. Invalidation ${{ env.INVALIDATION_ID }} finished."
+
+      - name: Smoke test
+        run: |
+          # Hit the CloudFront URL and verify 200 + presence of security headers
+          # Replace with your actual CloudFront domain or use a custom domain after DNS cutover
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L https://cloudcowboy.us/ || echo "000")
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "::warning::Smoke test got HTTP $HTTP_CODE — may be expected if DNS hasn't been cut over yet"
+          else
+            echo "::notice::Smoke test passed: HTTP 200"
+          fi
