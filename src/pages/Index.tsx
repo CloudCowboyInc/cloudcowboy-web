@@ -36,8 +36,8 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Cloud Cowboy | Ag Service Operating System for Spray, Seed & Custom Operators</title>
-        <meta name="description" content="The all-in-one operating system for ag service businesses — quoting, dispatch, field mapping, compliance, billing, and analytics in one platform built for spray, seed, and custom operators." />
+        <title>Cloud Cowboy | Ag Service Operating System</title>
+        <meta name="description" content="The all-in-one operating system for ag service businesses — quote, dispatch, map, bill, and analyze every job from one platform." />
         <link rel="canonical" href="https://cloudcowboy.us/" />
       </Helmet>
       <SectionSpy />
