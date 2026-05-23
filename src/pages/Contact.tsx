@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Mail, Calendar, Linkedin, Send, Globe } from "lucide-react";
 import Navbar from "@/components/Navbar";
 
@@ -17,6 +18,14 @@ export default function ContactPage() {
 
   return (
     <main className="bg-background text-foreground overflow-x-hidden">
+      <Helmet>
+        <title>Contact Cloud Cowboy | Talk to the Ag Service OS Team</title>
+        <meta name="description" content="Get in touch with Cloud Cowboy. Book a 30-minute call to see how the ag service operating system fits your spray, seed, or custom operation." />
+        <link rel="canonical" href="https://cloudcowboy.us/contact" />
+        <meta property="og:title" content="Contact Cloud Cowboy" />
+        <meta property="og:description" content="Book a 30-minute call to see how the ag service OS fits your operation." />
+        <meta property="og:url" content="https://cloudcowboy.us/contact" />
+      </Helmet>
       {/* Hero */}
       <section ref={heroRef} className="relative pt-32 pb-16 px-6">
         <div className="absolute inset-0 bg-grid-pattern opacity-20" />

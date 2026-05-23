@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { Helmet } from "react-helmet-async";
 import { Gift, Tag, MessageSquare, Trophy, CalendarCheck, Settings, Rocket } from "lucide-react";
 import Navbar from "@/components/Navbar";
 
@@ -19,6 +20,14 @@ export default function BetaPage() {
 
   return (
     <main className="bg-background text-foreground overflow-x-hidden">
+      <Helmet>
+        <title>Beta Program | Cloud Cowboy — Free Access for Ag Service Operators</title>
+        <meta name="description" content="Join the Cloud Cowboy beta and get free access to the ag service operating system built for spray, seed, and custom operators. Lock in founder pricing and shape the platform." />
+        <link rel="canonical" href="https://cloudcowboy.us/beta" />
+        <meta property="og:title" content="Cloud Cowboy Beta — Free Access for Ag Service Operators" />
+        <meta property="og:description" content="Free beta access to the ag service operating system. Lock in founder pricing and help shape the platform." />
+        <meta property="og:url" content="https://cloudcowboy.us/beta" />
+      </Helmet>
       {/* Hero */}
       <section ref={heroRef} className="relative min-h-[70vh] flex items-center justify-center pt-20">
         <div className="absolute inset-0 bg-grid-pattern opacity-30" />
