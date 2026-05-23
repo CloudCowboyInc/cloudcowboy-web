@@ -1,0 +1,15 @@
+# Cloud Cowboy
+
+> The Ag Service Operating System — one platform to quote, dispatch, map, bill, and analyze every job for spray, seed, and custom ag operators.
+
+Cloud Cowboy is an all-in-one operating system for ag service businesses. It connects quoting, dispatch, field mapping, compliance, billing, and analytics so operators can spend less time on paperwork and more time serving farmers. Hardware-agnostic, built on a bespoke agentic platform, private by default.
+
+## Pages
+
+- [Home](/): Overview of the Cloud Cowboy ag service operating system.
+- [Beta Program](/beta): Free beta access for early operators with founder pricing lock-in.
+- [Contact](/contact): Get in touch with the Cloud Cowboy team.
+
+## Optional
+
+- [Book a call](https://calendly.com/chris-cloudcowboy/30min): Schedule a 30-minute conversation with the founder.
