@@ -1,14 +1,19 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { useSearchParams } from "react-router-dom";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, AlertCircle } from "lucide-react";
+import { CheckCircle2, AlertCircle, Info } from "lucide-react";
 
 export default function RequestAccess() {
-  const [form, setForm] = useState({ email: "", name: "", org: "", note: "" });
+  const [params] = useSearchParams();
+  const prefillEmail = params.get("email") ?? "";
+  const fromLogin = params.get("from") === "login";
+
+  const [form, setForm] = useState({ email: prefillEmail, name: "", org: "", note: "" });
   const [done, setDone] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -24,19 +29,26 @@ export default function RequestAccess() {
       return;
     }
     setBusy(true);
-    const { error } = await supabase.from("access_requests").insert({
+    const payload = {
       email: form.email.trim().toLowerCase(),
       name: form.name.trim() || null,
       org: form.org.trim() || null,
       note: form.note.trim() || null,
-    });
+    };
+    const { error } = await supabase.from("access_requests").insert(payload);
+    if (error) {
+      setBusy(false);
+      setErr(error.message);
+      return;
+    }
+    // Best-effort: notify admins by email (no-verify-jwt function). Don't block on it.
+    supabase.functions.invoke("notify-access-request", { body: payload }).catch(() => {});
     setBusy(false);
-    if (error) setErr(error.message);
-    else setDone(true);
+    setDone(true);
   };
 
   return (
-    <div className="mx-auto max-w-lg px-4 pb-24 pt-28">
+    <div className="relative z-10 mx-auto max-w-lg px-4 pb-24 pt-28">
       <Helmet><title>Investor Access · Cloud Cowboy</title></Helmet>
       <h1 className="font-display text-3xl font-bold md:text-4xl">
         <span className="text-gradient-primary">Investor</span> Access
@@ -45,6 +57,13 @@ export default function RequestAccess() {
         Our investor materials are private. Request access and we'll review it —
         once approved, you'll sign in with a one-time email link.
       </p>
+
+      {fromLogin && (
+        <div className="mt-4 flex items-start gap-2 rounded-md border border-secondary/30 bg-secondary/5 p-3 text-xs text-muted-foreground">
+          <Info className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
+          That email isn't on our approved list yet — request access below and we'll review it.
+        </div>
+      )}
 
       <Card className="mt-6 border-border/60 bg-card/70 p-6">
         {done ? (

@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/auth";
 
 function Centered({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 text-center text-sm text-muted-foreground">
+    <div className="relative z-10 flex min-h-screen items-center justify-center px-4 text-center text-sm text-muted-foreground">
       {children}
     </div>
   );

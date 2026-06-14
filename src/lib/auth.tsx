@@ -75,7 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!supabase) return { error: "Backend not configured yet." };
       const { error } = await supabase.auth.signInWithOtp({
         email: e.trim().toLowerCase(),
-        options: { emailRedirectTo: `${window.location.origin}/crm` },
+        options: { emailRedirectTo: `${window.location.origin}/portal` },
       });
       return { error: error?.message ?? null };
     },
