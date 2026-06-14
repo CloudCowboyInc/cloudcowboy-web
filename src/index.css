@@ -221,3 +221,28 @@
   scroll-margin-top: 96px;
 }
 
+
+/* ============================================================
+   Leaflet — dark theme tweaks for the CRM map
+   ============================================================ */
+.leaflet-container { font-family: inherit; position: relative; z-index: 0; }
+.leaflet-tooltip {
+  background: hsl(230 20% 14%);
+  border: 1px solid hsl(230 15% 26%);
+  color: hsl(0 0% 100%);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+.leaflet-tooltip-top::before { border-top-color: hsl(230 15% 26%); }
+.leaflet-tooltip .text-muted-foreground { color: hsl(230 10% 65%); }
+.leaflet-bar a {
+  background: hsl(230 20% 14%);
+  color: #fff;
+  border-color: hsl(230 15% 26%);
+}
+.leaflet-bar a:hover { background: hsl(25 68% 50%); }
+.leaflet-control-attribution {
+  background: rgba(20,24,34,0.7) !important;
+  color: hsl(230 10% 60%) !important;
+}
+.leaflet-control-attribution a { color: hsl(210 62% 62%) !important; }
