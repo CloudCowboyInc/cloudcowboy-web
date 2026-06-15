@@ -56,3 +56,27 @@ the edge function — never in the client.
 ### Swapping the data layer
 `src/lib/crm-store.tsx` and `src/lib/auth.tsx` are the only seams. They already
 branch on `isSupabaseConfigured`; no component changes needed.
+
+## Access-request email flow (added)
+Lets non-members get routed to Request Access, notifies admins of new requests,
+and emails requesters on approve/deny.
+
+1. **Run the extra migration** in the SQL editor: `supabase/migrations/0002_email_allowed.sql`
+   (adds an anon-callable `email_is_allowed()` check so the login page can route
+   non-members to Request Access instead of emailing a dead-end link).
+2. **Deploy all three edge functions** (the request-notify one must skip JWT
+   verification since requesters are anonymous):
+   ```
+   supabase functions deploy send-bulk
+   supabase functions deploy notify-decision
+   supabase functions deploy notify-access-request --no-verify-jwt
+   ```
+3. **Set the shared secrets** (used by all three):
+   ```
+   supabase secrets set RESEND_API_KEY=... FROM_EMAIL="Cloud Cowboy <hello@cloudcowboy.us>" SITE_URL="https://your-site.com"
+   ```
+   `SITE_URL` is used to build the "review in admin portal" and "sign in" links.
+   Admin-notification emails go to every allowlist row with role = admin.
+
+Note: Resend only delivers to arbitrary recipients once you've **verified a
+sending domain**. Until then, test emails reach the Resend account owner only.
