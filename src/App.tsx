@@ -7,17 +7,19 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import AnimatedBackground from "./components/home/AnimatedBackground";
 import { AuthProvider } from "./lib/auth";
-import { RequireAdmin } from "./components/auth/Guards";
+import { RequireAdmin, RequireAllowed } from "./components/auth/Guards";
 import Index from "./pages/Index";
 import Beta from "./pages/Beta";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import RequestAccess from "./pages/RequestAccess";
+import Portal from "./pages/Portal";
 import NotFound from "./pages/NotFound";
 
 // Internal tools — lazy-loaded so their code + lead data are NOT in the public bundle.
 const CRM = lazy(() => import("./pages/CRM"));
 const Admin = lazy(() => import("./pages/Admin"));
+const InvestorPortal = lazy(() => import("./pages/InvestorPortal"));
 
 const queryClient = new QueryClient();
 
@@ -36,6 +38,15 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
             <Route path="/investors" element={<RequestAccess />} />
+            <Route path="/portal" element={<Portal />} />
+            <Route
+              path="/investor"
+              element={
+                <Suspense fallback={null}>
+                  <RequireAllowed><InvestorPortal /></RequireAllowed>
+                </Suspense>
+              }
+            />
             <Route
               path="/crm"
               element={

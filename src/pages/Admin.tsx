@@ -39,6 +39,7 @@ export default function Admin() {
     const e2 = await supabase.from("access_requests")
       .update({ status: "approved" }).eq("id", r.id);
     if (e1.error || e2.error) return toast.error(e1.error?.message || e2.error?.message);
+    supabase.functions.invoke("notify-decision", { body: { email: r.email, decision: "approved" } }).catch(() => {});
     toast.success(`Approved ${r.email} as ${role}`);
     load();
   };
@@ -48,6 +49,7 @@ export default function Admin() {
     const { error } = await supabase.from("access_requests")
       .update({ status: "denied" }).eq("id", r.id);
     if (error) return toast.error(error.message);
+    supabase.functions.invoke("notify-decision", { body: { email: r.email, decision: "denied" } }).catch(() => {});
     toast.success(`Denied ${r.email}`);
     load();
   };
@@ -63,7 +65,7 @@ export default function Admin() {
   const pending = requests.filter((r) => r.status === "pending");
 
   return (
-    <div className="mx-auto max-w-5xl px-4 pb-24 pt-28 md:px-8">
+    <div className="relative z-10 mx-auto max-w-5xl px-4 pb-24 pt-28 md:px-8">
       <Helmet><title>Admin · Access Requests</title><meta name="robots" content="noindex" /></Helmet>
       <h1 className="mb-6 font-display text-3xl font-bold">
         <span className="text-gradient-primary">Access</span> Admin

@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { MailCheck, Lock, AlertCircle } from "lucide-react";
+import { MailCheck, Lock, AlertCircle, ArrowRight } from "lucide-react";
 
 export default function Login() {
   const { configured, signIn, email: sessionEmail, isAllowed, loading } = useAuth();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -17,14 +20,31 @@ export default function Login() {
     e.preventDefault();
     setBusy(true);
     setErr(null);
-    const { error } = await signIn(email);
+    const addr = email.trim().toLowerCase();
+
+    // Route non-members to Request Access instead of emailing a dead-end link.
+    if (isSupabaseConfigured && supabase) {
+      const { data: allowed, error: rpcErr } = await supabase.rpc("email_is_allowed", { p_email: addr });
+      if (rpcErr) {
+        setBusy(false);
+        setErr(rpcErr.message);
+        return;
+      }
+      if (!allowed) {
+        setBusy(false);
+        navigate(`/investors?email=${encodeURIComponent(addr)}&from=login`);
+        return;
+      }
+    }
+
+    const { error } = await signIn(addr);
     setBusy(false);
     if (error) setErr(error);
     else setSent(true);
   };
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-md items-center px-4 pt-20">
+    <div className="relative z-10 mx-auto flex min-h-screen max-w-md items-center px-4 pt-20">
       <Helmet><title>Sign in · Cloud Cowboy</title><meta name="robots" content="noindex" /></Helmet>
       <Card className="w-full border-border/60 bg-card/70 p-8">
         <div className="mb-5 flex items-center gap-2">
@@ -65,7 +85,7 @@ export default function Login() {
             />
             {err && <p className="text-xs text-destructive">{err}</p>}
             <Button type="submit" className="w-full" disabled={busy || !configured}>
-              {busy ? "Sending…" : "Send magic link"}
+              {busy ? "Checking…" : "Send magic link"}
             </Button>
             <p className="text-center text-xs text-muted-foreground">
               No password. We email you a secure one-time link.
@@ -73,9 +93,16 @@ export default function Login() {
           </form>
         )}
 
-        <div className="mt-6 border-t border-border pt-4 text-center text-xs text-muted-foreground">
-          Need access?{" "}
-          <a href="/investors" className="text-primary hover:underline">Request it here</a>
+        {/* Prominent path for first-time visitors */}
+        <div className="mt-6 border-t border-border pt-5">
+          <p className="mb-2 text-center text-xs text-muted-foreground">
+            First time here? Investor access is by approval.
+          </p>
+          <Button asChild variant="outline" className="w-full border-primary/40 hover:bg-primary hover:text-primary-foreground">
+            <a href="/investors">
+              Request investor access <ArrowRight className="ml-1 h-4 w-4" />
+            </a>
+          </Button>
         </div>
       </Card>
     </div>
