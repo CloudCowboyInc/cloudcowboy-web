@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import AnimatedBackground from "./components/home/AnimatedBackground";
 import { AuthProvider } from "./lib/auth";
@@ -16,8 +16,7 @@ import RequestAccess from "./pages/RequestAccess";
 import Portal from "./pages/Portal";
 import NotFound from "./pages/NotFound";
 
-// Internal tools — lazy-loaded so their code + lead data are NOT in the public bundle.
-const CRM = lazy(() => import("./pages/CRM"));
+// Internal hub — lazy-loaded so its code + lead data are NOT in the public bundle.
 const Admin = lazy(() => import("./pages/Admin"));
 const InvestorPortal = lazy(() => import("./pages/InvestorPortal"));
 
@@ -47,14 +46,7 @@ const App = () => (
                 </Suspense>
               }
             />
-            <Route
-              path="/crm"
-              element={
-                <Suspense fallback={null}>
-                  <RequireAdmin><CRM /></RequireAdmin>
-                </Suspense>
-              }
-            />
+            <Route path="/crm" element={<Navigate to="/admin" replace />} />
             <Route
               path="/admin"
               element={

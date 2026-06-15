@@ -1,9 +1,9 @@
 import { MapContainer, TileLayer, CircleMarker, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import type { Lead } from "@/data/leads";
-import { STATUS_COLORS, READINESS_COLORS } from "./statusConfig";
+import { STATUS_COLORS, READINESS_COLORS, OPERATOR_COLORS } from "./statusConfig";
 
-type ColorMode = "status" | "readiness";
+type ColorMode = "status" | "readiness" | "operator";
 
 interface Props {
   leads: Lead[];
@@ -13,7 +13,11 @@ interface Props {
 
 export default function USLeadMap({ leads, colorMode, onSelect }: Props) {
   const colorFor = (l: Lead) =>
-    colorMode === "status" ? STATUS_COLORS[l.status] : READINESS_COLORS[l.readiness];
+    colorMode === "status"
+      ? STATUS_COLORS[l.status]
+      : colorMode === "operator"
+      ? OPERATOR_COLORS[l.operatorType]
+      : READINESS_COLORS[l.readiness];
 
   const plotted = leads.filter((l) => l.lat != null && l.lng != null);
 

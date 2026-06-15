@@ -42,6 +42,8 @@ function rowToLead(r: any): Lead {
     zip: r.zip ?? "", lat: r.lat ?? null, lng: r.lng ?? null,
     employees: r.employees ?? "", revenue: r.revenue ?? "",
     status: (r.status ?? "New") as PipelineStatus, readiness: (r.readiness ?? "thin") as Readiness,
+    source: r.source ?? "", operatorType: (r.operator_type ?? "") as Lead["operatorType"],
+    services: r.services ?? [], facebook: r.facebook ?? "", instagram: r.instagram ?? "",
   };
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
