@@ -1,13 +1,15 @@
 import { Helmet } from "react-helmet-async";
-import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LineChart, Map, Coins, Lock, LogOut, ArrowLeft } from "lucide-react";
+import { LineChart, Map, Coins, Lock, LogOut, CalendarDays } from "lucide-react";
 import CloudCowboyLogo from "@/components/CloudCowboyLogo";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useAuth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
 const TAGLINE = "The Ag Catalyst Through Service Instigation.";
+const DEMO_CALL = "https://calendly.com/chris-cloudcowboy/30min";
 
 const TABS = [
   { to: "/portal/market", label: "Market", icon: Map },
@@ -49,11 +51,6 @@ export default function DataRoomLayout() {
           </div>
 
           <div className="flex flex-col items-end gap-2">
-            <Button asChild variant="ghost" size="sm" className="gap-1 text-muted-foreground">
-              <Link to="/investor">
-                <ArrowLeft className="h-4 w-4" /> Portal home
-              </Link>
-            </Button>
             {email && (
               <span className="text-xs text-muted-foreground">Signed in as {email}</span>
             )}
@@ -100,6 +97,19 @@ export default function DataRoomLayout() {
       <main>
         <Outlet />
       </main>
+
+      {/* Want to talk? — migrated from the old portal landing; available everywhere. */}
+      <Card className="mt-10 flex flex-wrap items-center justify-between gap-4 border-primary/30 bg-primary/5 p-6">
+        <div>
+          <h3 className="font-display text-lg font-semibold">Want to talk?</h3>
+          <p className="text-sm text-muted-foreground">Book 30 minutes with the founder.</p>
+        </div>
+        <Button asChild className="gap-1.5">
+          <a href={DEMO_CALL} target="_blank" rel="noreferrer">
+            <CalendarDays className="h-4 w-4" /> Schedule a call
+          </a>
+        </Button>
+      </Card>
     </div>
   );
 }

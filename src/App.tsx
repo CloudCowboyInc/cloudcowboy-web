@@ -19,7 +19,6 @@ import NotFound from "./pages/NotFound";
 
 // Internal hub — lazy-loaded so its code + lead data are NOT in the public bundle.
 const Admin = lazy(() => import("./pages/Admin"));
-const InvestorPortal = lazy(() => import("./pages/InvestorPortal"));
 
 // Investor data room — lazy so the model + lead data stay out of the public bundle.
 const DataRoomLayout = lazy(() => import("./pages/dataroom/DataRoomLayout"));
@@ -57,13 +56,10 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/investors" element={<RequestAccess />} />
             <Route path="/portal" element={<Portal />} />
+            {/* Investor entry — land straight in the data room. */}
             <Route
               path="/investor"
-              element={
-                <Suspense fallback={null}>
-                  <RequireAllowed><InvestorPortal /></RequireAllowed>
-                </Suspense>
-              }
+              element={<RequireAllowed><Navigate to="/portal/market" replace /></RequireAllowed>}
             />
             {/* Investor data room — Market · Go-To-Market · Finance, behind the investor guard. */}
             <Route

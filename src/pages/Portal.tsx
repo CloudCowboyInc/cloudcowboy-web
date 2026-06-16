@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 /**
  * Neutral landing after magic-link sign in. Routes by role:
  *   admin    -> /admin
- *   investor -> /investor
+ *   investor -> /portal/market (straight into the data room)
  *   signed in but not approved -> /investors (request access)
  *   not signed in -> /login
  */
@@ -18,7 +18,7 @@ export default function Portal() {
     if (loading) return;
     if (!user) navigate("/login", { replace: true });
     else if (isAdmin) navigate("/admin", { replace: true });
-    else if (isAllowed) navigate("/investor", { replace: true });
+    else if (isAllowed) navigate("/portal/market", { replace: true });
     else navigate("/investors", { replace: true });
   }, [loading, user, isAdmin, isAllowed, navigate]);
 
