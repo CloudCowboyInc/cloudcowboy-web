@@ -3,7 +3,7 @@ import {
   SectionCard,
   StatTile,
   TamSamSomFunnel,
-  SegmentPyramid,
+  SegmentExplorer,
   MarketGrowthChart,
   WhyThis,
   StoryNotes,
@@ -116,9 +116,9 @@ export default function MarketPage() {
         icon={Layers}
         eyebrow="Supporting data — total industry revenue (not ARR)"
         title={`${UNDERLYING_MARKET_LABEL} (${MARKET_TOTALS.total2025})`}
-        description="The dollars flowing through each US ag-service vertical — the industry the ARR funnel is derived from. Drill into any segment."
+        description="The dollars flowing through each US ag-service vertical — the industry the ARR funnel is derived from. Hover the wheel or switch to the list to drill into any segment."
       >
-        <SegmentPyramid />
+        <SegmentExplorer />
 
         <WhyThis className="mt-5" title="How the industry relates to our ARR funnel">
           <p>{FUNNEL_RELATIONSHIP}</p>

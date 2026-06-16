@@ -5,6 +5,8 @@ export { default as ToggleRow, type ToggleRowProps } from "./ToggleRow";
 export { default as ViewSwitch, type ViewSwitchProps, type ViewMode } from "./ViewSwitch";
 export { default as TamSamSomFunnel } from "./TamSamSomFunnel";
 export { default as SegmentPyramid } from "./SegmentPyramid";
+export { default as MarketWheel } from "./MarketWheel";
+export { default as SegmentExplorer } from "./SegmentExplorer";
 export { default as MarketGrowthChart } from "./MarketGrowthChart";
 export { default as EventsToggleList } from "./EventsToggleList";
 export { default as OrgsToggleList } from "./OrgsToggleList";

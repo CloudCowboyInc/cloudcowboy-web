@@ -89,16 +89,20 @@ describe("Market page — underlying segment drill-down", () => {
     expect(beachhead?.entities).toBe(15_000);
   });
 
-  it("drill-down expands a segment's detail and projection", () => {
+  it("wheel pops up a segment's detail and updates on selection", () => {
     renderPage();
-    // The beachhead tier is open by default; its description should be visible.
-    expect(
-      screen.getByText(/the largest service segment/i),
-    ).toBeInTheDocument();
-    // Open another segment and check its detail appears.
-    const aerial = screen.getByRole("button", { name: /Aerial Application Services/i });
+    // Beachhead is selected by default — its detail (description) is visible.
+    expect(screen.getByText(/the largest service segment/i)).toBeInTheDocument();
+    // Select another segment via its legend entry (wedge + legend both expose it).
+    const aerial = screen.getAllByRole("button", { name: /Aerial Application Services/i })[0];
     fireEvent.click(aerial);
     expect(screen.getAllByText(/Agricultural aviation/i).length).toBeGreaterThan(0);
+  });
+
+  it("can switch between the wheel and the list view", () => {
+    renderPage();
+    fireEvent.click(screen.getByRole("radio", { name: /^List$/i }));
+    expect(screen.getByText(/Sized by 2025 US industry revenue/i)).toBeInTheDocument();
   });
 });
 
