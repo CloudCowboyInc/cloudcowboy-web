@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Coins, RotateCcw, SlidersHorizontal, Banknote } from "lucide-react";
+import { Coins, RotateCcw, SlidersHorizontal, Banknote, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   SectionCard,
@@ -10,6 +10,7 @@ import {
   AssumptionPanel,
   RaisePanel,
   WhyThis,
+  StoryNotes,
   type ViewMode,
 } from "@/components/dataroom";
 import { useModel } from "@/lib/model/store";
@@ -91,6 +92,16 @@ export default function FinancePage() {
             before any future-round dilution; MOIC is that stake over the amount invested.
           </p>
         </WhyThis>
+      </SectionCard>
+
+      {/* Story & Notes — the narrative behind the model */}
+      <SectionCard
+        icon={BookOpen}
+        eyebrow="Story &amp; notes"
+        title="The narrative behind the model"
+        description="The reasoning behind each part of the proforma — open any section for the why."
+      >
+        <StoryNotes page="finance" />
       </SectionCard>
     </div>
   );

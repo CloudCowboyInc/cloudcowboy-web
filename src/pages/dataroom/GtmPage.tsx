@@ -1,11 +1,12 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Compass, CalendarDays, Users, LineChart } from "lucide-react";
+import { Compass, CalendarDays, Users, LineChart, BookOpen } from "lucide-react";
 import {
   SectionCard,
   WhyThis,
   EventsToggleList,
   OrgsToggleList,
   FinanceImpactReadout,
+  StoryNotes,
 } from "@/components/dataroom";
 import CrmBoard from "@/pages/CRM";
 
@@ -95,6 +96,10 @@ export default function GtmPage() {
           </SectionCard>
         </TabsContent>
       </Tabs>
+
+      <SectionCard icon={BookOpen} eyebrow="Story &amp; notes" title="How we go to market, in context">
+        <StoryNotes page="gtm" />
+      </SectionCard>
     </div>
   );
 }

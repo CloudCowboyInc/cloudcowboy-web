@@ -1,4 +1,5 @@
 import { Suspense, lazy } from "react";
+import { Loader2 } from "lucide-react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -28,6 +29,18 @@ const FinancePage = lazy(() => import("./pages/dataroom/FinancePage"));
 
 const queryClient = new QueryClient();
 
+/** Branded fallback while a lazy data-room chunk loads. */
+const RouteLoader = () => (
+  <div
+    className="relative z-10 flex min-h-screen items-center justify-center gap-2 text-muted-foreground"
+    role="status"
+    aria-live="polite"
+  >
+    <Loader2 className="h-5 w-5 animate-spin text-primary" />
+    <span>Loading data room…</span>
+  </div>
+);
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -55,7 +68,7 @@ const App = () => (
             {/* Investor data room — Market · Go-To-Market · Finance, behind the investor guard. */}
             <Route
               element={
-                <Suspense fallback={null}>
+                <Suspense fallback={<RouteLoader />}>
                   <RequireAllowed><DataRoomLayout /></RequireAllowed>
                 </Suspense>
               }

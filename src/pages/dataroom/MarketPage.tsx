@@ -1,10 +1,11 @@
-import { Layers, TrendingUp } from "lucide-react";
+import { Layers, TrendingUp, BookOpen } from "lucide-react";
 import {
   SectionCard,
   StatTile,
   TamSamSomFunnel,
   SegmentTable,
   WhyThis,
+  StoryNotes,
 } from "@/components/dataroom";
 import {
   MARKET_HEADLINE,
@@ -89,6 +90,10 @@ export default function MarketPage() {
         <p className="mt-4 border-t border-border/50 pt-3 text-xs text-muted-foreground">
           Source: {MARKET_SOURCE}
         </p>
+      </SectionCard>
+
+      <SectionCard icon={BookOpen} eyebrow="Story &amp; notes" title="The thesis, in context">
+        <StoryNotes page="market" />
       </SectionCard>
     </div>
   );

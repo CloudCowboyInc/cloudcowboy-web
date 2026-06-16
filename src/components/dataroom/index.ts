@@ -12,3 +12,4 @@ export { default as FinanceTable } from "./FinanceTable";
 export { default as FinanceCharts } from "./FinanceCharts";
 export { default as AssumptionPanel } from "./AssumptionPanel";
 export { default as RaisePanel } from "./RaisePanel";
+export { default as StoryNotes } from "./StoryNotes";
