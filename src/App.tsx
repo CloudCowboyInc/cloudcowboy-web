@@ -20,6 +20,12 @@ import NotFound from "./pages/NotFound";
 const Admin = lazy(() => import("./pages/Admin"));
 const InvestorPortal = lazy(() => import("./pages/InvestorPortal"));
 
+// Investor data room — lazy so the model + lead data stay out of the public bundle.
+const DataRoomLayout = lazy(() => import("./pages/dataroom/DataRoomLayout"));
+const MarketPage = lazy(() => import("./pages/dataroom/MarketPage"));
+const GtmPage = lazy(() => import("./pages/dataroom/GtmPage"));
+const FinancePage = lazy(() => import("./pages/dataroom/FinancePage"));
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -46,6 +52,18 @@ const App = () => (
                 </Suspense>
               }
             />
+            {/* Investor data room — Market · Go-To-Market · Finance, behind the investor guard. */}
+            <Route
+              element={
+                <Suspense fallback={null}>
+                  <RequireAllowed><DataRoomLayout /></RequireAllowed>
+                </Suspense>
+              }
+            >
+              <Route path="/portal/market" element={<MarketPage />} />
+              <Route path="/portal/gtm" element={<GtmPage />} />
+              <Route path="/portal/finance" element={<FinancePage />} />
+            </Route>
             <Route path="/crm" element={<Navigate to="/admin" replace />} />
             <Route
               path="/admin"

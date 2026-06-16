@@ -1,8 +1,9 @@
 import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, BarChart3, Cpu, CalendarDays, LogOut, Lock } from "lucide-react";
+import { FileText, BarChart3, Cpu, CalendarDays, LogOut, Lock, ArrowRight } from "lucide-react";
 
 const DEMO_CALL = "https://calendly.com/chris-cloudcowboy/30min";
 
@@ -38,6 +39,24 @@ export default function InvestorPortal() {
         raising to build the AI-native operating system for the spray-drone
         services industry — thank you for taking a look.
       </p>
+
+      <Card className="mb-6 flex flex-wrap items-center justify-between gap-4 border-primary/40 bg-primary/10 p-6">
+        <div>
+          <div className="mb-1 flex items-center gap-2 text-xs uppercase tracking-wide text-primary">
+            <BarChart3 className="h-3.5 w-3.5" /> Live · Interactive
+          </div>
+          <h3 className="font-display text-xl font-semibold">Enter the data room</h3>
+          <p className="mt-1 max-w-xl text-sm text-muted-foreground">
+            Market sizing, go-to-market, and a fully interactive financial model —
+            change any assumption and the proforma recomputes live.
+          </p>
+        </div>
+        <Button asChild size="lg" className="gap-1.5">
+          <Link to="/portal/market">
+            Open data room <ArrowRight className="h-4 w-4" />
+          </Link>
+        </Button>
+      </Card>
 
       <div className="grid gap-4 sm:grid-cols-3">
         {materials.map((m) => (
