@@ -73,6 +73,9 @@ function loadState(): ModelState {
   }
 }
 
+/** The untouched all-Y base case — a fixed reference for "Δ to base" readouts. */
+export const BASE_RESULT: ModelResult = compute(baseState().inputs);
+
 let state: ModelState = loadState();
 const listeners = new Set<() => void>();
 

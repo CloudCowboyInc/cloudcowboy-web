@@ -12,6 +12,9 @@ import {
   ViewSwitch,
 } from "@/components/dataroom";
 
+// The CRM mounts Leaflet (needs a real DOM) — stub it for the shell smoke test.
+vi.mock("@/pages/CRM", () => ({ default: () => <div>Customer Discovery CRM</div> }));
+
 afterEach(cleanup);
 
 describe("data room — page smoke", () => {
@@ -22,7 +25,7 @@ describe("data room — page smoke", () => {
 
   it("renders the GTM page without throwing", () => {
     render(<MemoryRouter><GtmPage /></MemoryRouter>);
-    expect(screen.getByRole("heading", { name: /Customer Discovery/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /How we reach the market/i })).toBeInTheDocument();
   });
 
   it("renders the Finance page without throwing", () => {
