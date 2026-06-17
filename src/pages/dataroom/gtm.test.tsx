@@ -53,6 +53,6 @@ describe("GTM (ROUNDUP) — FinanceImpactReadout", () => {
     render(<FinanceImpactReadout />);
     expect(screen.getByText(/Live finance impact/i)).toBeInTheDocument();
     expect(screen.getByText(/Peak cash need/i)).toBeInTheDocument();
-    expect(screen.getByText(/Exit valuation/i)).toBeInTheDocument();
+    expect(screen.getByText(/Year 5 valuation/i)).toBeInTheDocument();
   });
 });

@@ -18,6 +18,7 @@ import {
   TIER_DERIVATION,
   TAM_BRIDGE,
   VERTICALS_NOTE,
+  US_ONLY_FUNNEL_NOTE,
   UNDERLYING_MARKET_LABEL,
   FUNNEL_RELATIONSHIP,
   US_FOCUS_NOTE,
@@ -65,6 +66,11 @@ export default function MarketPage() {
         description="Nested tiers: total US market → available market → our chemical-applicator beachhead. Dollar figures are ARR."
       >
         <TamSamSomFunnel tiers={MARKET_TIERS} />
+
+        <div className="mt-5 flex items-start gap-2 rounded-lg border border-primary/40 bg-primary/10 px-4 py-3 text-sm">
+          <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+          <p className="text-foreground/90">{US_ONLY_FUNNEL_NOTE}</p>
+        </div>
 
         <WhyThis className="mt-5" title="How these numbers are derived" defaultOpen>
           <p>{TIER_DERIVATION.intro}</p>

@@ -50,7 +50,7 @@ export default function FinancePage() {
       {/* Headline KPIs */}
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-6">
         <StatTile label="ARR · 2031" value={compactUSD(metrics.arr5)} hint={usd(metrics.arr5)} accent="hsl(var(--primary))" />
-        <StatTile label="Exit valuation" value={compactUSD(metrics.valuation)} hint={`${multiple(inputs.arrMultiple, 0)} ARR`} accent="hsl(var(--primary))" />
+        <StatTile label="Year 5 valuation" value={compactUSD(metrics.valuation)} hint={`${multiple(inputs.arrMultiple, 0)} ARR`} accent="hsl(var(--primary))" />
         <StatTile label="Peak cash need" value={compactUSD(metrics.peakCashNeed)} hint={metrics.troughMonth} accent="hsl(var(--destructive))" />
         <StatTile label="Cash-flow positive" value={metrics.firstCfPositive ?? "—"} hint="cumulative ≥ 0" accent="hsl(var(--secondary))" />
         <StatTile label="MOIC" value={multiple(metrics.moic, 0)} hint="gross, this round" accent="hsl(var(--secondary))" />
@@ -88,7 +88,7 @@ export default function FinancePage() {
         <WhyThis className="mt-5" title="How to read the raise">
           <p>
             The raise must cover the peak cash need (the spring-2027 trough) with margin.
-            Investor stake at exit is the round's ownership applied to the live valuation,
+            Investor stake at year 5 is the round's ownership applied to the year-5 valuation,
             before any future-round dilution; MOIC is that stake over the amount invested.
           </p>
         </WhyThis>

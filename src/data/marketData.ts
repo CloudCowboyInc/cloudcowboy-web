@@ -102,6 +102,10 @@ export const TIER_DERIVATION = {
 export const VERTICALS_NOTE =
   "The slide does not itemize the 8 verticals with individual sizes or CAGR, so none are invented here — only the three tiers, the 8-verticals count, and the chemical-applicator beachhead are shown.";
 
+/** Prominent reminder on the funnel: these are US-only; global dwarfs them. */
+export const US_ONLY_FUNNEL_NOTE =
+  "These TAM / SAM / SOM figures are United States only. The global opportunity is exponentially larger — we size only what we can project responsibly today.";
+
 /** The TAM bridge from the source doc — how the $3.1B US ARR TAM is built. */
 export const TAM_BRIDGE = {
   note: "Cloud Cowboy's US TAM is two additive revenue streams: a 2% flat fee on service transactions, plus a $12,000/yr SaaS subscription per entity.",

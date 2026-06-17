@@ -29,7 +29,7 @@ export const STORY_NOTES: StoryNote[] = [
     title: "How to read this model",
     page: "finance",
     paragraphs: [
-      "Every number on this page is computed by one tested engine from the assumptions in §3 — there is no spreadsheet to drift out of sync. The six periods are 2026–2031.",
+      "Every number on this page is computed by one tested engine from the assumptions in the build spec — there is no spreadsheet to drift out of sync. The six periods are 2026–2031.",
       "Change any assumption, the raise, or the Go-To-Market toggles and the entire model recomputes live. Costs are shown as negative values; the bottom line is EBITDA and the running cumulative cash.",
     ],
   },
@@ -118,7 +118,7 @@ export const STORY_NOTES: StoryNote[] = [
     title: "Sources",
     page: "finance",
     paragraphs: [
-      "Finance figures come from the canonical assumptions in the build spec §3 (customers, pricing, staffing, marketing, and the monthly seasonal model).",
+      "Finance figures come from the canonical assumptions in the build spec (customers, pricing, staffing, marketing, and the monthly seasonal model).",
       "Market figures come from Chris's TAM/SAM/SOM slide and the Cloud Cowboy US Agricultural Service Providers Market Analysis (March 2026).",
     ],
   },

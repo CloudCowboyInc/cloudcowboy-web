@@ -87,12 +87,12 @@ export default function RaisePanel() {
       {/* Returns */}
       <div className="rounded-lg border border-primary/30 bg-primary/5 p-4">
         <div className="mb-3 text-xs font-medium uppercase tracking-wide text-primary">
-          Returns at the live valuation ({compactUSD(metrics.valuation)})
+          Returns at the year-5 valuation ({compactUSD(metrics.valuation)})
         </div>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-          <StatTile label="Exit valuation" value={compactUSD(metrics.valuation)} hint={`ARR 2031 × ${inputs.arrMultiple}`} accent="hsl(var(--primary))" />
+          <StatTile label="Year 5 valuation" value={compactUSD(metrics.valuation)} hint={`ARR 2031 × ${inputs.arrMultiple}`} accent="hsl(var(--primary))" />
           <StatTile
-            label="Investor stake at exit"
+            label="Investor stake at year 5"
             value={compactUSD(metrics.investorStakeAtExit)}
             hint="pre future-round dilution"
             accent="hsl(var(--secondary))"

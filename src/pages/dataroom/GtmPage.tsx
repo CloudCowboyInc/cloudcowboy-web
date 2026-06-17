@@ -56,7 +56,7 @@ export default function GtmPage() {
             title="Identified targets — live pipeline"
             description="Our researched universe of ag-service operators: mapped, filterable, and tracked through the pipeline. This is the bottom-up evidence behind the SOM beachhead."
           >
-            <CrmBoard />
+            <CrmBoard forceLocal />
           </SectionCard>
         </TabsContent>
 

@@ -249,9 +249,9 @@ function CRMInner() {
   );
 }
 
-export default function CrmBoard() {
+export default function CrmBoard({ forceLocal = false }: { forceLocal?: boolean }) {
   return (
-    <CRMProvider>
+    <CRMProvider forceLocal={forceLocal}>
       <CRMInner />
     </CRMProvider>
   );

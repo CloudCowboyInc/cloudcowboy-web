@@ -60,8 +60,16 @@ interface CRMContextValue {
 
 const CRMContext = createContext<CRMContextValue | null>(null);
 
-export function CRMProvider({ children }: { children: ReactNode }) {
-  const useDb = isSupabaseConfigured && !!supabase;
+export function CRMProvider({
+  children,
+  forceLocal = false,
+}: {
+  children: ReactNode;
+  /** Always use the static seed dataset (e.g. the investor data room, where the
+   *  viewer has no RLS access to the live leads table). */
+  forceLocal?: boolean;
+}) {
+  const useDb = !forceLocal && isSupabaseConfigured && !!supabase;
 
   const [statusOverrides, setStatusOverrides] = useState<Record<string, PipelineStatus>>(
     () => (useDb ? {} : loadJSON(LS_STATUS, {}))

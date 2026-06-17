@@ -52,7 +52,7 @@ export default function FinanceImpactReadout({ className }: { className?: string
       goodWhen: "higher",
     },
     {
-      label: "Exit valuation",
+      label: "Year 5 valuation",
       value: r.metrics.valuation,
       base: BASE_RESULT.metrics.valuation,
       goodWhen: "higher",
