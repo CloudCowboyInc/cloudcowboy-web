@@ -191,7 +191,7 @@ export default function MarketPage() {
         </div>
       </SectionCard>
 
-      <SectionCard icon={BookOpen} eyebrow="Story &amp; notes" title="The thesis, in context">
+      <SectionCard icon={BookOpen} eyebrow="Notes" title="The thesis, in context">
         <StoryNotes page="market" />
       </SectionCard>
     </div>

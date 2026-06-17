@@ -145,10 +145,10 @@ export default function FinancePage() {
         </WhyThis>
       </SectionCard>
 
-      {/* Story & Notes — the narrative behind the model */}
+      {/* Notes — the narrative behind the model */}
       <SectionCard
         icon={BookOpen}
-        eyebrow="Story &amp; notes"
+        eyebrow="Notes"
         title="The narrative behind the model"
         description="The reasoning behind each part of the proforma — open any section for the why."
       >

@@ -105,7 +105,7 @@ export default function GtmPage() {
         </TabsContent>
       </Tabs>
 
-      <SectionCard icon={BookOpen} eyebrow="Story &amp; notes" title="How we go to market, in context">
+      <SectionCard icon={BookOpen} eyebrow="Notes" title="How we go to market, in context">
         <StoryNotes page="gtm" />
       </SectionCard>
     </div>
