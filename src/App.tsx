@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import AnimatedBackground from "./components/home/AnimatedBackground";
 import { AuthProvider } from "./lib/auth";
 import { RequireAdmin, RequireAllowed } from "./components/auth/Guards";
+import ErrorBoundary from "./components/ErrorBoundary";
 import Index from "./pages/Index";
 import Beta from "./pages/Beta";
 import Contact from "./pages/Contact";
@@ -28,15 +29,15 @@ const FinancePage = lazy(() => import("./pages/dataroom/FinancePage"));
 
 const queryClient = new QueryClient();
 
-/** Branded fallback while a lazy data-room chunk loads. */
-const RouteLoader = () => (
+/** Branded fallback while a lazy chunk loads. */
+const RouteLoader = ({ label = "Loading…" }: { label?: string }) => (
   <div
     className="relative z-10 flex min-h-screen items-center justify-center gap-2 text-muted-foreground"
     role="status"
     aria-live="polite"
   >
     <Loader2 className="h-5 w-5 animate-spin text-primary" />
-    <span>Loading data room…</span>
+    <span>{label}</span>
   </div>
 );
 
@@ -64,9 +65,11 @@ const App = () => (
             {/* Investor data room — Market · Go-To-Market · Finance, behind the investor guard. */}
             <Route
               element={
-                <Suspense fallback={<RouteLoader />}>
-                  <RequireAllowed><DataRoomLayout /></RequireAllowed>
-                </Suspense>
+                <ErrorBoundary area="data room">
+                  <Suspense fallback={<RouteLoader label="Loading data room…" />}>
+                    <RequireAllowed><DataRoomLayout /></RequireAllowed>
+                  </Suspense>
+                </ErrorBoundary>
               }
             >
               <Route path="/portal/market" element={<MarketPage />} />
@@ -77,9 +80,11 @@ const App = () => (
             <Route
               path="/admin"
               element={
-                <Suspense fallback={null}>
-                  <RequireAdmin><Admin /></RequireAdmin>
-                </Suspense>
+                <ErrorBoundary area="admin hub">
+                  <Suspense fallback={<RouteLoader label="Loading hub…" />}>
+                    <RequireAdmin><Admin /></RequireAdmin>
+                  </Suspense>
+                </ErrorBoundary>
               }
             />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
