@@ -3,7 +3,7 @@ import { Compass, CalendarDays, Users, LineChart, BookOpen } from "lucide-react"
 import {
   SectionCard,
   WhyThis,
-  EventsToggleList,
+  EventsExplorer,
   OrgsToggleList,
   FinanceImpactReadout,
   StoryNotes,
@@ -65,9 +65,9 @@ export default function GtmPage() {
             icon={CalendarDays}
             eyebrow="Events"
             title="The event circuit"
-            description="Toggle each show in or out — the included circuit total and the proforma's peak cash need update instantly."
+            description="Exact dates, costs, and travel days for the circuit. Toggle shows in or out (the proforma updates instantly), open any for full detail, or switch to the calendar."
           >
-            <EventsToggleList />
+            <EventsExplorer />
             <WhyThis className="mt-5" title="Why the event circuit matters">
               <p>
                 Trade shows are where ag operators are won face-to-face. The circuit is a real

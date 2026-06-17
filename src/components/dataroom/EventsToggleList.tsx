@@ -1,10 +1,12 @@
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ToggleRow from "./ToggleRow";
 import StatTile from "./StatTile";
+import EventDetailDialog from "./EventDetailDialog";
 import { EVENT_SHOWS, EVENTS_BASE_ANNUAL_DEFAULT } from "@/lib/model/data";
 import { useModel } from "@/lib/model/store";
 import { compactUSD, signedCompactUSD } from "@/lib/model/format";
+import { EVENT_DETAILS, formatRange } from "@/data/eventsData";
 import { cn } from "@/lib/utils";
 import type { EventTier } from "@/lib/model/types";
 
@@ -58,23 +60,45 @@ export default function EventsToggleList() {
       </div>
 
       <div className="space-y-2">
-        {EVENT_SHOWS.map((e) => (
-          <ToggleRow
-            key={e.id}
-            label={e.name}
-            checked={!!eventToggles[e.id]}
-            onCheckedChange={(v) => actions.toggleEvent(e.id, v)}
-            meta={
-              <>
-                <span className={cn("rounded px-1.5 py-0.5 text-[11px] font-semibold", TIER_STYLE[e.tier])}>
-                  {e.tier}
-                </span>
-                <span className="w-10 text-right text-muted-foreground">{e.month}</span>
-                <span className="w-16 text-right font-medium tabular-nums">{compactUSD(e.cost)}</span>
-              </>
-            }
-          />
-        ))}
+        {EVENT_SHOWS.map((e) => {
+          const d = EVENT_DETAILS[e.id];
+          return (
+            <ToggleRow
+              key={e.id}
+              label={
+                <EventDetailDialog event={e}>
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1.5 text-left font-medium text-foreground underline decoration-transparent underline-offset-2 transition-colors hover:decoration-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    {e.name}
+                    <Info className="h-3.5 w-3.5 text-muted-foreground" aria-hidden />
+                  </button>
+                </EventDetailDialog>
+              }
+              description={
+                d ? (
+                  <span>
+                    {formatRange(d.start, d.end)}
+                    {!d.dateConfirmed && <span className="ml-1 text-muted-foreground/70">· est.</span>}
+                    {" · "}
+                    {d.location}
+                  </span>
+                ) : undefined
+              }
+              checked={!!eventToggles[e.id]}
+              onCheckedChange={(v) => actions.toggleEvent(e.id, v)}
+              meta={
+                <>
+                  <span className={cn("rounded px-1.5 py-0.5 text-[11px] font-semibold", TIER_STYLE[e.tier])}>
+                    {e.tier}
+                  </span>
+                  <span className="w-16 text-right font-medium tabular-nums">{compactUSD(e.cost)}</span>
+                </>
+              }
+            />
+          );
+        })}
       </div>
     </div>
   );
