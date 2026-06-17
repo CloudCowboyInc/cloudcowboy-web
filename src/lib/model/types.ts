@@ -113,6 +113,15 @@ export interface AnnualRow {
   newCust: number;
   acqSpend: number;
   blendedCac: number;
+  // Key metrics (mirroring the proforma's Key Metrics block)
+  grossMargin: number;
+  ebitdaMargin: number;
+  arrGrowth: number;
+  netNewArr: number;
+  nrr: number;
+  burnMultiple: number;
+  revenuePerFte: number;
+  marketingPctRev: number;
 }
 
 /** One month of the seasonalized cash model (72 total). */

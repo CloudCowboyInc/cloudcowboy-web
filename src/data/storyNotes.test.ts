@@ -26,7 +26,7 @@ describe("Story & Notes (LAST_MILE) — the 12 sections", () => {
       "unit-economics",
       "seasonality",
       "stress-test",
-      "sources",
+      "reference-tabs",
     ]) {
       expect(ids).toContain(id);
     }

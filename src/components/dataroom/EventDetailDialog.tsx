@@ -33,7 +33,7 @@ export default function EventDetailDialog({
   children: ReactNode;
 }) {
   const d = EVENT_DETAILS[event.id];
-  const breakdown = priceBreakdown(event.cost);
+  const breakdown = d ? priceBreakdown(d) : [];
   const sixYear = Math.round(event.cost * SIX_YEAR_EVENT_MULTIPLIER);
   const share = ((event.cost / EVENTS_BASE_ANNUAL_DEFAULT) * 100).toFixed(1);
 
@@ -87,7 +87,7 @@ export default function EventDetailDialog({
         {/* Price breakdown */}
         <div className="rounded-lg border border-border/50 bg-background/40 p-3">
           <div className="mb-2 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-            Cost breakdown — estimated allocation
+            Cost breakdown — from the proforma event budget
           </div>
           <div className="space-y-1.5">
             {breakdown.map((b) => (
@@ -111,8 +111,8 @@ export default function EventDetailDialog({
           </Button>
         )}
         <p className="text-[11px] text-muted-foreground">
-          Cost breakdown is an estimated allocation of the budgeted total. Dates marked “est.” are
-          scheduled to the typical window and should be confirmed with the organizer.
+          Cost build-up follows the proforma's full-send budget (3 people, $160/room, $40/day,
+          $0.70/mile). Dates marked “est.” are scheduled to the typical window pending confirmation.
         </p>
       </DialogContent>
     </Dialog>

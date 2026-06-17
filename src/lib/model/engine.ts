@@ -32,6 +32,7 @@ export function compute(inputs: ModelInputs): ModelResult {
     presold,
     preSeasonCapture,
     annualChurn,
+    gmvGrowth,
     social,
     digital,
     national,
@@ -96,6 +97,20 @@ export function compute(inputs: ModelInputs): ModelResult {
     const acqSpend = marketing + newCust * salesCommissionPerNewCustomer;
     const blendedCac = newCust <= 0 ? 0 : acqSpend / newCust;
 
+    // Key metrics (proforma Key Metrics block)
+    const prevArr = y === 0 ? 0 : annual[y - 1].arr;
+    const grossMargin = recognizedRev === 0 ? 0 : grossProfit / recognizedRev;
+    const ebitdaMargin = recognizedRev === 0 ? 0 : ebitda / recognizedRev;
+    const arrGrowth = y === 0 || prevArr === 0 ? 0 : arr / prevArr - 1;
+    const netNewArr = y === 0 ? arr : arr - prevArr;
+    const nrr =
+      (1 - annualChurn[y]) *
+      ((subscriptionPerYear + avgGmvPerCustomer * (1 + gmvGrowth[y]) * takeRate) /
+        (subscriptionPerYear + avgGmvPerCustomer * takeRate));
+    const burnMultiple = netNewArr <= 0 ? 0 : Math.max(0, -ebitda) / netNewArr;
+    const revenuePerFte = totalFTE === 0 ? 0 : recognizedRev / totalFTE;
+    const marketingPctRev = recognizedRev === 0 ? 0 : marketing / recognizedRev;
+
     annual.push({
       year: YEARS[y],
       yearIndex: y,
@@ -129,6 +144,14 @@ export function compute(inputs: ModelInputs): ModelResult {
       newCust,
       acqSpend,
       blendedCac,
+      grossMargin,
+      ebitdaMargin,
+      arrGrowth,
+      netNewArr,
+      nrr,
+      burnMultiple,
+      revenuePerFte,
+      marketingPctRev,
     });
   }
 

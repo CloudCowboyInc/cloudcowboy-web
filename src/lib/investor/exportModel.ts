@@ -198,8 +198,17 @@ export async function buildModelWorkbook(
   annRow("Investor capital in", (i) => (i === 0 ? inputs.raiseAmount : 0));
   annRow("Cash incl. investment", (i) => A[i].cumCash + inputs.raiseAmount, money, true);
   annRow("ARR", (i) => A[i].arr, money, true);
+  annRow("ARR growth", (i) => A[i].arrGrowth, "0.0%");
+  annRow("Net new ARR", (i) => A[i].netNewArr);
+  annRow("Gross margin", (i) => A[i].grossMargin, "0.0%");
+  annRow("EBITDA margin", (i) => A[i].ebitdaMargin, "0.0%");
+  annRow("Net revenue retention (NRR)", (i) => A[i].nrr, "0.0%");
+  annRow("Burn multiple", (i) => A[i].burnMultiple, "0.00");
   annRow("New customers", (i) => A[i].newCust, "#,##0");
   annRow("Blended CAC", (i) => A[i].blendedCac);
+  annRow("Customer-acquisition spend", (i) => A[i].acqSpend);
+  annRow("Marketing % of revenue", (i) => A[i].marketingPctRev, "0.0%");
+  annRow("Revenue / FTE", (i) => A[i].revenuePerFte);
   annRow("Total FTE", (i) => A[i].totalFTE, "0.0");
   an.views = [{ state: "frozen", xSplit: 1, ySplit: 5 }];
 

@@ -1,8 +1,7 @@
 /**
- * "Story & Notes" — the narrative behind the model, ported as 12 sections and
- * surfaced via WhyThis expanders on the relevant data-room pages. Every figure
- * cited here is a canonical §3 input or a §3.9 output of the engine — nothing
- * is fabricated. `page` tags where each note is most relevant.
+ * "Story & Notes" — the investor narrative, transcribed verbatim from the
+ * CloudCowboy_Proforma "Story & Notes" tab so the data room mirrors the
+ * spreadsheet exactly. Surfaced via WhyThis expanders on the relevant pages.
  */
 
 export type StoryPage = "market" | "gtm" | "finance";
@@ -17,11 +16,10 @@ export interface StoryNote {
 export const STORY_NOTES: StoryNote[] = [
   {
     id: "thesis",
-    title: "The thesis",
+    title: "The one-line thesis",
     page: "market",
     paragraphs: [
-      "Cloud Cowboy is the AI-native operating system for ag-service providers. We start with the beachhead — ~15,000 chemical-application businesses (drone + ground) — then expand across the eight ag-service verticals that make up the available market.",
-      "Each operator is worth ~$30K/yr: a $12,000 subscription plus 2% of the ~$900K of job revenue that runs through the platform. That single unit drives both the Market funnel and the finance model, so the two always reconcile.",
+      "Cloud Cowboy is the operating system for agricultural service providers — the payments-embedded platform that runs quoting, dispatch, flight planning, and billing for spray-drone and custom-application businesses. Because every job is invoiced and paid through us (ACH via Stripe), we capture transaction volume directly. We are the system of record that runs the business, not a marketplace taking a referral slice.",
     ],
   },
   {
@@ -29,97 +27,90 @@ export const STORY_NOTES: StoryNote[] = [
     title: "How to read this model",
     page: "finance",
     paragraphs: [
-      "Every number on this page is computed by one tested engine from the assumptions in the build spec — there is no spreadsheet to drift out of sync. The six periods are 2026–2031.",
-      "Change any assumption, the raise, or the Go-To-Market toggles and the entire model recomputes live. Costs are shown as negative values; the bottom line is EBITDA and the running cumulative cash.",
+      "Base case only. Blue cells are adjustable inputs; black cells are formulas — change any blue number and the whole model recalculates. The portal exposes Aggressive / Conservative toggles on top of this base. Years run 2026 (Year 0, build) through 2031 (Year 5). All figures are US-only; the platform is built systems-agnostic and global-ready, but every number here is the US plan.",
     ],
   },
   {
     id: "ramp",
-    title: "The customer ramp",
-    page: "gtm",
+    title: "Customer ramp — why it is deliberately conservative",
+    page: "finance",
     paragraphs: [
-      "Customers (end of year) grow 0 → 125 → 300 → 650 → 1,250 → 2,000, seeded by 50 presold operators in 2026. Net adds accelerate as the sales team scales from 1 to 12 reps.",
-      "Churn starts conservative at 8% and compresses to 5% by 2031 as the product deepens and switching costs rise.",
+      "No hockey stick. 50 customers are pre-sold during the 2026 build year and begin billing in 2027, so 2026 shows zero paying customers and zero churn by design. We grow to 125 / 300 / 650 / 1,250 / 2,000 paying customers by 2031, intentionally capped at 2,000 — going larger this early strains credibility more than it adds value. Annual logo churn improves from 8% to 5% as the product deepens and switching cost rises.",
     ],
   },
   {
     id: "recognized-vs-arr",
-    title: "Recognized revenue vs ARR",
+    title: "Revenue — two numbers, on purpose",
     page: "finance",
     paragraphs: [
-      "ARR is the run-rate on end-of-year customers (× ~$30K) — it reaches $60M in 2031. Recognized revenue reflects the customers actually active in-season, so mid-year adds aren't fully recognized in the year they sign.",
-      "That timing gap is why 2031 recognized revenue (~$46M) sits below the $60M ARR. ARR is the forward-looking valuation driver; recognized revenue is what hits the P&L.",
+      "Recognized revenue is in-year and seasonal: customers acquired mid-season only contribute partial GMV that year, so recognized revenue trails the run-rate. ARR is the end-of-year run-rate — the forward 12-month value of the customer base — and is what the valuation multiple is applied to. We monetize two ways: a $12,000 annual subscription plus 2% of all transaction volume. At ~$900K average GMV per customer, that is ~$30K ARR per customer, so 2,000 customers = $60M ARR.",
     ],
   },
   {
     id: "capture",
-    title: "100% transaction capture",
+    title: "Why 100% transaction capture is defensible",
     page: "finance",
     paragraphs: [
-      "The base case assumes we process 100% of customers' job revenue (transaction capture = 1.0). This is the model's most sensitive lever — at 2% of ~$900K GMV it contributes ~$18K of each customer's ~$30K value.",
-      "Dial capture down on the assumptions panel to see the conservative case; transaction revenue scales linearly with it.",
+      "This is the core of the model and the assumption to probe hardest. We are not lead-gen: once a provider runs quoting, scheduling, and invoicing on Cloud Cowboy, payment runs natively through the platform (ACH via Stripe, ~$5/job). Capture approaches 100% by construction — the same dynamic by which Toast captures restaurant payments and ServiceTitan captures the trades. If a provider processes payments off-platform, they lose the workflow that makes the platform useful.",
     ],
   },
   {
     id: "marketing-cac",
-    title: "Marketing & CAC",
+    title: "Marketing & CAC — the efficiency story",
     page: "gtm",
     paragraphs: [
-      "Spend scales from social/digital into national media plus the live event circuit and org memberships. The event circuit and memberships are the toggles on this page — every one flows into the proforma.",
-      "Blended CAC compresses toward ~$2,553 by 2031 (against a $2,500 target) as brand, referrals, and the event presence lower the cost of each new operator.",
+      "Marketing is built bottoms-up, not as a plug. The grounded foundation is our real field plan: 18 ag conventions ($93,752 full-send circuit; see the reference tabs), $10K/mo social & content, 12 industry memberships, and $120K of one-time launch capital (wrapped truck, equipment trailer, merch, booth build). The event circuit grows 10%/yr from 2028 as we add shows; digital media and a national-expansion line scale with our footprint.",
+      "The result: blended CAC (marketing + sales commission ÷ new customers) starts high near $6K — we invest in brand and presence ahead of volume — then compresses to roughly our $2,500 target by Year 5 as fixed spend leverages over a larger base. Marketing as a share of revenue falls from ~14% to low-single-digits, which is the operating leverage an investor wants to see.",
     ],
   },
   {
     id: "staffing",
-    title: "Staffing & FTE",
+    title: "Staffing & FTE — how headcount is counted",
     page: "finance",
     paragraphs: [
-      "Headcount grows from ~1.75 FTE in 2026 to 47 by 2031 across engineering, sales, customer success, ag specialists, marketing, and ops.",
-      "The benefits load steps from 10% to 28% in 2028, when the team formalizes full benefits — visible as a margin step in that year.",
+      "Headcount is measured in FTE-years (full-time equivalents), not raw bodies, so partial-year hires are costed correctly. One FTE is one person working full-time for the full year; a half-time role is 0.5, and someone who starts mid-year counts only for the fraction of the year they are on payroll. Example: the CEO is 0.42 FTE in 2026 because salary starts in August (about 5 of 12 months), and the two founding engineers total ~0.83 FTE that year.",
+      "This is why 2026 is a partial payroll year: CEO + 2 engineers from August, Business Ops + Marketing from October, and the Ag specialist joining mid-2027. By 2031 the company runs ~47 FTE across seven categories (engineering, sales, marketing, business ops, customer success, ag specialists, and the founder). Salaries are competitive and scale by category; benefits and payroll load step from 10% to 28% on Jan 1, 2028, when full healthcare and 401(k) begin.",
     ],
   },
   {
     id: "gna",
-    title: "G&A",
+    title: "G&A — what the overhead line covers",
     page: "finance",
     paragraphs: [
-      "General & administrative scales with the business from $150K (2026) to $1.65M (2031), covering operations, legal, tooling, and facilities. It is deliberately conservative — over-, not under-budgeted.",
+      "G&A is company overhead, kept separate from the cost of delivering the product (payments and platform/AI sit in COGS) and from go-to-market (marketing and sales commission sit above it). It scales with headcount at roughly $33–35K per FTE per year and is front-loaded in 2026 for company formation. It covers software and internal tools (Workspace, Slack, GitHub, accounting, HR/payroll, the CRM); legal and compliance (entity, contracts, IP and patent filings, fundraising legal, SOC 2 and data-privacy work); insurance (general liability, tech E&O, cyber, and D&O after the round); and finance and admin (bookkeeping, tax, fractional CFO, recruiting). As a share of revenue it falls from ~17% to ~4% by Year 5 — the operating leverage of a remote-first, AI-native team.",
     ],
   },
   {
     id: "unit-economics",
-    title: "Unit economics",
+    title: "Unit economics & margin",
     page: "finance",
     paragraphs: [
-      "At ~$30K ARR per customer against ~$1,800 platform COGS plus ACH job costs, contribution margin is high. A blended CAC near $2,553 against ~$30K of annual value implies a payback measured in weeks, not years.",
-      "Strong unit economics are what let the model turn cash-flow positive (cumulative ≥ 0) in 2028 despite the aggressive ramp.",
+      "Strong gross and EBITDA margins are a feature of the operating-system model: software-plus-payments revenue against a lean, AI-native cost base where bespoke agents handle work that would otherwise be headcount. The business reaches cash-flow positive in 2028 on a peak operating cash need under ~$0.7M. The honest caveat, stated plainly: margins this strong depend on the $30K ARR/customer and high transaction-capture assumptions holding. That is the number we expect rigorous diligence to test, and we welcome the test.",
     ],
   },
   {
     id: "seasonality",
-    title: "Seasonality & monthly cash",
+    title: "Seasonality & monthly cash flow",
     page: "finance",
     paragraphs: [
-      "Spray season concentrates revenue from spring through late summer (monthly seasonal factors peak at 2.4×), while fixed costs run evenly across the year. Cash therefore dips through each off-season.",
-      "The deepest dip — the peak cash need the raise must cover — is ~$797K in March 2027. The monthly chart marks that trough explicitly.",
+      "Ag is not a steady business, so a flat 1/12 monthly view would mislead. The Monthly Cash Flow spreads the annual base case across the real spray calendar: revenue, jobs, and payment processing follow the season (near-zero Nov–Mar, peak Apr–Aug), while salaries, G&A, platform, and subscription are paid evenly all year. Event spend is placed in the actual months each of the 18 shows occurs — which is fall- and winter-heavy, the opposite of revenue.",
+      "The honest consequence: the company carries full fixed cost through every winter before the season pays, so the true cash low point is mid-spring, not year-end. In the base case the deepest point is about $0.80M in March 2027 — meaningfully below the $0.63M year-end figure — and that intra-year trough, not the annual number, is what the raise must cover. Every monthly column sums exactly back to the annual proforma.",
     ],
   },
   {
     id: "stress-test",
-    title: "Stress-testing the model",
+    title: "What we would stress-test (and bracket in the conservative case)",
     page: "finance",
     paragraphs: [
-      "This proforma is built to be stressed, not just admired. Toggle off the event circuit, lower transaction capture, slow the customer ramp, or change the raise — every input flows through to peak cash need, EBITDA, and returns live.",
-      "Use “Reset to base case” to return to the spec defaults at any time.",
+      "Lower transaction capture, a slower customer ramp, higher churn, and a CAC that compresses more slowly. The portal's conservative toggle will bracket each of these. We would rather hand you the downside than have you discover it — the base case is a plan, not a promise.",
     ],
   },
   {
-    id: "sources",
-    title: "Sources",
-    page: "finance",
+    id: "reference-tabs",
+    title: "Reference tabs — the live field plan",
+    page: "gtm",
     paragraphs: [
-      "Finance figures come from the canonical assumptions in the build spec (customers, pricing, staffing, marketing, and the monthly seasonal model).",
-      "Market figures come from Chris's TAM/SAM/SOM slide and the Cloud Cowboy US Agricultural Service Providers Market Analysis (March 2026).",
+      "The Events and Orgs sections are our live field-marketing plan: every convention with its booth/registration and travel cost, every membership, and the one-time launch capital — each with Y/N toggles that update the totals. These are the source of the grounded marketing numbers in the model.",
     ],
   },
 ];

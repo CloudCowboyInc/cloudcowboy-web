@@ -9,21 +9,24 @@ import {
 } from "@/components/ui/table";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useModel } from "@/lib/model/store";
-import { usd, compactUSD } from "@/lib/model/format";
+import { usd, compactUSD, pct, multiple } from "@/lib/model/format";
 import { cn } from "@/lib/utils";
 import type { AnnualRow, MonthlyRow } from "@/lib/model/types";
 
 type Granularity = "annual" | "monthly";
+type Fmt = "money" | "num" | "pct" | "mult";
 
 const num = (n: number) => Math.round(n).toLocaleString("en-US");
+const fmtVal = (v: number, fmt: Fmt) =>
+  fmt === "money" ? usd(v) : fmt === "pct" ? pct(v) : fmt === "mult" ? multiple(v, 2) : num(v);
 
 function Row({
-  label, rows, pick, money = true, bold = false, indent = false, signColor = false,
+  label, rows, pick, fmt = "money", bold = false, indent = false, signColor = false,
 }: {
   label: string;
   rows: AnnualRow[];
   pick: (r: AnnualRow) => number;
-  money?: boolean;
+  fmt?: Fmt;
   bold?: boolean;
   indent?: boolean;
   signColor?: boolean;
@@ -37,7 +40,7 @@ function Row({
         const v = pick(r);
         return (
           <TableCell key={r.year} className={cn("text-right tabular-nums", signColor && v < 0 && "text-destructive", signColor && v > 0 && "text-secondary")}>
-            {money ? usd(v) : num(v)}
+            {fmtVal(v, fmt)}
           </TableCell>
         );
       })}
@@ -189,11 +192,11 @@ export default function FinanceTable() {
             </TableHeader>
             <TableBody>
               <GroupHeader label="Customers" span={span} />
-              <Row label="Beginning of year" rows={annual} pick={(r) => r.boy} money={false} indent />
-              <Row label="Churned" rows={annual} pick={(r) => r.churned} money={false} indent />
-              <Row label="Net adds" rows={annual} pick={(r) => r.adds} money={false} indent />
-              <Row label="Customers (EOY)" rows={annual} pick={(r) => r.customersEOY} money={false} bold />
-              <Row label="Active in season" rows={annual} pick={(r) => r.activeSeason} money={false} indent />
+              <Row label="Beginning of year" rows={annual} pick={(r) => r.boy} fmt="num" indent />
+              <Row label="Churned" rows={annual} pick={(r) => r.churned} fmt="num" indent />
+              <Row label="Net adds" rows={annual} pick={(r) => r.adds} fmt="num" indent />
+              <Row label="Customers (EOY)" rows={annual} pick={(r) => r.customersEOY} fmt="num" bold />
+              <Row label="Active in season" rows={annual} pick={(r) => r.activeSeason} fmt="num" indent />
 
               <GroupHeader label="Revenue" span={span} />
               <Row label="Subscription" rows={annual} pick={(r) => r.subRev} indent />
@@ -222,9 +225,18 @@ export default function FinanceTable() {
 
               <GroupHeader label="Key metrics" span={span} />
               <Row label="ARR" rows={annual} pick={(r) => r.arr} bold />
-              <Row label="New customers" rows={annual} pick={(r) => r.newCust} money={false} indent />
+              <Row label="ARR growth" rows={annual} pick={(r) => r.arrGrowth} fmt="pct" indent />
+              <Row label="Net new ARR" rows={annual} pick={(r) => r.netNewArr} indent />
+              <Row label="Gross margin" rows={annual} pick={(r) => r.grossMargin} fmt="pct" indent />
+              <Row label="EBITDA margin" rows={annual} pick={(r) => r.ebitdaMargin} fmt="pct" indent />
+              <Row label="Net revenue retention (NRR)" rows={annual} pick={(r) => r.nrr} fmt="pct" indent />
+              <Row label="Burn multiple" rows={annual} pick={(r) => r.burnMultiple} fmt="mult" indent />
+              <Row label="New customers" rows={annual} pick={(r) => r.newCust} fmt="num" indent />
               <Row label="Blended CAC" rows={annual} pick={(r) => r.blendedCac} indent />
-              <Row label="Total FTE" rows={annual} pick={(r) => r.totalFTE} money={false} indent />
+              <Row label="Customer-acquisition spend" rows={annual} pick={(r) => r.acqSpend} indent />
+              <Row label="Marketing % of revenue" rows={annual} pick={(r) => r.marketingPctRev} fmt="pct" indent />
+              <Row label="Revenue / FTE" rows={annual} pick={(r) => r.revenuePerFte} indent />
+              <Row label="Total FTE" rows={annual} pick={(r) => r.totalFTE} fmt="num" indent />
             </TableBody>
           </Table>
         </div>

@@ -49,6 +49,32 @@ describe("model engine — §3.9 base-case fixtures (all toggles Y)", () => {
   });
 });
 
+describe("model engine — Key Metrics parity with CloudCowboy_Proforma.xlsx", () => {
+  const r = compute(DEFAULT_INPUTS);
+  const a = r.annual;
+
+  it("gross margin is ~91.5% every operating year (proforma R72)", () => {
+    for (let y = 1; y <= 5; y++) near(a[y].grossMargin, 0.915, 0.001);
+  });
+  it("EBITDA margin matches (proforma R83): Y1 ~12.9%, Y5 ~68.5%", () => {
+    near(a[1].ebitdaMargin, 0.12867987, 0.0005);
+    near(a[5].ebitdaMargin, 0.68500262, 0.0005);
+  });
+  it("NRR matches (proforma R91): Y0 100%, Y1 96.4%, Y5 103.0%", () => {
+    near(a[0].nrr, 1.0, 0.001);
+    near(a[1].nrr, 0.96416, 0.0005);
+    near(a[5].nrr, 1.0298, 0.0005);
+  });
+  it("ARR growth Y5 = 60% and net-new ARR Y5 = $22.5M (proforma R88/R90)", () => {
+    near(a[5].arrGrowth, 0.6, 0.001);
+    near(a[5].netNewArr, 22_500_000);
+  });
+  it("revenue/FTE Y5 ≈ $979,388 and marketing % rev Y5 ≈ 2.39% (proforma R89/R96)", () => {
+    near(a[5].revenuePerFte, 979388.3, 1);
+    near(a[5].marketingPctRev, 0.0238878, 0.0005);
+  });
+});
+
 describe("model engine — monthly→annual reconciliation invariant (§3.5b)", () => {
   const r = compute(DEFAULT_INPUTS);
 
