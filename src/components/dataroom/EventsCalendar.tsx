@@ -169,12 +169,18 @@ export default function EventsCalendar({
                                 <Plane className="h-2.5 w-2.5 shrink-0" />
                                 <span className="truncate">{h.event.name}</span>
                               </span>
-                              <span className="block text-[10px] leading-tight opacity-80">Travel day</span>
+                              {d?.location && (
+                                <span className="block truncate text-[10px] leading-tight opacity-90">{d.location}</span>
+                              )}
+                              <span className="block text-[10px] leading-tight opacity-70">Travel day</span>
                             </span>
                           ) : (
                             <span className="block px-1.5 py-1 text-white" style={{ background: color }}>
                               <span className="block truncate text-[11px] font-semibold leading-tight">{h.event.name}</span>
-                              <span className="block text-[10px] leading-tight text-white/85">
+                              {d?.location && (
+                                <span className="block truncate text-[10px] leading-tight text-white/90">{d.location}</span>
+                              )}
+                              <span className="block text-[10px] leading-tight text-white/75">
                                 {isStart ? shortDates(d!) : "Show day"}
                               </span>
                             </span>
