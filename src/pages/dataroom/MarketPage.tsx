@@ -7,7 +7,9 @@ import {
   MarketGrowthChart,
   WhyThis,
   StoryNotes,
+  SectionFeedback,
 } from "@/components/dataroom";
+import { useSectionActivity } from "@/lib/investor/hooks";
 import {
   MARKET_HEADLINE,
   MARKET_TIERS,
@@ -33,6 +35,7 @@ import {
  * instigation thesis, and grouped sources. All figures from src/data/marketData.ts.
  */
 export default function MarketPage() {
+  useSectionActivity("Market");
   return (
     <div className="space-y-6">
       {/* Hero — US scope front and centre */}
@@ -64,6 +67,7 @@ export default function MarketPage() {
         eyebrow="From the TAM / SAM / SOM slide"
         title="The US ARR funnel"
         description="Nested tiers: total US market → available market → our chemical-applicator beachhead. Dollar figures are ARR."
+        action={<SectionFeedback section="Market — ARR funnel" />}
       >
         <TamSamSomFunnel tiers={MARKET_TIERS} />
 

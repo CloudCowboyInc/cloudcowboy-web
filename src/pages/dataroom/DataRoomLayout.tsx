@@ -6,6 +6,7 @@ import CloudCowboyLogo from "@/components/CloudCowboyLogo";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useAuth } from "@/lib/auth";
+import { useConfigAutosave } from "@/lib/investor/hooks";
 import { cn } from "@/lib/utils";
 
 const TAGLINE = "The Ag Catalyst Through Service Instigation.";
@@ -26,6 +27,7 @@ const TABS = [
 export default function DataRoomLayout() {
   const { email, signOut } = useAuth();
   const { pathname } = useLocation();
+  useConfigAutosave();
 
   return (
     <div className="relative z-10 mx-auto max-w-7xl px-4 pb-24 pt-24 md:px-8 md:pt-28">

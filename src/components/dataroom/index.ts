@@ -20,3 +20,4 @@ export { default as MasterChart } from "./MasterChart";
 export { default as AssumptionPanel } from "./AssumptionPanel";
 export { default as RaisePanel } from "./RaisePanel";
 export { default as StoryNotes } from "./StoryNotes";
+export { default as SectionFeedback } from "./SectionFeedback";

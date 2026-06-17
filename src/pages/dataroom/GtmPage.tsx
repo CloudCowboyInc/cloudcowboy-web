@@ -7,8 +7,10 @@ import {
   OrgsToggleList,
   FinanceImpactReadout,
   StoryNotes,
+  SectionFeedback,
 } from "@/components/dataroom";
 import CrmBoard from "@/pages/CRM";
+import { useSectionActivity } from "@/lib/investor/hooks";
 
 /**
  * Go-To-Market page (ROUNDUP). Three sub-tabs:
@@ -19,6 +21,7 @@ import CrmBoard from "@/pages/CRM";
  * GTM levers and the proforma is always visible.
  */
 export default function GtmPage() {
+  useSectionActivity("Go-To-Market");
   return (
     <div className="space-y-6">
       <div>
@@ -66,6 +69,7 @@ export default function GtmPage() {
             eyebrow="Events"
             title="The event circuit"
             description="Exact dates, costs, and travel days for the circuit. Toggle shows in or out (the proforma updates instantly), open any for full detail, or switch to the calendar."
+            action={<SectionFeedback section="GTM — Events" />}
           >
             <EventsExplorer />
             <WhyThis className="mt-5" title="Why the event circuit matters">

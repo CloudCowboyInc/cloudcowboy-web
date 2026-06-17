@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Coins, RotateCcw, SlidersHorizontal, Banknote, BookOpen } from "lucide-react";
+import { Coins, RotateCcw, SlidersHorizontal, Banknote, BookOpen, FileSpreadsheet, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import {
   SectionCard,
   StatTile,
@@ -12,9 +13,14 @@ import {
   RaisePanel,
   WhyThis,
   StoryNotes,
+  SectionFeedback,
   type ViewMode,
 } from "@/components/dataroom";
 import { useModel } from "@/lib/model/store";
+import { useAuth } from "@/lib/auth";
+import { useSectionActivity } from "@/lib/investor/hooks";
+import { downloadModelExcel } from "@/lib/investor/exportModel";
+import { recordExport, bufferToBase64 } from "@/lib/investor/backend";
 import { compactUSD, multiple, usd } from "@/lib/model/format";
 
 /**
@@ -23,13 +29,36 @@ import { compactUSD, multiple, usd } from "@/lib/model/format";
  * shared store and reflects the GTM Events/Orgs toggles.
  */
 export default function FinancePage() {
-  const { inputs, result, actions } = useModel();
+  const { base, growth, eventToggles, orgToggles, inputs, result, actions } = useModel();
   const { metrics, annual } = result;
+  const { email } = useAuth();
   const [view, setView] = useState<ViewMode>("table");
+  const [exporting, setExporting] = useState(false);
+  useSectionActivity("Finance");
+
+  const exportExcel = async () => {
+    setExporting(true);
+    try {
+      const buf = await downloadModelExcel(inputs, result, {
+        investorEmail: email,
+        generatedAt: new Date().toISOString(),
+        eventToggles,
+        orgToggles,
+        growth,
+      });
+      // Snapshot + email Chris a copy of the workbook (best-effort).
+      void recordExport(email, { base, growth, eventToggles, orgToggles, metrics }, bufferToBase64(buf));
+      toast.success("Excel exported — a copy was sent to the Cloud Cowboy team.");
+    } catch {
+      toast.error("Export failed. Please try again.");
+    } finally {
+      setExporting(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
-      {/* Header + reset */}
+      {/* Header + actions */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-primary">
@@ -43,9 +72,15 @@ export default function FinancePage() {
             GTM toggles and the whole model recomputes live — no spreadsheet drift.
           </p>
         </div>
-        <Button variant="outline" size="sm" className="gap-1.5" onClick={() => actions.resetToBaseCase()}>
-          <RotateCcw className="h-4 w-4" /> Reset to base case
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button size="sm" className="gap-1.5" onClick={exportExcel} disabled={exporting}>
+            {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileSpreadsheet className="h-4 w-4" />}
+            Export to Excel
+          </Button>
+          <Button variant="outline" size="sm" className="gap-1.5" onClick={() => actions.resetToBaseCase()}>
+            <RotateCcw className="h-4 w-4" /> Reset to base case
+          </Button>
+        </div>
       </div>
 
       {/* Headline KPIs */}
@@ -63,7 +98,12 @@ export default function FinancePage() {
         eyebrow="Proforma"
         title="Six-year model"
         description="Annual P&L and monthly cash, or the same data as charts."
-        action={<ViewSwitch value={view} onChange={setView} />}
+        action={
+          <div className="flex items-center gap-2">
+            <SectionFeedback section="Finance — Proforma" />
+            <ViewSwitch value={view} onChange={setView} />
+          </div>
+        }
       >
         {view === "table" ? (
           <FinanceTable />
@@ -91,6 +131,7 @@ export default function FinancePage() {
         eyebrow="The raise"
         title="Raise, dilution & returns"
         description="Defaults: $1.0M at 20% → $5.0M post / $4.0M pre."
+        action={<SectionFeedback section="Finance — Raise" />}
       >
         <RaisePanel />
         <WhyThis className="mt-5" title="How to read the raise">
