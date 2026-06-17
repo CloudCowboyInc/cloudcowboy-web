@@ -4,6 +4,7 @@ import {
   SectionCard,
   WhyThis,
   EventsExplorer,
+  CapitalSummary,
   OrgsToggleList,
   FinanceImpactReadout,
   StoryNotes,
@@ -72,6 +73,9 @@ export default function GtmPage() {
             action={<SectionFeedback section="GTM — Events" />}
           >
             <EventsExplorer />
+            <div className="mt-6">
+              <CapitalSummary />
+            </div>
             <WhyThis className="mt-5" title="Why the event circuit matters">
               <p>
                 Trade shows are where ag operators are won face-to-face. The circuit is a real

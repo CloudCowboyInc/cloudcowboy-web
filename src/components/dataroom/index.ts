@@ -10,6 +10,7 @@ export { default as SegmentExplorer } from "./SegmentExplorer";
 export { default as MarketGrowthChart } from "./MarketGrowthChart";
 export { default as EventsToggleList } from "./EventsToggleList";
 export { default as EventsExplorer } from "./EventsExplorer";
+export { default as CapitalSummary } from "./CapitalSummary";
 export { default as EventDetailDialog } from "./EventDetailDialog";
 export { default as EventsCalendar } from "./EventsCalendar";
 export { default as OrgsToggleList } from "./OrgsToggleList";

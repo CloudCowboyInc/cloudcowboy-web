@@ -21,7 +21,7 @@ import { useAuth } from "@/lib/auth";
 import { useSectionActivity } from "@/lib/investor/hooks";
 import { downloadModelExcel } from "@/lib/investor/exportModel";
 import { recordExport, bufferToBase64 } from "@/lib/investor/backend";
-import { compactUSD, multiple, usd } from "@/lib/model/format";
+import { compactUSD, multiple, usd, pct } from "@/lib/model/format";
 
 /**
  * Finance page (WAR_ROOM). The interactive proforma: table/graph views, live
@@ -84,11 +84,13 @@ export default function FinancePage() {
       </div>
 
       {/* Headline KPIs */}
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-6">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatTile label="ARR · 2031" value={compactUSD(metrics.arr5)} hint={usd(metrics.arr5)} accent="hsl(var(--primary))" />
         <StatTile label="Year 5 valuation" value={compactUSD(metrics.valuation)} hint={`${multiple(inputs.arrMultiple, 0)} ARR`} accent="hsl(var(--primary))" />
         <StatTile label="Peak cash need" value={compactUSD(metrics.peakCashNeed)} hint={metrics.troughMonth} accent="hsl(var(--destructive))" />
         <StatTile label="Cash-flow positive" value={metrics.firstCfPositive ?? "—"} hint="cumulative ≥ 0" accent="hsl(var(--secondary))" />
+        <StatTile label="EBITDA margin · 2031" value={pct(annual[5].ebitdaMargin)} hint="Y5" accent="hsl(var(--secondary))" />
+        <StatTile label="NRR · 2031" value={pct(annual[5].nrr)} hint="net revenue retention" accent="hsl(var(--secondary))" />
         <StatTile label="MOIC" value={multiple(metrics.moic, 0)} hint="gross, this round" accent="hsl(var(--secondary))" />
         <StatTile label="Blended CAC · 2031" value={compactUSD(annual[5].blendedCac)} hint="per new customer" />
       </div>
