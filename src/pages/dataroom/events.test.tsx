@@ -30,12 +30,26 @@ describe("Events (list) — dates & detail", () => {
 });
 
 describe("Events (calendar)", () => {
-  it("renders the circuit months with a priority legend", () => {
-    const all = Object.fromEntries(EVENT_SHOWS.map((e) => [e.id, true]));
+  const all = Object.fromEntries(EVENT_SHOWS.map((e) => [e.id, true]));
+
+  it("shows one month at a time with a priority legend", () => {
     render(<EventsCalendar includedIds={all} />);
-    expect(screen.getByText(/Sep 2026/)).toBeInTheDocument();
+    // Defaults to the first circuit month (Aug 2026).
+    expect(screen.getByText(/Aug 2026/)).toBeInTheDocument();
+    expect(screen.queryByText(/Sep 2026/)).not.toBeInTheDocument();
     expect(screen.getByText(/Top priority/i)).toBeInTheDocument();
     expect(screen.getByText(/Travel day/i)).toBeInTheDocument();
+    // The month's events are listed.
+    expect(screen.getByText(/Events this month/i)).toBeInTheDocument();
+  });
+
+  it("navigates to the next month with the Next button", () => {
+    render(<EventsCalendar includedIds={all} />);
+    fireEvent.click(screen.getByRole("button", { name: /next/i }));
+    expect(screen.getByText(/Sep 2026/)).toBeInTheDocument();
+    expect(screen.queryByText(/Aug 2026/)).not.toBeInTheDocument();
+    // Sep has Farm Progress Show in the list — clickable for full detail.
+    expect(screen.getAllByText(/Farm Progress Show/i).length).toBeGreaterThan(0);
   });
 });
 
