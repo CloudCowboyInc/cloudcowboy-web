@@ -7,6 +7,7 @@ import {
   ViewSwitch,
   FinanceTable,
   FinanceCharts,
+  MasterChart,
   AssumptionPanel,
   RaisePanel,
   WhyThis,
@@ -64,7 +65,14 @@ export default function FinancePage() {
         description="Annual P&L and monthly cash, or the same data as charts."
         action={<ViewSwitch value={view} onChange={setView} />}
       >
-        {view === "table" ? <FinanceTable /> : <FinanceCharts />}
+        {view === "table" ? (
+          <FinanceTable />
+        ) : (
+          <div className="space-y-8">
+            <MasterChart />
+            <FinanceCharts />
+          </div>
+        )}
       </SectionCard>
 
       {/* Assumptions */}

@@ -8,24 +8,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useModelResult } from "@/lib/model/store";
-import { usd } from "@/lib/model/format";
+import { useModel } from "@/lib/model/store";
+import { usd, compactUSD } from "@/lib/model/format";
 import { cn } from "@/lib/utils";
-import type { AnnualRow } from "@/lib/model/types";
+import type { AnnualRow, MonthlyRow } from "@/lib/model/types";
 
 type Granularity = "annual" | "monthly";
 
 const num = (n: number) => Math.round(n).toLocaleString("en-US");
 
-/** A labelled annual row: value per year, optionally money-formatted. */
 function Row({
-  label,
-  rows,
-  pick,
-  money = true,
-  bold = false,
-  indent = false,
-  signColor = false,
+  label, rows, pick, money = true, bold = false, indent = false, signColor = false,
 }: {
   label: string;
   rows: AnnualRow[];
@@ -43,14 +36,7 @@ function Row({
       {rows.map((r) => {
         const v = pick(r);
         return (
-          <TableCell
-            key={r.year}
-            className={cn(
-              "text-right tabular-nums",
-              signColor && v < 0 && "text-destructive",
-              signColor && v > 0 && "text-secondary",
-            )}
-          >
+          <TableCell key={r.year} className={cn("text-right tabular-nums", signColor && v < 0 && "text-destructive", signColor && v > 0 && "text-secondary")}>
             {money ? usd(v) : num(v)}
           </TableCell>
         );
@@ -69,15 +55,106 @@ function GroupHeader({ label, span }: { label: string; span: number }) {
   );
 }
 
+/** Excel-style monthly P&L — line items as rows, 72 months as columns, scrolls horizontally. */
+function MonthlyMatrix({ monthly, raise, troughIndex }: { monthly: MonthlyRow[]; raise: number; troughIndex: number }) {
+  type Def = { label: string; get?: (m: MonthlyRow) => number; group?: boolean; bold?: boolean; indent?: boolean; sign?: boolean };
+  const defs: Def[] = [
+    { label: "Revenue", group: true },
+    { label: "Subscription", get: (m) => m.subM, indent: true },
+    { label: "Transaction (2% take)", get: (m) => m.txnM, indent: true },
+    { label: "Recognized revenue", get: (m) => m.subM + m.txnM, bold: true },
+    { label: "COGS", group: true },
+    { label: "ACH / job costs", get: (m) => m.achM, indent: true },
+    { label: "Platform COGS", get: (m) => m.platM, indent: true },
+    { label: "Gross profit", get: (m) => m.subM + m.txnM + m.achM + m.platM, bold: true, sign: true },
+    { label: "Operating expenses", group: true },
+    { label: "People", get: (m) => m.peopleM, indent: true },
+    { label: "Layer-1 AI", get: (m) => m.aiM, indent: true },
+    { label: "Sales commission", get: (m) => m.commM, indent: true },
+    { label: "Marketing", get: (m) => m.mktOtherM + m.eventsM + m.oneTimeM, indent: true },
+    { label: "G&A", get: (m) => m.gnaM, indent: true },
+    { label: "Bottom line", group: true },
+    { label: "Net cash flow (EBITDA)", get: (m) => m.netM, bold: true, sign: true },
+    { label: "Cumulative cash", get: (m) => m.cumM, bold: true, sign: true },
+    { label: "Financing", group: true },
+    { label: "Investor capital in", get: (m) => (m.index === 0 ? raise : 0), indent: true },
+    { label: "Cash incl. investment", get: (m) => m.cumM + raise, bold: true, sign: true },
+  ];
+
+  return (
+    <div className="overflow-x-auto rounded-lg border border-border/50">
+      <table className="w-max border-collapse text-xs">
+        <thead>
+          <tr>
+            <th className="sticky left-0 z-20 border-b border-border/60 bg-card px-3 py-2 text-left font-medium">
+              USD
+            </th>
+            {monthly.map((m) => (
+              <th
+                key={m.index}
+                className={cn(
+                  "min-w-[68px] border-b border-l border-border/40 bg-card px-2 py-2 text-right font-medium tabular-nums",
+                  m.index === troughIndex && "bg-destructive/15 text-destructive",
+                  m.month === 1 && "border-l-2 border-l-border",
+                )}
+              >
+                {`${m.label.split(" ")[0]} '${m.label.split(" ")[1].slice(2)}`}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {defs.map((d) =>
+            d.group ? (
+              <tr key={d.label} className="bg-muted/40">
+                <td className="sticky left-0 z-10 bg-muted/40 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-primary" colSpan={1}>
+                  {d.label}
+                </td>
+                <td colSpan={monthly.length} />
+              </tr>
+            ) : (
+              <tr key={d.label} className={cn(d.bold && "font-semibold")}>
+                <td className={cn("sticky left-0 z-10 whitespace-nowrap bg-card px-3 py-1", d.indent && "pl-6 text-muted-foreground", d.bold && "font-display")}>
+                  {d.label}
+                </td>
+                {monthly.map((m) => {
+                  const v = d.get!(m);
+                  return (
+                    <td
+                      key={m.index}
+                      title={usd(v)}
+                      className={cn(
+                        "border-l border-border/30 px-2 py-1 text-right tabular-nums",
+                        m.index === troughIndex && "bg-destructive/10",
+                        m.month === 1 && "border-l-2 border-l-border",
+                        d.sign && v < 0 && "text-destructive",
+                        d.sign && v > 0 && "text-secondary",
+                      )}
+                    >
+                      {Math.abs(v) < 1 ? "—" : compactUSD(v)}
+                    </td>
+                  );
+                })}
+              </tr>
+            ),
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 /**
  * The interactive proforma table. Annual P&L (customers → revenue → COGS →
- * OpEx → EBITDA → cumulative → key metrics incl. CAC) plus a monthly cash view.
- * Reads the live compute() result; reflects all assumptions + GTM toggles.
+ * OpEx → EBITDA → cumulative → financing → key metrics incl. CAC) plus an
+ * Excel-style monthly matrix that scrolls horizontally. Includes the investor
+ * capital line. Reads the live compute() result + raise.
  */
 export default function FinanceTable() {
-  const r = useModelResult();
+  const { result, inputs } = useModel();
   const [granularity, setGranularity] = useState<Granularity>("annual");
-  const { annual, monthly, metrics } = r;
+  const { annual, monthly, metrics } = result;
+  const raise = inputs.raiseAmount;
   const span = annual.length + 1;
 
   return (
@@ -94,7 +171,7 @@ export default function FinanceTable() {
             Annual
           </ToggleGroupItem>
           <ToggleGroupItem value="monthly" className="h-8 px-3 text-xs data-[state=on]:bg-primary data-[state=on]:text-primary-foreground">
-            Monthly cash
+            Monthly (Excel)
           </ToggleGroupItem>
         </ToggleGroup>
       </div>
@@ -104,7 +181,7 @@ export default function FinanceTable() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="min-w-[160px]">USD</TableHead>
+                <TableHead className="min-w-[170px]">USD</TableHead>
                 {annual.map((a) => (
                   <TableHead key={a.year} className="text-right">{a.year}</TableHead>
                 ))}
@@ -139,6 +216,10 @@ export default function FinanceTable() {
               <Row label="EBITDA" rows={annual} pick={(r) => r.ebitda} bold signColor />
               <Row label="Cumulative cash" rows={annual} pick={(r) => r.cumCash} bold signColor />
 
+              <GroupHeader label="Financing" span={span} />
+              <Row label="Investor capital in" rows={annual} pick={(r) => (r.yearIndex === 0 ? raise : 0)} indent />
+              <Row label="Cash incl. investment" rows={annual} pick={(r) => r.cumCash + raise} bold signColor />
+
               <GroupHeader label="Key metrics" span={span} />
               <Row label="ARR" rows={annual} pick={(r) => r.arr} bold />
               <Row label="New customers" rows={annual} pick={(r) => r.newCust} money={false} indent />
@@ -148,41 +229,13 @@ export default function FinanceTable() {
           </Table>
         </div>
       ) : (
-        <div className="max-h-[560px] overflow-auto">
-          <Table>
-            <TableHeader className="sticky top-0 z-10 bg-card">
-              <TableRow>
-                <TableHead>Month</TableHead>
-                <TableHead className="text-right">Net cash</TableHead>
-                <TableHead className="text-right">Cumulative cash</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {monthly.map((m) => {
-                const isTrough = m.index === metrics.troughIndex;
-                return (
-                  <TableRow key={m.index} className={cn(isTrough && "bg-destructive/15")}>
-                    <TableCell className="whitespace-nowrap">
-                      {m.label}
-                      {isTrough && (
-                        <span className="ml-2 rounded bg-destructive/30 px-1.5 py-0.5 text-[11px] font-semibold text-destructive">
-                          cash trough
-                        </span>
-                      )}
-                    </TableCell>
-                    <TableCell className={cn("text-right tabular-nums", m.netM < 0 && "text-destructive")}>
-                      {usd(m.netM)}
-                    </TableCell>
-                    <TableCell className={cn("text-right tabular-nums", m.cumM < 0 && "text-destructive")}>
-                      {usd(m.cumM)}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </div>
+        <MonthlyMatrix monthly={monthly} raise={raise} troughIndex={metrics.troughIndex} />
       )}
+      <p className="text-xs text-muted-foreground">
+        {granularity === "monthly"
+          ? "Monthly P&L — scroll horizontally; year boundaries are ruled, the spring-2027 cash trough is highlighted. Hover a cell for the exact figure."
+          : "Full six-year P&L incl. the investor capital line and cash-including-investment."}
+      </p>
     </div>
   );
 }

@@ -20,11 +20,18 @@ describe("Finance (WAR_ROOM) — proforma table reconciles to §3.9", () => {
     expect(screen.getByText("$60,000,000")).toBeInTheDocument();
   });
 
-  it("monthly view marks the spring-2027 cash trough", () => {
+  it("monthly Excel view lays out line items incl. investor capital", () => {
     render(<FinanceTable />);
-    fireEvent.click(screen.getByRole("radio", { name: /monthly cash/i }));
-    expect(screen.getByText(/cash trough/i)).toBeInTheDocument();
-    expect(screen.getByText("Mar 2027")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("radio", { name: /monthly \(excel\)/i }));
+    expect(screen.getByText("Investor capital in")).toBeInTheDocument();
+    expect(screen.getByText("Cash incl. investment")).toBeInTheDocument();
+    // months are columns — Mar '27 (the trough month) is a header
+    expect(screen.getByText("Mar '27")).toBeInTheDocument();
+  });
+
+  it("annual view includes the investor capital line", () => {
+    render(<FinanceTable />);
+    expect(screen.getByText("Investor capital in")).toBeInTheDocument();
   });
 });
 
@@ -59,5 +66,25 @@ describe("Finance (WAR_ROOM) — assumptions propagate live", () => {
     fireEvent.change(screen.getByLabelText("Transaction capture"), { target: { value: "50" } });
     const after = modelStore.getResult().metrics.arr5;
     expect(after).toBeLessThan(before);
+  });
+});
+
+describe("Finance (WAR_ROOM) — growth models (first value + YoY %)", () => {
+  it("default is 'follow plan' so the base case is unchanged", () => {
+    modelStore.resetToBaseCase();
+    expect(modelStore.getState().growth.customersEOY.active).toBe(false);
+    expect(modelStore.getState().inputs.customersEOY).toEqual([0, 125, 300, 650, 1250, 2000]);
+  });
+
+  it("activating a growth lever regenerates the series geometrically", () => {
+    modelStore.resetToBaseCase();
+    modelStore.setGrowth("customersEOY", { active: true, first: 200, rate: 0.5 });
+    const c = modelStore.getState().inputs.customersEOY;
+    expect(c[0]).toBe(0); // 2026 preserved
+    expect(c[1]).toBe(200); // 2027 start
+    expect(c[2]).toBe(300); // 200 × 1.5
+    expect(c[3]).toBe(450); // 200 × 1.5^2
+    modelStore.resetToBaseCase();
+    expect(modelStore.getState().inputs.customersEOY[1]).toBe(125);
   });
 });
