@@ -13,7 +13,7 @@ type View = "list" | "calendar";
  * colour-coded by priority. Both open per-event detail on click.
  */
 export default function EventsExplorer() {
-  const [view, setView] = useState<View>("list");
+  const [view, setView] = useState<View>("calendar");
   const { eventToggles } = useModel();
   return (
     <div className="space-y-4">
