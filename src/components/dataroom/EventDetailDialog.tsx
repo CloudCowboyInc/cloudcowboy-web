@@ -1,6 +1,7 @@
 import { type ReactNode } from "react";
 import { CalendarDays, MapPin, ExternalLink, Plane } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import {
   Dialog,
   DialogContent,
@@ -9,6 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { EVENTS_BASE_ANNUAL_DEFAULT } from "@/lib/model/data";
+import { useModel } from "@/lib/model/store";
 import { usd } from "@/lib/model/format";
 import {
   EVENT_DETAILS,
@@ -32,6 +34,8 @@ export default function EventDetailDialog({
   event: EventShow;
   children: ReactNode;
 }) {
+  const { eventToggles, actions } = useModel();
+  const included = !!eventToggles[event.id];
   const d = EVENT_DETAILS[event.id];
   const breakdown = d ? priceBreakdown(d) : [];
   const sixYear = Math.round(event.cost * SIX_YEAR_EVENT_MULTIPLIER);
@@ -49,6 +53,21 @@ export default function EventDetailDialog({
             </span>
           </DialogTitle>
         </DialogHeader>
+
+        {/* Include / exclude — same Y/N toggle as the list, drives the model */}
+        <div className={cn(
+          "flex items-center justify-between rounded-lg border px-3 py-2",
+          included ? "border-primary/40 bg-primary/5" : "border-border/60 bg-muted/30",
+        )}>
+          <span className="text-sm font-medium">
+            {included ? "Included in the circuit" : "Excluded from the circuit"}
+          </span>
+          <Switch
+            checked={included}
+            onCheckedChange={(v) => actions.toggleEvent(event.id, v)}
+            aria-label={`Include ${event.name} in the circuit`}
+          />
+        </div>
 
         {d && (
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">

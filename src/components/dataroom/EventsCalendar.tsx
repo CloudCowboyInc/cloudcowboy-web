@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight, MapPin, Info } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Info, Plane } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import EventDetailDialog from "./EventDetailDialog";
 import { EVENT_SHOWS } from "@/lib/model/data";
 import { compactUSD } from "@/lib/model/format";
-import { EVENT_DETAILS, parseISO, formatRange, MONTHS_SHORT } from "@/data/eventsData";
+import { EVENT_DETAILS, parseISO, formatRange, MONTHS_SHORT, type EventDetail } from "@/data/eventsData";
 import { cn } from "@/lib/utils";
 import type { EventShow, EventTier } from "@/lib/model/types";
 
@@ -29,6 +29,16 @@ const addDays = (d: Date, n: number) => {
   c.setDate(c.getDate() + n);
   return c;
 };
+
+/** Compact date range for a calendar block, e.g. "Aug 21–22". */
+function shortDates(d: EventDetail): string {
+  const s = parseISO(d.start);
+  const e = parseISO(d.end);
+  const sm = MONTHS_SHORT[s.getMonth()];
+  if (d.start === d.end) return `${sm} ${s.getDate()}`;
+  if (s.getMonth() === e.getMonth()) return `${sm} ${s.getDate()}–${e.getDate()}`;
+  return `${sm} ${s.getDate()} – ${MONTHS_SHORT[e.getMonth()]} ${e.getDate()}`;
+}
 
 /**
  * Calendar view of the event circuit — one month at a time, colour-coded by
@@ -125,16 +135,18 @@ export default function EventsCalendar({
         </div>
         <div className="grid grid-cols-7 gap-1">
           {cells.map((day, i) => {
-            if (day === null) return <div key={`b-${i}`} />;
+            if (day === null) return <div key={`b-${i}`} className="min-h-[92px]" />;
             const hits = byDay.get(keyOf(y, m, day)) ?? [];
             return (
               <div
                 key={day}
-                className={cn("min-h-[64px] rounded border border-border/40 p-1 text-[11px]", hits.length > 0 ? "bg-background/40" : "bg-transparent")}
+                className={cn("min-h-[92px] rounded border border-border/40 p-1", hits.length > 0 ? "bg-background/40" : "bg-transparent")}
               >
-                <div className="mb-1 text-muted-foreground">{day}</div>
+                <div className="mb-1 px-0.5 text-[11px] text-muted-foreground">{day}</div>
                 <div className="space-y-1">
                   {hits.slice(0, 3).map((h, k) => {
+                    const d = EVENT_DETAILS[h.event.id];
+                    const isStart = d && parseISO(d.start).getDate() === day && parseISO(d.start).getMonth() === m;
                     const color = TIER_COLOR[h.event.tier];
                     const dimmed = !includedIds[h.event.id];
                     return (
@@ -144,21 +156,30 @@ export default function EventsCalendar({
                           title={`${h.event.name} — ${h.type === "travel" ? "travel day" : "show day"}`}
                           aria-label={`${h.event.name}, ${h.type} day — open details`}
                           className={cn(
-                            "block h-2 w-full rounded-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
-                            h.type === "travel" && "opacity-40",
+                            "block w-full overflow-hidden rounded text-left transition-opacity focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
+                            dimmed && "opacity-40",
                           )}
-                          style={{
-                            background: color,
-                            opacity: dimmed ? 0.35 : 1,
-                            ...(h.type === "travel"
-                              ? { backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.35) 2px, rgba(0,0,0,0.35) 4px)" }
-                              : {}),
-                          }}
-                        />
+                        >
+                          {h.type === "travel" ? (
+                            <span
+                              className="flex items-center gap-0.5 rounded border border-dashed px-1 py-0.5 text-[9px] font-medium"
+                              style={{ borderColor: color, color }}
+                            >
+                              <Plane className="h-2.5 w-2.5" /> Travel
+                            </span>
+                          ) : isStart ? (
+                            <span className="block px-1.5 py-1 text-white" style={{ background: color }}>
+                              <span className="block truncate text-[11px] font-semibold leading-tight">{h.event.name}</span>
+                              <span className="block text-[10px] leading-tight text-white/85">{shortDates(d!)}</span>
+                            </span>
+                          ) : (
+                            <span className="block h-2 rounded" style={{ background: color }} />
+                          )}
+                        </button>
                       </EventDetailDialog>
                     );
                   })}
-                  {hits.length > 3 && <div className="text-[9px] text-muted-foreground">+{hits.length - 3}</div>}
+                  {hits.length > 3 && <div className="px-0.5 text-[9px] text-muted-foreground">+{hits.length - 3} more</div>}
                 </div>
               </div>
             );
