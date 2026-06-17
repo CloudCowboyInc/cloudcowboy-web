@@ -38,7 +38,7 @@ describe("Events (calendar)", () => {
     expect(screen.getByText(/Aug 2026/)).toBeInTheDocument();
     expect(screen.queryByText(/Sep 2026/)).not.toBeInTheDocument();
     expect(screen.getByText(/Top priority/i)).toBeInTheDocument();
-    expect(screen.getByText(/Travel day/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Travel day/i).length).toBeGreaterThan(0);
     // The month's events are listed.
     expect(screen.getByText(/Events this month/i)).toBeInTheDocument();
   });

@@ -162,18 +162,22 @@ export default function EventsCalendar({
                         >
                           {h.type === "travel" ? (
                             <span
-                              className="flex items-center gap-0.5 rounded border border-dashed px-1 py-0.5 text-[9px] font-medium"
+                              className="block rounded border border-dashed px-1.5 py-1"
                               style={{ borderColor: color, color }}
                             >
-                              <Plane className="h-2.5 w-2.5" /> Travel
-                            </span>
-                          ) : isStart ? (
-                            <span className="block px-1.5 py-1 text-white" style={{ background: color }}>
-                              <span className="block truncate text-[11px] font-semibold leading-tight">{h.event.name}</span>
-                              <span className="block text-[10px] leading-tight text-white/85">{shortDates(d!)}</span>
+                              <span className="flex items-center gap-0.5 truncate text-[11px] font-semibold leading-tight">
+                                <Plane className="h-2.5 w-2.5 shrink-0" />
+                                <span className="truncate">{h.event.name}</span>
+                              </span>
+                              <span className="block text-[10px] leading-tight opacity-80">Travel day</span>
                             </span>
                           ) : (
-                            <span className="block h-2 rounded" style={{ background: color }} />
+                            <span className="block px-1.5 py-1 text-white" style={{ background: color }}>
+                              <span className="block truncate text-[11px] font-semibold leading-tight">{h.event.name}</span>
+                              <span className="block text-[10px] leading-tight text-white/85">
+                                {isStart ? shortDates(d!) : "Show day"}
+                              </span>
+                            </span>
                           )}
                         </button>
                       </EventDetailDialog>
