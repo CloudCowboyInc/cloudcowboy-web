@@ -106,12 +106,32 @@ describe("Market page — underlying segment drill-down", () => {
   });
 });
 
+describe("Market page — segment 'read more'", () => {
+  it("opens the full document detail for the active segment", () => {
+    renderPage();
+    fireEvent.click(screen.getByRole("button", { name: /Read more/i }));
+    // Chemical is active by default — full detail + market structure appear.
+    expect(screen.getByText(/variable-rate technology \(VRT\) application services/i)).toBeInTheDocument();
+    expect(screen.getByText(/Top 7 companies/i)).toBeInTheDocument();
+  });
+});
+
 describe("Market page — sources", () => {
   it("cites the source document and grouped references", () => {
     renderPage();
     expect(screen.getByText(/US Agricultural Service Providers Market Analysis/i)).toBeInTheDocument();
     expect(screen.getByText(/Government & official statistics/i)).toBeInTheDocument();
     expect(screen.getAllByText(/USDA/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/IBISWorld/i).length).toBeGreaterThan(0);
+  });
+
+  it("renders the evidence base as clickable links to the publishers", () => {
+    renderPage();
+    const ibis = screen.getAllByRole("link", { name: /IBISWorld/i })[0];
+    expect(ibis).toHaveAttribute("href", expect.stringContaining("ibisworld.com"));
+    const census = screen.getAllByRole("link", { name: /US Census Bureau/i })[0];
+    expect(census).toHaveAttribute("href", expect.stringContaining("census.gov"));
+    // links open safely in a new tab
+    expect(ibis).toHaveAttribute("target", "_blank");
+    expect(ibis).toHaveAttribute("rel", expect.stringContaining("noreferrer"));
   });
 });

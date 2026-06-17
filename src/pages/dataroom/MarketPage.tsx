@@ -1,4 +1,4 @@
-import { Layers, TrendingUp, BookOpen, MapPin, Zap, Globe, FileText, Compass } from "lucide-react";
+import { Layers, TrendingUp, BookOpen, MapPin, Zap, Globe, FileText, Compass, ExternalLink } from "lucide-react";
 import {
   SectionCard,
   StatTile,
@@ -162,9 +162,17 @@ export default function MarketPage() {
               </div>
               <ul className="space-y-1 text-sm text-muted-foreground">
                 {g.items.map((it) => (
-                  <li key={it} className="flex gap-2">
+                  <li key={it.label} className="flex gap-2">
                     <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-muted-foreground/60" aria-hidden />
-                    {it}
+                    <a
+                      href={it.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-start gap-1 text-muted-foreground underline decoration-border underline-offset-2 transition-colors hover:text-primary hover:decoration-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    >
+                      {it.label}
+                      <ExternalLink className="mt-0.5 h-3 w-3 shrink-0 opacity-60" aria-hidden />
+                    </a>
                   </li>
                 ))}
               </ul>

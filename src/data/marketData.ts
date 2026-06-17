@@ -426,48 +426,53 @@ export const MARKET_DRIVERS: { title: string; body: string }[] = [
   },
 ];
 
-/** §10/§11 — sources, grouped, to build credibility. */
+/** §10/§11 — sources, grouped, to build credibility. Links point to each
+ *  publisher (official domains; the source doc did not include deep URLs). */
+export interface SourceItem {
+  label: string;
+  url: string;
+}
 export interface SourceGroup {
   category: string;
-  items: string[];
+  items: SourceItem[];
 }
 
 export const MARKET_SOURCE_GROUPS: SourceGroup[] = [
   {
     category: "Government & official statistics",
     items: [
-      "USDA Economic Research Service — Farm Labor",
-      "USDA NASS — Census of Agriculture 2022",
-      "US Census Bureau — 2022 Economic Census, NAICS Sector 11",
-      "Bureau of Labor Statistics — NAICS 115",
-      "USDA AMS — Transportation Research & Analysis",
-      "USDA NASS — Farm Labor Survey",
+      { label: "USDA Economic Research Service — Farm Labor", url: "https://www.ers.usda.gov/topics/farm-economy/farm-labor" },
+      { label: "USDA NASS — Census of Agriculture 2022", url: "https://www.nass.usda.gov/AgCensus/" },
+      { label: "US Census Bureau — 2022 Economic Census, NAICS Sector 11", url: "https://www.census.gov/programs-surveys/economic-census.html" },
+      { label: "Bureau of Labor Statistics — NAICS 115", url: "https://www.bls.gov/iag/tgs/iag115.htm" },
+      { label: "USDA AMS — Transportation Research & Analysis", url: "https://www.ams.usda.gov/services/transportation-analysis" },
+      { label: "USDA NASS — Farm Labor Survey", url: "https://www.nass.usda.gov/Surveys/Guide_to_NASS_Surveys/Farm_Labor/" },
     ],
   },
   {
     category: "Market research reports",
     items: [
-      "Grand View Research — US Farming as a Service; US Agriculture Drone; US Veterinary AI; US Animal Health; US Agricultural Fencing",
-      "Mordor Intelligence — Agricultural Sprayers; US Agricultural Irrigation Machinery",
-      "Precedence Research — Farming as a Service; Precision Farming",
-      "Market Research Future — Agriculture Crop Service; Grain Dryers",
-      "IBISWorld — Crop Services in the US; Precision Agriculture Systems & Services",
+      { label: "Grand View Research — US Farming as a Service; US Agriculture Drone; US Veterinary AI; US Animal Health; US Agricultural Fencing", url: "https://www.grandviewresearch.com/" },
+      { label: "Mordor Intelligence — Agricultural Sprayers; US Agricultural Irrigation Machinery", url: "https://www.mordorintelligence.com/" },
+      { label: "Precedence Research — Farming as a Service; Precision Farming", url: "https://www.precedenceresearch.com/" },
+      { label: "Market Research Future — Agriculture Crop Service; Grain Dryers", url: "https://www.marketresearchfuture.com/" },
+      { label: "IBISWorld — Crop Services in the US; Precision Agriculture Systems & Services", url: "https://www.ibisworld.com/" },
     ],
   },
   {
     category: "Industry associations & publications",
     items: [
-      "National Agricultural Aviation Association — Industry Facts",
-      "CropLife Magazine — Top 100 US Ag Retailers",
-      "AgAmerica — US Farm Labor Shortage",
-      "Grain Journal — 2025 Transportation Report",
+      { label: "National Agricultural Aviation Association — Industry Facts", url: "https://www.agaviation.org/" },
+      { label: "CropLife Magazine — Top 100 US Ag Retailers", url: "https://www.croplife.com/" },
+      { label: "AgAmerica — US Farm Labor Shortage", url: "https://agamerica.com/" },
+      { label: "Grain Journal — 2025 Transportation Report", url: "https://grainjournal.com/" },
     ],
   },
   {
     category: "Academic & research",
     items: [
-      "UC Davis — Labor Contractors in US Agriculture",
-      "Federal Reserve Bank of Kansas City — Agricultural Labor",
+      { label: "UC Davis — Labor Contractors in US Agriculture", url: "https://www.ucdavis.edu/" },
+      { label: "Federal Reserve Bank of Kansas City — Agricultural Labor", url: "https://www.kansascityfed.org/agriculture/" },
     ],
   },
 ];
@@ -478,3 +483,86 @@ export const MARKET_SOURCE =
 /** How the supporting table relates to the ARR funnel — stated on the page. */
 export const FUNNEL_RELATIONSHIP =
   "The $104.3B is the total US industry; Cloud Cowboy's $3.1B TAM is what we monetize from it ($12K subscription + 2% of transactions). Chemical & Fertilizer Application is both the largest segment and our beachhead.";
+
+/**
+ * Full per-segment detail (§3.1–3.12 of the source doc, verbatim), plus the
+ * §8 competitive market-structure note where the document states one, and a
+ * short label for the wheel. Keyed by segment rank. This is "every detail" the
+ * document carries for each segment, surfaced via the "Read more" dialog.
+ */
+export interface SegmentDetail {
+  short: string;
+  fullDetail: string;
+  marketStructure?: string;
+}
+
+export const SEGMENT_DETAILS: Record<number, SegmentDetail> = {
+  1: {
+    short: "Chemical & Fert.",
+    fullDetail:
+      "This is the largest service segment, encompassing custom chemical application (herbicides, pesticides, fungicides), fertilizer spreading and injection, and variable-rate technology (VRT) application services. The global agriculture crop service market is expected to grow from $8.01 billion in 2025 to $14.70 billion by 2034 at a 7.0% CAGR. In the US, the crop protection chemicals market alone is valued at $21.34 billion in 2025. The service component — custom application by hired operators — represents a significant and growing share as farmers increasingly outsource specialized spraying to avoid equipment costs and regulatory complexity. Approximately 15,000 custom application businesses operate across the US.",
+    marketStructure: "Top 7 companies >$1B each; highly fragmented below.",
+  },
+  2: {
+    short: "Ag Trucking",
+    fullDetail:
+      "Agricultural trucking serves as the critical link between farm origins, grain elevators, processing facilities, and intermodal hubs. This segment includes grain hauling, livestock transport, produce delivery, and farm-to-market freight logistics. In 2025, trucking faces dual challenges of rising operational complexity and persistent regional imbalances. Driver shortages, particularly for short-haul seasonal freight, remain a key constraint, with many regional carriers scaling back capacity due to insurance costs and driver churn. An estimated 10,500 agricultural trucking entities serve the US market.",
+    marketStructure: "Extremely fragmented; driver shortages reshape the market.",
+  },
+  3: {
+    short: "Farm Labor",
+    fullDetail:
+      "Farm labor contracting is one of the fastest-growing segments, driven by chronic agricultural labor shortages. Employment in agricultural support industries rose from 1.07 million in 2010 to 1.18 million in 2024. Farm labor contractors now account for over 40% of H-2A visa jobs, and their share of crop labor positions has steadily increased over two decades, particularly in California. The US farming-as-a-service market generated $1.16 billion in 2024 and is expected to reach $3.38 billion by 2033 at a 12.7% CAGR. Approximately 12,400 labor contracting and staffing entities operate nationally.",
+    marketStructure: "Highly fragmented; farm labor contractors increasingly dominant.",
+  },
+  4: {
+    short: "Livestock",
+    fullDetail:
+      "Livestock services encompass veterinary care, artificial insemination (AI), hoof trimming, shearing, branding, feed management, and livestock handling. The US animal health market was valued at $12.65 billion in 2024 with a 7.97% projected CAGR. The US veterinary AI market alone is estimated at $2.0–2.55 billion in 2024, projected to reach $4.61 billion by 2034 at a 6.1% CAGR. This segment spans cattle, dairy, hog, sheep, goat, and poultry operations, with approximately 17,800 entities — the largest entity count of any segment, reflecting the fragmented nature of livestock services.",
+    marketStructure: "Fragmented service delivery; consolidated product supply.",
+  },
+  5: {
+    short: "Custom Harvest",
+    fullDetail:
+      "Custom harvesting includes combine harvesting, forage harvesting, hay baling, and specialty crop harvest crews. The average US custom grain harvest rate in 2025 is projected to rise by 8% compared to 2024, driven by skilled operator shortages and rising equipment costs. The broader harvesting machinery market is valued at $31.86 billion in 2025 with the US growing at an 8.07% CAGR. Custom harvesters typically follow the wheat and corn belts seasonally, with approximately 6,200 entities operating nationally.",
+    marketStructure: "Highly fragmented; seasonal/regional operators.",
+  },
+  6: {
+    short: "Precision Ag",
+    fullDetail:
+      "The fastest-growing segment by CAGR, precision ag services include agronomy consulting, soil testing, drone mapping and analytics, farm management advisory, and data-driven decision support. The US precision farming market is valued at $4.37 billion in 2025, projected to reach $15.23 billion by 2035 at a 13.3% CAGR. The agriculture drone market is expected to grow from $5.40 billion in 2025 to $12.70 billion by 2030 at 18.8% CAGR. Major players include John Deere, Trimble, AGCO, and CNH Industrial. Approximately 5,800 consulting and precision ag service entities operate in the US.",
+    marketStructure: "Tech giants entering; boutique consultants thrive.",
+  },
+  7: {
+    short: "Aerial App.",
+    fullDetail:
+      "Agricultural aviation encompasses traditional crop dusting, helicopter application, and the rapidly growing drone-based aerial application segment. The global agricultural aircraft market is estimated at $6.3 billion in 2025, forecast to reach $11.4 billion by 2034 at a 6.8% CAGR. North America dominates with 33.2% market share. The average aerial application business operates 2.3 aircraft, with 84% fixed-wing and 16% rotorcraft. Drone-based solutions are increasingly complementing traditional aircraft, providing targeted spraying and crop monitoring. An estimated 2,400 aerial application businesses operate in the US.",
+    marketStructure: "Fragmented; avg 2.3 aircraft/business; drone entrants.",
+  },
+  8: {
+    short: "Post-Harvest",
+    fullDetail:
+      "Post-harvest services include grain drying, storage, handling, and cotton ginning. The grain dryers market is projected at $3.81 billion in 2025, growing to $6.21 billion by 2035 at a 5.01% CAGR. US grain storage silos represent a $297.59 million market in 2025. Cotton ginning machinery is a $2.16 billion global market in 2025, with the US representing the majority of North American demand. This segment includes approximately 5,100 entities, including 594 cotton ginning establishments.",
+  },
+  9: {
+    short: "Irrigation",
+    fullDetail:
+      "Irrigation services encompass installation, maintenance, scheduling optimization, and water management consulting. The US agricultural irrigation machinery market stands at $2.10 billion in 2025, projected to reach $2.80 billion by 2030 at a 5.6% CAGR. Drip irrigation leads with an 11.4% CAGR, driven by specialty fruit and nut expansion. Water conservation mandates and drought frequency are accelerating demand. Major players include Valmont Industries, Lindsay Corporation, The Toro Company, and Netafim. An estimated 1,900 irrigation service providers operate nationally.",
+    marketStructure: "Equipment consolidated; service highly fragmented.",
+  },
+  10: {
+    short: "Vineyard/Orchard",
+    fullDetail:
+      "This segment covers specialized labor and management services for vineyards, orchards, and other specialty crops including berries, nuts, and vegetables. North America dominated the orchard and vineyard equipment market in 2024, accounting for 43.8% share and generating $0.7 billion in revenue. California alone reports approximately 590,000 acres of grape cultivation. The sector faces a 15–20% annual labor deficit, accelerating demand for contracted specialty crop services. Pruning and leafing services account for 40% of segment revenue. Approximately 3,800 specialty crop service entities operate in the US.",
+  },
+  11: {
+    short: "Soil Prep",
+    fullDetail:
+      "Soil preparation services include tilling, plowing, land clearing, seed drilling, and cultivation services. According to census data, there are 4,136 soil preparation, planting, and cultivating establishments in the US, though total entities including smaller operators are estimated at approximately 7,800. Cultivation and soil preparation capture 36.7% of the broader farm equipment market usage. This segment grows in line with planted acreage expansion and no-till/reduced-till adoption trends.",
+  },
+  12: {
+    short: "Fencing",
+    fullDetail:
+      "Agricultural fencing services encompass installation, repair, and maintenance of farm and ranch perimeter fencing, livestock containment systems, and crop protection barriers. The US agricultural fencing market was estimated at $2.40 billion in 2022, growing at a 4.6% CAGR. The USDA allocated $200 million for rural infrastructure in 2024 including fencing around public lands and farms. The barbed wire segment leads with 35.7% revenue share. An estimated 1,600 agricultural fencing contractors serve the US market.",
+  },
+};
