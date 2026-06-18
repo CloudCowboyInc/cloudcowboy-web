@@ -116,12 +116,11 @@ export async function buildModelWorkbook(
   series(13, inputs.gmvGrowth);
   series(16, inputs.social);
   series(17, inputs.digital);
-  // Event circuit per year = included-circuit base × that year's factor.
-  series(18, inputs.eventYearFactor.map((f) => Math.round(inputs.eventsBaseAnnual * f)));
   series(19, inputs.national);
-  // Memberships are applied at the same annual figure every year.
-  series(20, new Array(6).fill(inputs.membershipsAnnual));
-  series(21, inputs.oneTime);
+  // Rows 18 (event circuit), 20 (memberships) and 21 (one-time capital) are
+  // formulas in the template — they reference the Events / Orgs totals so the
+  // Y/N toggles flow through. We set those toggles below and leave the formulas
+  // untouched, rather than overwriting them with static values.
   series(25, inputs.gAndA);
   STAFF.forEach((_, i) => {
     series(28 + i, inputs.staff[i].fte);

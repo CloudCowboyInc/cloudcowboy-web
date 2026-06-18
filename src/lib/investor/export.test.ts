@@ -88,6 +88,19 @@ describe("Excel export — mirrors the proforma with portal values", () => {
     const pfTitle = wb.getWorksheet("Proforma")!.getCell("A2");
     expect(pfTitle.font?.size ?? 0).toBeGreaterThanOrEqual(12);
 
+    // The Events/Orgs Y/N toggles flow into the Proforma: the event circuit
+    // (row 18), memberships (row 20) and one-time capital (row 21) are formulas
+    // referencing the Events/Orgs totals, and the toggle cells are dropdowns.
+    const pfXml = await zip.file("xl/worksheets/sheet1.xml")!.async("string");
+    expect(pfXml).toMatch(/<c r="B18"[^>]*><f>Events!\$O\$31/); // event circuit
+    expect(pfXml).toMatch(/<c r="B21"[^>]*><f>Events!\$C\$39<\/f>/); // one-time capital
+    expect(pfXml).toMatch(/<c r="B20"[^>]*><f>'Orgs/); // memberships
+    const evXml = await zip.file("xl/worksheets/sheet3.xml")!.async("string");
+    expect(evXml).toMatch(/<dataValidation type="list"[^>]*sqref="B13:B30 B35:B38"/);
+    expect(evXml).toContain('<formula1>"Y,N"</formula1>');
+    const ogXml = await zip.file("xl/worksheets/sheet4.xml")!.async("string");
+    expect(ogXml).toMatch(/<dataValidation type="list"[^>]*sqref="B5:B16"/);
+
     // Formula-driven P&L is preserved (not flattened to static numbers).
     const pf = wb.getWorksheet("Proforma")!;
     const b22 = pf.getCell("B22").value as { formula?: string };
