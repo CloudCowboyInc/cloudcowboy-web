@@ -38,9 +38,9 @@ const SERIES: Series[] = [
   { key: "ai", label: "Layer-1 AI", color: "hsl(174 40% 50%)", kind: "cost", axis: "left", defaultOn: false },
   { key: "commissions", label: "Commissions", color: "hsl(280 40% 62%)", kind: "cost", axis: "left", defaultOn: false },
   { key: "netCash", label: "Net cash flow", color: "hsl(var(--muted-foreground))", kind: "cash", axis: "left", defaultOn: false },
-  { key: "cumCash", label: "Cumulative cash", color: "hsl(var(--primary))", kind: "cash", axis: "right", defaultOn: true },
-  { key: "opCash", label: "Operating cash (excl. raise)", color: "hsl(var(--accent))", kind: "cash", axis: "right", defaultOn: false },
-  { key: "capital", label: "Investor capital", color: "hsl(0 0% 72%)", kind: "capital", axis: "right", defaultOn: true },
+  { key: "cumCash", label: "Cumulative cash", color: "hsl(var(--primary))", kind: "cash", axis: "left", defaultOn: true },
+  { key: "opCash", label: "Operating cash (excl. raise)", color: "hsl(var(--accent))", kind: "cash", axis: "left", defaultOn: false },
+  { key: "capital", label: "Investor capital", color: "hsl(0 0% 72%)", kind: "capital", axis: "left", defaultOn: true },
 ];
 
 const tooltipStyle = {
@@ -150,7 +150,6 @@ export default function MasterChart() {
           <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
           <XAxis dataKey="label" {...axisProps} interval={gran === "monthly" ? 5 : 0} />
           <YAxis yAxisId="left" {...axisProps} tickFormatter={(v) => compactUSD(v)} width={56} />
-          <YAxis yAxisId="right" orientation="right" {...axisProps} tickFormatter={(v) => compactUSD(v)} width={56} />
           <Tooltip
             contentStyle={tooltipStyle}
             formatter={(v: number, n) => [usd(v), SERIES.find((s) => s.key === n)?.label ?? n]}
@@ -193,10 +192,10 @@ export default function MasterChart() {
         </span>
       </div>
       <p className="text-xs text-muted-foreground">
-        Left axis: per-period line items (costs shown as outflow magnitude). Right axis: cash on hand
-        — cumulative cash starts at the investor capital raised and burns down, alongside the flat
-        investor-capital reference. Stack the cost series to see spend composition; drag the window to
-        set a date range.
+        One shared dollar axis: every series is to the same scale. Per-period line items show costs as
+        outflow magnitude; cumulative cash is cash on hand — it starts at the investor capital raised
+        and burns down, alongside the flat investor-capital reference. Toggle series or drag the window
+        to focus; stack the cost series to see spend composition.
       </p>
     </div>
   );
