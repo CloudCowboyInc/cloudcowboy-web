@@ -67,6 +67,18 @@ describe("Excel export — mirrors the proforma with portal values", () => {
       expect(firstRow, `drawing${i} not top-left`).toBe("0");
     }
 
+    // Every sheet keeps its branded A2 title (text present and not recoloured to
+    // the small grey style — guards against the shared-style stamp regression).
+    for (const ws of wb.worksheets) {
+      const title = ws.getCell("A2");
+      expect(String(title.value ?? "").length, `${ws.name} title missing`).toBeGreaterThan(0);
+      const c = title.font?.color?.argb;
+      expect(c, `${ws.name} title recoloured to stamp grey`).not.toBe("FF6B7280");
+    }
+    // The Proforma title specifically stays the large branded heading.
+    const pfTitle = wb.getWorksheet("Proforma")!.getCell("A2");
+    expect(pfTitle.font?.size ?? 0).toBeGreaterThanOrEqual(12);
+
     // Formula-driven P&L is preserved (not flattened to static numbers).
     const pf = wb.getWorksheet("Proforma")!;
     const b22 = pf.getCell("B22").value as { formula?: string };

@@ -121,13 +121,11 @@ export async function buildModelWorkbook(
     });
   }
 
-  // ── Stamp who/when this configuration was exported for (A1 is empty in the
-  //    template; keep the proforma's own title row A2 untouched). ───────────
-  const who = meta.investorEmail ?? "investor";
-  const when = new Date(meta.generatedAt).toLocaleString("en-US");
-  const stamp = pf.getCell("A1");
-  stamp.value = `Investor configuration — ${who} · exported ${when}. Blue inputs reflect this investor's portal settings; all formulas recalculate live.`;
-  stamp.font = { italic: true, size: 9, color: { argb: "FF6B7280" } };
+  // Note: we deliberately do NOT stamp investor/date into a header cell. exceljs
+  // shares one style record across the sheets' title cells, so re-styling any
+  // cell that shares it (e.g. A1) silently recolours every sheet's A2 title —
+  // making the titles look "missing". Whose config this is and when it was
+  // exported is carried by the filename, the emailed copy, and the saved config.
 
   // Force Excel / Sheets to recalculate every formula against the new inputs.
   wb.calcProperties.fullCalcOnLoad = true;
