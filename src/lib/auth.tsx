@@ -23,7 +23,20 @@ interface AuthValue {
   refreshRole: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthValue | null>(null);
+const DEFAULT_AUTH: AuthValue = {
+  configured: false,
+  loading: false,
+  user: null,
+  email: null,
+  role: null,
+  isAllowed: false,
+  isAdmin: false,
+  signIn: async () => ({ error: "Auth not ready." }),
+  signOut: async () => {},
+  refreshRole: async () => {},
+};
+
+const AuthContext = createContext<AuthValue>(DEFAULT_AUTH);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(isSupabaseConfigured);
@@ -91,7 +104,5 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 }
 
 export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
-  return ctx;
+  return useContext(AuthContext);
 }

@@ -23,3 +23,20 @@ export const READINESS_LABEL: Record<Readiness, string> = {
   partial: "Phone or email",
   thin: "No contact yet",
 };
+
+
+import type { OperatorType } from "@/data/leads";
+
+export const OPERATOR_COLORS: Record<OperatorType, string> = {
+  ground: "#5a9bd4",
+  aerial: "#d4782f",
+  drone: "#3fb27f",
+  "": "#64748b",
+};
+
+export const OPERATOR_LABEL: Record<OperatorType, string> = {
+  ground: "Ground",
+  aerial: "Aerial (manned)",
+  drone: "Drone",
+  "": "Unknown",
+};

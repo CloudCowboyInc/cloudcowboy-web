@@ -16,10 +16,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Phone, Mail, Globe, MapPin, Plane } from "lucide-react";
+import { Phone, Mail, Globe, MapPin, Plane, Bot, Tractor, Facebook, Instagram, Tag } from "lucide-react";
 import { PIPELINE_STATUSES, type Lead, type PipelineStatus } from "@/data/leads";
 import { useCRM, type InteractionType } from "@/lib/crm-store";
-import { STATUS_COLORS, READINESS_LABEL } from "./statusConfig";
+import { STATUS_COLORS, READINESS_LABEL, OPERATOR_COLORS, OPERATOR_LABEL } from "./statusConfig";
 import { toast } from "sonner";
 
 const TYPES: InteractionType[] = ["call", "email", "meeting", "note"];
@@ -56,11 +56,13 @@ export default function LeadDetailDrawer({
 
         <div className="mt-4 space-y-5 text-sm">
           <div className="flex flex-wrap gap-2">
-            {lead.aerial && (
-              <Badge className="gap-1 bg-primary/15 text-primary hover:bg-primary/15">
-                <Plane className="h-3 w-3" /> Aerial operator
-              </Badge>
-            )}
+            <Badge
+              className="gap-1 border-0"
+              style={{ background: `${OPERATOR_COLORS[lead.operatorType]}22`, color: OPERATOR_COLORS[lead.operatorType] }}
+            >
+              {lead.operatorType === "drone" ? <Bot className="h-3 w-3" /> : lead.operatorType === "aerial" ? <Plane className="h-3 w-3" /> : <Tractor className="h-3 w-3" />}
+              {OPERATOR_LABEL[lead.operatorType]}
+            </Badge>
             {lead.codes.map((c) => (
               <Badge key={c} variant="outline">
                 Cat {c}
@@ -109,6 +111,20 @@ export default function LeadDetailDrawer({
                 </a>
               </div>
             )}
+            {(lead.facebook || lead.instagram) && (
+              <div className="flex items-center gap-3 pl-6">
+                {lead.facebook && (
+                  <a href={lead.facebook} target="_blank" rel="noreferrer" className="flex items-center gap-1 hover:text-primary">
+                    <Facebook className="h-4 w-4" /> Facebook
+                  </a>
+                )}
+                {lead.instagram && (
+                  <a href={lead.instagram} target="_blank" rel="noreferrer" className="flex items-center gap-1 hover:text-primary">
+                    <Instagram className="h-4 w-4" /> Instagram
+                  </a>
+                )}
+              </div>
+            )}
             {(lead.employees || lead.revenue) && (
               <div className="pl-6 text-xs">
                 {lead.employees ? `~${lead.employees} staff` : ""}
@@ -117,7 +133,21 @@ export default function LeadDetailDrawer({
               </div>
             )}
             <div className="pl-6 text-xs">Owner / contact: {lead.contact}</div>
+            {lead.source && <div className="pl-6 text-xs">Source: {lead.source}</div>}
           </div>
+
+          {lead.services.length > 0 && (
+            <div>
+              <div className="mb-1.5 flex items-center gap-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                <Tag className="h-3.5 w-3.5" /> Services
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {lead.services.map((sv) => (
+                  <Badge key={sv} variant="outline" className="font-normal">{sv}</Badge>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div>
             <label className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted-foreground">

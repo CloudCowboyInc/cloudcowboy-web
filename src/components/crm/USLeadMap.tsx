@@ -1,9 +1,9 @@
 import { MapContainer, TileLayer, CircleMarker, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import type { Lead } from "@/data/leads";
-import { STATUS_COLORS, READINESS_COLORS } from "./statusConfig";
+import { STATUS_COLORS, READINESS_COLORS, OPERATOR_COLORS } from "./statusConfig";
 
-type ColorMode = "status" | "readiness";
+type ColorMode = "status" | "readiness" | "operator";
 
 interface Props {
   leads: Lead[];
@@ -13,9 +13,26 @@ interface Props {
 
 export default function USLeadMap({ leads, colorMode, onSelect }: Props) {
   const colorFor = (l: Lead) =>
-    colorMode === "status" ? STATUS_COLORS[l.status] : READINESS_COLORS[l.readiness];
+    colorMode === "status"
+      ? STATUS_COLORS[l.status]
+      : colorMode === "operator"
+      ? OPERATOR_COLORS[l.operatorType]
+      : READINESS_COLORS[l.readiness];
 
-  const plotted = leads.filter((l) => l.lat != null && l.lng != null);
+  // Only plot valid, in-range coordinates — a bad/NaN lat-lng from the live DB
+  // makes Leaflet throw synchronously during render (blanking the page).
+  const plotted = leads.filter((l) => {
+    const lat = Number(l.lat);
+    const lng = Number(l.lng);
+    return (
+      l.lat != null &&
+      l.lng != null &&
+      Number.isFinite(lat) &&
+      Number.isFinite(lng) &&
+      Math.abs(lat) <= 90 &&
+      Math.abs(lng) <= 180
+    );
+  });
 
   return (
     <div className="relative z-0 w-full">
