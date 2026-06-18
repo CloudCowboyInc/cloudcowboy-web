@@ -53,6 +53,20 @@ describe("Excel export — mirrors the proforma with portal values", () => {
     const workbookXml = await zip.file("xl/workbook.xml")!.async("string");
     expect(workbookXml).toContain('fullCalcOnLoad="1"');
 
+    // Branding survives the round-trip: the Cloud Cowboy logo image and a
+    // drawing (top-left placement) on every one of the seven sheets.
+    expect(zip.file("xl/media/image1.png")).toBeTruthy();
+    const drawingCount = Object.keys(zip.files).filter((n) =>
+      /^xl\/drawings\/drawing\d+\.xml$/.test(n),
+    ).length;
+    expect(drawingCount).toBe(7);
+    // Every sheet's logo is anchored in the top row (xdr:row 0).
+    for (let i = 1; i <= 7; i++) {
+      const d = await zip.file(`xl/drawings/drawing${i}.xml`)!.async("string");
+      const firstRow = d.match(/<xdr:from>[\s\S]*?<xdr:row>(\d+)<\/xdr:row>/)?.[1];
+      expect(firstRow, `drawing${i} not top-left`).toBe("0");
+    }
+
     // Formula-driven P&L is preserved (not flattened to static numbers).
     const pf = wb.getWorksheet("Proforma")!;
     const b22 = pf.getCell("B22").value as { formula?: string };
