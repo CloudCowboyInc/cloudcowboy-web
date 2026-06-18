@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import StatTile from "./StatTile";
 import { useModel } from "@/lib/model/store";
-import { compactUSD, usd, pct, multiple } from "@/lib/model/format";
+import { compactUSD, usd, pct, multiple, grouped, parseGrouped } from "@/lib/model/format";
 
 /**
  * The raise & returns panel. Edit the raise amount and either dilution or
@@ -25,13 +25,11 @@ export default function RaisePanel() {
           <div className="relative mt-1">
             <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">$</span>
             <Input
-              type="number"
-              inputMode="decimal"
+              type="text"
+              inputMode="numeric"
               aria-label="Raise amount"
-              min={0}
-              step={100000}
-              value={raiseAmount}
-              onChange={(e) => actions.setRaiseAmount(e.target.value === "" ? 0 : Number(e.target.value))}
+              value={grouped(raiseAmount)}
+              onChange={(e) => actions.setRaiseAmount(parseGrouped(e.target.value))}
               className="h-9 pl-6 tabular-nums"
             />
           </div>
@@ -58,13 +56,11 @@ export default function RaisePanel() {
           <div className="relative mt-1">
             <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">$</span>
             <Input
-              type="number"
-              inputMode="decimal"
+              type="text"
+              inputMode="numeric"
               aria-label="Post-money valuation"
-              min={0}
-              step={100000}
-              value={Math.round(metrics.postMoney)}
-              onChange={(e) => actions.setPostMoney(e.target.value === "" ? 1 : Number(e.target.value))}
+              value={grouped(metrics.postMoney)}
+              onChange={(e) => actions.setPostMoney(Math.max(1, parseGrouped(e.target.value)))}
               className="h-9 pl-6 tabular-nums"
             />
           </div>

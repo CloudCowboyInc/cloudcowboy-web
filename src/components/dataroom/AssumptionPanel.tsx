@@ -2,12 +2,12 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { useModel, type GrowthKey } from "@/lib/model/store";
 import { YEARS } from "@/lib/model/data";
-import { compactUSD, pct } from "@/lib/model/format";
+import { compactUSD, pct, grouped, parseGrouped } from "@/lib/model/format";
 import { cn } from "@/lib/utils";
 import type { ModelInputs } from "@/lib/model/types";
 
 function Field({
-  label, ariaLabel, value, onChange, step = 1, min = 0, prefix, suffix, disabled,
+  label, ariaLabel, value, onChange, step = 1, min = 0, prefix, suffix, disabled, commas,
 }: {
   label: string;
   ariaLabel?: string;
@@ -18,23 +18,37 @@ function Field({
   prefix?: string;
   suffix?: string;
   disabled?: boolean;
+  /** Display whole-dollar values with thousands separators (1,000,000). */
+  commas?: boolean;
 }) {
   return (
     <label className="block">
       <span className="text-xs text-muted-foreground">{label}</span>
       <div className="relative mt-1">
         {prefix && <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">{prefix}</span>}
-        <Input
-          type="number"
-          inputMode="decimal"
-          aria-label={ariaLabel ?? label}
-          value={Number.isFinite(value) ? value : 0}
-          min={min}
-          step={step}
-          disabled={disabled}
-          onChange={(e) => onChange(e.target.value === "" ? 0 : Number(e.target.value))}
-          className={cn("h-9 tabular-nums", prefix && "pl-6", suffix && "pr-8")}
-        />
+        {commas ? (
+          <Input
+            type="text"
+            inputMode="numeric"
+            aria-label={ariaLabel ?? label}
+            value={grouped(value)}
+            disabled={disabled}
+            onChange={(e) => onChange(parseGrouped(e.target.value))}
+            className={cn("h-9 tabular-nums", prefix && "pl-6", suffix && "pr-8")}
+          />
+        ) : (
+          <Input
+            type="number"
+            inputMode="decimal"
+            aria-label={ariaLabel ?? label}
+            value={Number.isFinite(value) ? value : 0}
+            min={min}
+            step={step}
+            disabled={disabled}
+            onChange={(e) => onChange(e.target.value === "" ? 0 : Number(e.target.value))}
+            className={cn("h-9 tabular-nums", prefix && "pl-6", suffix && "pr-8")}
+          />
+        )}
         {suffix && <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">{suffix}</span>}
       </div>
     </label>
@@ -87,6 +101,7 @@ function GrowthControl({
             step={kind === "percent" ? 0.5 : kind === "money" ? 1000 : 5}
             prefix={prefix}
             suffix={suffix}
+            commas={kind === "money"}
             onChange={(n) => actions.setGrowth(gkey, { first: kind === "percent" ? n / 100 : n })}
           />
           <Field
@@ -130,17 +145,17 @@ export default function AssumptionPanel() {
       <div>
         <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-primary">Unit economics & pricing</div>
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
-          <Field label="Avg GMV / customer" value={inputs.avgGmvPerCustomer} step={50000} prefix="$" onChange={set("avgGmvPerCustomer")} />
-          <Field label="Subscription / yr" value={inputs.subscriptionPerYear} step={1000} prefix="$" onChange={set("subscriptionPerYear")} />
+          <Field label="Avg GMV / customer" value={inputs.avgGmvPerCustomer} prefix="$" commas onChange={set("avgGmvPerCustomer")} />
+          <Field label="Subscription / yr" value={inputs.subscriptionPerYear} prefix="$" commas onChange={set("subscriptionPerYear")} />
           <Field label="Take rate" value={Math.round(inputs.takeRate * 1000) / 10} step={0.5} suffix="%" onChange={(n) => actions.setAssumption("takeRate", n / 100)} />
           <Field label="Transaction capture" value={Math.round(inputs.transactionCapture * 1000) / 10} step={5} suffix="%" onChange={(n) => actions.setAssumption("transactionCapture", n / 100)} />
           <Field label="Jobs / customer / yr" value={inputs.jobsPerCustomerYear} step={5} onChange={set("jobsPerCustomerYear")} />
           <Field label="ACH cost / job" value={inputs.achCostPerJob} step={1} prefix="$" onChange={set("achCostPerJob")} />
-          <Field label="Platform COGS / customer" value={inputs.platformCogsPerCustomer} step={100} prefix="$" onChange={set("platformCogsPerCustomer")} />
-          <Field label="Sales commission / new cust" value={inputs.salesCommissionPerNewCustomer} step={100} prefix="$" onChange={set("salesCommissionPerNewCustomer")} />
-          <Field label="Layer-1 AI / FTE / yr" value={inputs.layer1AiPerFtePerYear} step={500} prefix="$" onChange={set("layer1AiPerFtePerYear")} />
+          <Field label="Platform COGS / customer" value={inputs.platformCogsPerCustomer} prefix="$" commas onChange={set("platformCogsPerCustomer")} />
+          <Field label="Sales commission / new cust" value={inputs.salesCommissionPerNewCustomer} prefix="$" commas onChange={set("salesCommissionPerNewCustomer")} />
+          <Field label="Layer-1 AI / FTE / yr" value={inputs.layer1AiPerFtePerYear} prefix="$" commas onChange={set("layer1AiPerFtePerYear")} />
           <Field label="ARR multiple" value={inputs.arrMultiple} step={1} suffix="×" onChange={set("arrMultiple")} />
-          <Field label="Target CAC" value={inputs.targetCac} step={100} prefix="$" onChange={set("targetCac")} />
+          <Field label="Target CAC" value={inputs.targetCac} prefix="$" commas onChange={set("targetCac")} />
           <Field label="Presold (2026)" value={inputs.presold[0]} step={5} onChange={(n) => actions.setInputArrayValue("presold", 0, n)} />
         </div>
       </div>

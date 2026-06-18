@@ -138,7 +138,8 @@ export async function buildModelWorkbook(
     .num("J14", inputs.platformCogsPerCustomer)
     .num("J15", inputs.salesCommissionPerNewCustomer)
     .num("J16", inputs.arrMultiple)
-    .num("J17", inputs.targetCac);
+    .num("J17", inputs.targetCac)
+    .num("J18", inputs.raiseAmount); // capital raised — drives the cash-on-hand lines
   zip.file(pfPath, pf.toString());
 
   // ── Events sheet — Y/N toggle column B (rows 13–30, EVENT_SHOWS order) ───

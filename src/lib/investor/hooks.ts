@@ -66,11 +66,16 @@ export function useSectionActivity(section: string) {
     begin();
     const onVis = () => (document.visibilityState === "visible" ? begin() : pause());
     document.addEventListener("visibilitychange", onVis);
-    const iv = setInterval(flush, 30000);
+    // Flush every 15s so the admin board reflects active investors in near
+    // real-time; also flush when the tab is hidden or closed.
+    const iv = setInterval(flush, 15000);
+    const onHide = () => flush();
+    window.addEventListener("pagehide", onHide);
 
     return () => {
       clearInterval(iv);
       document.removeEventListener("visibilitychange", onVis);
+      window.removeEventListener("pagehide", onHide);
       pause();
       if (acc.current >= 2) void logActivity(email, section, "time", acc.current);
       acc.current = 0;

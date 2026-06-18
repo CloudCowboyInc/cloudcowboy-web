@@ -25,6 +25,17 @@ export function signedCompactUSD(n: number): string {
   return `${n > 0 ? "+" : "−"}${compactUSD(Math.abs(n))}`;
 }
 
+/** Group a whole number with thousands separators for input display: 1000000 → "1,000,000". */
+export function grouped(n: number): string {
+  return Number.isFinite(n) ? Math.round(n).toLocaleString("en-US") : "0";
+}
+
+/** Parse a typed/grouped money string back to a number (strips commas, $, spaces). */
+export function parseGrouped(s: string): number {
+  const n = Number(s.replace(/[^0-9-]/g, ""));
+  return Number.isNaN(n) ? 0 : n;
+}
+
 /** Percentage from a fraction: 0.02 → "2.0%". */
 export function pct(fraction: number, dp = 1): string {
   return `${(fraction * 100).toFixed(dp)}%`;

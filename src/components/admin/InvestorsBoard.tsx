@@ -53,7 +53,17 @@ export default function InvestorsBoard() {
     setComments(m);
     setLoading(false);
   }, []);
-  useEffect(() => { load(); }, [load]);
+
+  // Auto-refresh so investor activity shows live as they browse — not only when
+  // they export. Silent refresh every 15s, plus an immediate one when the admin
+  // tab regains focus.
+  useEffect(() => {
+    void load();
+    const iv = setInterval(() => void load(), 15000);
+    const onVis = () => { if (document.visibilityState === "visible") void load(); };
+    document.addEventListener("visibilitychange", onVis);
+    return () => { clearInterval(iv); document.removeEventListener("visibilitychange", onVis); };
+  }, [load]);
 
   const investors = useMemo<Investor[]>(() => {
     const emails = new Set<string>();
@@ -107,8 +117,19 @@ export default function InvestorsBoard() {
     <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
       {/* Investor list — ranked by engagement */}
       <div className="space-y-2">
-        <div className="text-xs font-semibold uppercase tracking-wide text-primary">Investors · by time spent</div>
-        {investors.map((inv) => (
+        <div className="flex items-center justify-between">
+          <div className="text-xs font-semibold uppercase tracking-wide text-primary">Investors · by time spent</div>
+          <span className="inline-flex items-center gap-1.5 text-[11px] text-muted-foreground" title="Auto-refreshing every 15s">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500/70" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+            </span>
+            Live
+          </span>
+        </div>
+        {investors.map((inv) => {
+          const activeNow = !!inv.lastActive && Date.now() - new Date(inv.lastActive).getTime() < 60000;
+          return (
           <button
             key={inv.email}
             type="button"
@@ -120,6 +141,11 @@ export default function InvestorsBoard() {
           >
             <div className="flex items-center gap-2 text-sm font-medium">
               <User className="h-4 w-4 text-muted-foreground" /> <span className="truncate">{inv.email}</span>
+              {activeNow && (
+                <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-500/15 px-1.5 py-0.5 text-[10px] font-medium text-emerald-500">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> active now
+                </span>
+              )}
             </div>
             <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted-foreground">
               <span className="inline-flex items-center gap-1"><Clock className="h-3 w-3" /> {dur(inv.totalTime)}</span>
@@ -128,7 +154,8 @@ export default function InvestorsBoard() {
               {inv.lastActive && <span>· {ago(inv.lastActive)}</span>}
             </div>
           </button>
-        ))}
+          );
+        })}
       </div>
 
       {/* Selected investor profile */}

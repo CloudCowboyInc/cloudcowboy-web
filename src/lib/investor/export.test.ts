@@ -105,6 +105,13 @@ describe("Excel export — mirrors the proforma with portal values", () => {
     const ogXml = await zip.file("xl/worksheets/sheet4.xml")!.async("string");
     expect(ogXml).toMatch(/<dataValidation type="list"[^>]*sqref="B5:B16"/);
 
+    // Investment amount is an assumption, and cash-on-hand lines (= raise +
+    // cumulative) exist on the Proforma and Monthly tabs.
+    expect(pfXml).toMatch(/<c r="J18"[^>]*><v>\d+<\/v>/); // capital raised input
+    expect(pfXml).toMatch(/<c r="B85"[^>]*><f>\$J\$18\+B84<\/f>/); // proforma cash on hand
+    const mcXml = await zip.file("xl/worksheets/sheet2.xml")!.async("string");
+    expect(mcXml).toMatch(/<c r="B26"[^>]*><f>Proforma!\$J\$18\+B25<\/f>/); // monthly cash on hand
+
     // Formula-driven P&L is preserved (not flattened to static numbers).
     const pf = wb.getWorksheet("Proforma")!;
     const b22 = pf.getCell("B22").value as { formula?: string };
@@ -120,6 +127,7 @@ describe("Excel export — mirrors the proforma with portal values", () => {
     inputs.subscriptionPerYear = 15000;
     inputs.avgGmvPerCustomer = 1000000;
     inputs.customersEOY = [0, 150, 350, 700, 1300, 2100];
+    inputs.raiseAmount = 2000000;
 
     const eventToggles = Object.fromEntries(EVENT_SHOWS.map((e, i) => [e.id, i !== 1])); // drop Farm Progress
     const orgToggles = Object.fromEntries(ORG_MEMBERSHIPS.map((o, i) => [o.id, i !== 0])); // drop CoAAA
@@ -144,6 +152,7 @@ describe("Excel export — mirrors the proforma with portal values", () => {
     expect(pf.getCell("J7").value).toBe(1000000); // avg GMV
     expect(pf.getCell("C9").value).toBe(150); // customers EOY 2027
     expect(pf.getCell("G9").value).toBe(2100); // customers EOY 2031
+    expect(pf.getCell("J18").value).toBe(2000000); // capital raised (investment)
 
     const events = wb.getWorksheet("Events")!;
     expect(events.getCell("B13").value).toBe("Y"); // Nebraska (kept)
