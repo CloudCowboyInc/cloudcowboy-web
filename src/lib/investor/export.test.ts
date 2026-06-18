@@ -51,6 +51,10 @@ describe("Excel export — mirrors the proforma with portal values", () => {
     const zip = await JSZip.loadAsync(buf);
     const workbookXml = await zip.file("xl/workbook.xml")!.async("string");
     expect(workbookXml).toContain('fullCalcOnLoad="1"');
+    // Opens on the Proforma tab (not Seasonality), to avoid confusion.
+    expect(workbookXml).toMatch(/activeTab="0"|<workbookView(?![^>]*activeTab)/);
+    const pfView = await zip.file("xl/worksheets/sheet1.xml")!.async("string");
+    expect(pfView).toMatch(/<sheetView[^>]*tabSelected="1"/);
 
     // The embedded charts are preserved (the whole point of the zip-surgery
     // approach — exceljs would have dropped them).
