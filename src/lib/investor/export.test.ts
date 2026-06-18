@@ -47,24 +47,33 @@ describe("Excel export — mirrors the proforma with portal values", () => {
     ]) {
       expect(names, `missing sheet ${s}`).toContain(s);
     }
-    // exceljs writes <calcPr fullCalcOnLoad="1"> but doesn't parse it back, so
-    // assert against the raw workbook.xml that Excel/Sheets will recalc on open.
+    // The export sets <calcPr fullCalcOnLoad="1"> so Excel/Sheets recalc on open.
     const zip = await JSZip.loadAsync(buf);
     const workbookXml = await zip.file("xl/workbook.xml")!.async("string");
     expect(workbookXml).toContain('fullCalcOnLoad="1"');
 
-    // Branding survives the round-trip: the Cloud Cowboy logo image and a
-    // drawing (top-left placement) on every one of the seven sheets.
+    // The embedded charts are preserved (the whole point of the zip-surgery
+    // approach — exceljs would have dropped them).
+    const chartCount = Object.keys(zip.files).filter((n) =>
+      /^xl\/charts\/chart\d+\.xml$/.test(n),
+    ).length;
+    expect(chartCount).toBeGreaterThanOrEqual(3);
+
+    // Branding survives: the Cloud Cowboy logo image and a drawing on every
+    // one of the seven sheets, each logo anchored top-left (xdr:row 0).
     expect(zip.file("xl/media/image1.png")).toBeTruthy();
     const drawingCount = Object.keys(zip.files).filter((n) =>
       /^xl\/drawings\/drawing\d+\.xml$/.test(n),
     ).length;
     expect(drawingCount).toBe(7);
-    // Every sheet's logo is anchored in the top row (xdr:row 0).
     for (let i = 1; i <= 7; i++) {
       const d = await zip.file(`xl/drawings/drawing${i}.xml`)!.async("string");
-      const firstRow = d.match(/<xdr:from>[\s\S]*?<xdr:row>(\d+)<\/xdr:row>/)?.[1];
-      expect(firstRow, `drawing${i} not top-left`).toBe("0");
+      // A drawing may hold charts too; isolate each anchor block and pick the
+      // one containing the logo picture, then read that block's from-row.
+      const anchors = d.match(/<xdr:(?:two|one)CellAnchor[\s\S]*?<\/xdr:(?:two|one)CellAnchor>/g) ?? [];
+      const picAnchor = anchors.find((a) => a.includes("<xdr:pic>"));
+      const picFromRow = picAnchor?.match(/<xdr:from>[\s\S]*?<xdr:row>(\d+)<\/xdr:row>/)?.[1];
+      expect(picFromRow, `drawing${i} logo not top-left`).toBe("0");
     }
 
     // Every sheet keeps its branded A2 title (text present and not recoloured to
