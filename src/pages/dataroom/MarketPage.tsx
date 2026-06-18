@@ -1,4 +1,4 @@
-import { Layers, TrendingUp, BookOpen, MapPin, Zap, Globe, FileText, Compass, ExternalLink } from "lucide-react";
+import { Layers, TrendingUp, MapPin, Zap, Globe, FileText, Compass, ExternalLink } from "lucide-react";
 import {
   SectionCard,
   StatTile,
@@ -6,7 +6,6 @@ import {
   SegmentExplorer,
   MarketGrowthChart,
   WhyThis,
-  StoryNotes,
   SectionFeedback,
 } from "@/components/dataroom";
 import { useSectionActivity } from "@/lib/investor/hooks";
@@ -189,10 +188,6 @@ export default function MarketPage() {
             </div>
           ))}
         </div>
-      </SectionCard>
-
-      <SectionCard icon={BookOpen} eyebrow="Notes" title="The thesis, in context">
-        <StoryNotes page="market" />
       </SectionCard>
     </div>
   );
