@@ -1,0 +1,137 @@
+import { describe, it, expect, afterEach } from "vitest";
+import { render, screen, cleanup, fireEvent } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import MarketPage from "./MarketPage";
+import { MARKET_SEGMENTS, MARKET_TIERS } from "@/data/marketData";
+
+afterEach(cleanup);
+
+const renderPage = () => render(<MemoryRouter><MarketPage /></MemoryRouter>);
+
+describe("Market page — US scope & thesis", () => {
+  it("makes the US-only scope explicit", () => {
+    renderPage();
+    expect(screen.getAllByText(/United States market/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/all figures US-specific/i)).toBeInTheDocument();
+  });
+
+  it("states the service-instigation thesis and global roadmap", () => {
+    renderPage();
+    expect(
+      screen.getAllByText(/The Ag Catalyst Through Service Instigation/i).length,
+    ).toBeGreaterThan(0);
+    expect(screen.getByText(/Built to go global/i)).toBeInTheDocument();
+  });
+});
+
+describe("Market page — funnel", () => {
+  it("renders the exact TAM/SAM/SOM ARR figures", () => {
+    renderPage();
+    expect(screen.getAllByText(/\$3\.1B ARR/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/\$2\.0B ARR/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/\$450M ARR/).length).toBeGreaterThan(0);
+  });
+
+  it("renders entity counts and the 8-verticals descriptor", () => {
+    renderPage();
+    expect(screen.getAllByText(/86,500/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/50,000/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/8 separate ag-service verticals/i).length).toBeGreaterThan(0);
+  });
+
+  it("shows the derivation incl. the $30K SOM unit and the TAM bridge", () => {
+    renderPage();
+    expect(screen.getByText(/\$30K each/i)).toBeInTheDocument();
+    expect(screen.getByText(/identical to the figure driving the finance model/i)).toBeInTheDocument();
+    expect(screen.getByText(/How the US TAM is built/i)).toBeInTheDocument();
+  });
+
+  it("marks the SOM tier as the beachhead", () => {
+    expect(MARKET_TIERS.find((t) => t.key === "SOM")?.isBeachhead).toBe(true);
+  });
+});
+
+describe("Market page — underlying segment drill-down", () => {
+  it("labels the section as total industry revenue, not ARR, with the $104.3B total", () => {
+    renderPage();
+    expect(
+      screen.getByText(/Underlying US ag-services market — total industry revenue/i),
+    ).toBeInTheDocument();
+    expect(screen.getAllByText(/\$104\.3B/).length).toBeGreaterThan(0);
+  });
+
+  it("renders all 12 segments", () => {
+    renderPage();
+    for (const seg of MARKET_SEGMENTS) {
+      expect(screen.getAllByText(seg.name).length).toBeGreaterThan(0);
+    }
+    expect(MARKET_SEGMENTS).toHaveLength(12);
+  });
+
+  it("renders the $140.3B 2030 figure", () => {
+    renderPage();
+    expect(screen.getAllByText(/140\.3B/).length).toBeGreaterThan(0);
+  });
+
+  it("now carries the source's CAGR for every segment (incl. soil-prep & fencing)", () => {
+    // The source document states CAGRs for all 12 — none are missing.
+    for (const s of MARKET_SEGMENTS) {
+      expect(s.cagr).toMatch(/%$/);
+      expect(s.cagrPct).toBeGreaterThan(0);
+    }
+    expect(MARKET_SEGMENTS.find((s) => s.rank === 11)?.cagr).toBe("5.2%");
+    expect(MARKET_SEGMENTS.find((s) => s.rank === 12)?.cagr).toBe("4.6%");
+  });
+
+  it("corrects the chemical-applicator beachhead to 15,000 entities (matches the SOM)", () => {
+    const beachhead = MARKET_SEGMENTS.find((s) => s.isBeachhead);
+    expect(beachhead?.name).toMatch(/Chemical & Fertilizer Application/);
+    expect(beachhead?.entities).toBe(15_000);
+  });
+
+  it("wheel pops up a segment's detail and updates on selection", () => {
+    renderPage();
+    // Beachhead is selected by default — its detail (description) is visible.
+    expect(screen.getByText(/the largest service segment/i)).toBeInTheDocument();
+    // Select another segment via its legend entry (wedge + legend both expose it).
+    const aerial = screen.getAllByRole("button", { name: /Aerial Application Services/i })[0];
+    fireEvent.click(aerial);
+    expect(screen.getAllByText(/Agricultural aviation/i).length).toBeGreaterThan(0);
+  });
+
+  it("can switch between the wheel and the list view", () => {
+    renderPage();
+    fireEvent.click(screen.getByRole("radio", { name: /^List$/i }));
+    expect(screen.getByText(/Sized by 2025 US industry revenue/i)).toBeInTheDocument();
+  });
+});
+
+describe("Market page — segment 'read more'", () => {
+  it("opens the full document detail for the active segment", () => {
+    renderPage();
+    fireEvent.click(screen.getByRole("button", { name: /Read more/i }));
+    // Chemical is active by default — full detail + market structure appear.
+    expect(screen.getByText(/variable-rate technology \(VRT\) application services/i)).toBeInTheDocument();
+    expect(screen.getByText(/Top 7 companies/i)).toBeInTheDocument();
+  });
+});
+
+describe("Market page — sources", () => {
+  it("cites the source document and grouped references", () => {
+    renderPage();
+    expect(screen.getByText(/US Agricultural Service Providers Market Analysis/i)).toBeInTheDocument();
+    expect(screen.getByText(/Government & official statistics/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/USDA/i).length).toBeGreaterThan(0);
+  });
+
+  it("renders the evidence base as clickable links to the publishers", () => {
+    renderPage();
+    const ibis = screen.getAllByRole("link", { name: /IBISWorld/i })[0];
+    expect(ibis).toHaveAttribute("href", expect.stringContaining("ibisworld.com"));
+    const census = screen.getAllByRole("link", { name: /US Census Bureau/i })[0];
+    expect(census).toHaveAttribute("href", expect.stringContaining("census.gov"));
+    // links open safely in a new tab
+    expect(ibis).toHaveAttribute("target", "_blank");
+    expect(ibis).toHaveAttribute("rel", expect.stringContaining("noreferrer"));
+  });
+});

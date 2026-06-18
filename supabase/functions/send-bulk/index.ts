@@ -39,7 +39,7 @@ Deno.serve(async (req) => {
 
     const { data: leads } = await admin
       .from("leads").select("id,email,dba,name").in("id", leadIds);
-    const recipients = (leads ?? []).filter((l: any) => l.email);
+    const recipients = (leads ?? []).filter((l: { email?: string }) => l.email);
 
     // 3) Send via Resend.
     const key = Deno.env.get("RESEND_API_KEY")!;

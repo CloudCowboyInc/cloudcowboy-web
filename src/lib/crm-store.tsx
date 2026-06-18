@@ -42,6 +42,8 @@ function rowToLead(r: any): Lead {
     zip: r.zip ?? "", lat: r.lat ?? null, lng: r.lng ?? null,
     employees: r.employees ?? "", revenue: r.revenue ?? "",
     status: (r.status ?? "New") as PipelineStatus, readiness: (r.readiness ?? "thin") as Readiness,
+    source: r.source ?? "", operatorType: (r.operator_type ?? "") as Lead["operatorType"],
+    services: r.services ?? [], facebook: r.facebook ?? "", instagram: r.instagram ?? "",
   };
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
@@ -58,8 +60,16 @@ interface CRMContextValue {
 
 const CRMContext = createContext<CRMContextValue | null>(null);
 
-export function CRMProvider({ children }: { children: ReactNode }) {
-  const useDb = isSupabaseConfigured && !!supabase;
+export function CRMProvider({
+  children,
+  forceLocal = false,
+}: {
+  children: ReactNode;
+  /** Always use the static seed dataset (e.g. the investor data room, where the
+   *  viewer has no RLS access to the live leads table). */
+  forceLocal?: boolean;
+}) {
+  const useDb = !forceLocal && isSupabaseConfigured && !!supabase;
 
   const [statusOverrides, setStatusOverrides] = useState<Record<string, PipelineStatus>>(
     () => (useDb ? {} : loadJSON(LS_STATUS, {}))
