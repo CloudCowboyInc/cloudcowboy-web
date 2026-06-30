@@ -1,7 +1,6 @@
 import { motion, useInView, animate } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { Users, Linkedin, Mail, Globe } from "lucide-react";
-import Navbar from "@/components/Navbar";
 import CloudCowboyLogo from "@/components/CloudCowboyLogo";
 
 function AnimatedCounter({ target, duration = 2, prefix = "", suffix = "", inView }: {
@@ -29,7 +28,7 @@ export default function AboutPage() {
   const numbersInView = useInView(numbersRef, { once: true, margin: "-100px" });
 
   return (
-    <main className="bg-background text-foreground overflow-x-hidden">
+    <main className="relative z-10 text-foreground overflow-x-hidden">
       {/* Hero */}
       <section ref={heroRef} className="relative min-h-[60vh] flex items-center justify-center pt-20">
         <div className="absolute inset-0 bg-grid-pattern opacity-30" />

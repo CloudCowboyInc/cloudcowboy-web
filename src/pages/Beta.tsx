@@ -2,7 +2,6 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { Gift, Tag, MessageSquare, Trophy, CalendarCheck, Settings, Rocket } from "lucide-react";
-import Navbar from "@/components/Navbar";
 
 const DEMO_LINK = "https://calendly.com/chris-cloudcowboy/30min";
 
@@ -19,7 +18,7 @@ export default function BetaPage() {
   const ctaInView = useInView(ctaRef, { once: true, margin: "-100px" });
 
   return (
-    <main className="bg-background text-foreground overflow-x-hidden">
+    <main className="relative z-10 text-foreground overflow-x-hidden">
       <Helmet>
         <title>Beta Program | Cloud Cowboy</title>
         <meta name="description" content="Free beta access to the Cloud Cowboy ag service operating system. Lock in founder pricing and help shape the platform." />

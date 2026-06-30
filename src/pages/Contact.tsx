@@ -2,7 +2,6 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Mail, Calendar, Linkedin, Send, Globe } from "lucide-react";
-import Navbar from "@/components/Navbar";
 
 const DEMO_LINK = "https://calendly.com/chris-cloudcowboy/30min";
 
@@ -17,7 +16,7 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="bg-background text-foreground overflow-x-hidden">
+    <main className="relative z-10 text-foreground overflow-x-hidden">
       <Helmet>
         <title>Contact Cloud Cowboy | Talk to the Ag Service OS Team</title>
         <meta name="description" content="Get in touch with Cloud Cowboy. Book a 30-minute call to see how the ag service operating system fits your spray, seed, or custom operation." />
